@@ -1,0 +1,63 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-c6507f4:147328ff25f:4c4b</id>
+  <name>UPK</name>
+  <nativeName>UPK</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-c6507f4:147328ff25f:4b9b</id>
+  </namespace>
+  <title>UPK</title>
+  <keywords>
+    <string>UPK</string>
+    <string>features</string>
+  </keywords>
+  <nativeCRS class="projected">PROJCS[&quot;NAD83 / New York Long Island (ftUS)&quot;, 
+  GEOGCS[&quot;NAD83&quot;, 
+    DATUM[&quot;North American Datum 1983&quot;, 
+      SPHEROID[&quot;GRS 1980&quot;, 6378137.0, 298.257222101, AUTHORITY[&quot;EPSG&quot;,&quot;7019&quot;]], 
+      TOWGS84[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 
+      AUTHORITY[&quot;EPSG&quot;,&quot;6269&quot;]], 
+    PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], 
+    UNIT[&quot;degree&quot;, 0.017453292519943295], 
+    AXIS[&quot;Geodetic longitude&quot;, EAST], 
+    AXIS[&quot;Geodetic latitude&quot;, NORTH], 
+    AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]], 
+  PROJECTION[&quot;Lambert_Conformal_Conic_2SP&quot;, AUTHORITY[&quot;EPSG&quot;,&quot;9802&quot;]], 
+  PARAMETER[&quot;central_meridian&quot;, -74.0], 
+  PARAMETER[&quot;latitude_of_origin&quot;, 40.166666666666664], 
+  PARAMETER[&quot;standard_parallel_1&quot;, 41.03333333333333], 
+  PARAMETER[&quot;false_easting&quot;, 984250.0], 
+  PARAMETER[&quot;false_northing&quot;, 0.0], 
+  PARAMETER[&quot;scale_factor&quot;, 1.0], 
+  PARAMETER[&quot;standard_parallel_2&quot;, 40.666666666666664], 
+  UNIT[&quot;foot_survey_us&quot;, 0.30480060960121924], 
+  AXIS[&quot;Easting&quot;, EAST], 
+  AXIS[&quot;Northing&quot;, NORTH], 
+  AUTHORITY[&quot;EPSG&quot;,&quot;2263&quot;]]</nativeCRS>
+  <srs>EPSG:2263</srs>
+  <nativeBoundingBox>
+    <minx>914058.0</minx>
+    <maxx>1066873.0</maxx>
+    <miny>121747.0</miny>
+    <maxy>271851.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-74.25395414972759</minx>
+    <maxx>-73.70107090483657</maxx>
+    <miny>40.500457595813465</miny>
+    <maxy>40.91283913424621</maxy>
+    <crs>GEOGCS[&quot;WGS84(DD)&quot;, 
+  DATUM[&quot;WGS84&quot;, 
+    SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]], 
+  PRIMEM[&quot;Greenwich&quot;, 0.0], 
+  UNIT[&quot;degree&quot;, 0.017453292519943295], 
+  AXIS[&quot;Geodetic longitude&quot;, EAST], 
+  AXIS[&quot;Geodetic latitude&quot;, NORTH]]</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-c6507f4:147328ff25f:4c48</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+</featureType>

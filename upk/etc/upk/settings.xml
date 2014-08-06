@@ -1,0 +1,28 @@
+<settings>
+  <id>SettingsInfoImpl-c6507f4:147328ff25f:4dfa</id>
+  <workspace>
+    <id>WorkspaceInfoImpl-c6507f4:147328ff25f:4b9c</id>
+    <name>upk</name>
+  </workspace>
+  <contact>
+    <id>contact</id>
+    <address>59 Maiden Lane, 33rd Floor</address>
+    <addressCity>New York</addressCity>
+    <addressCountry>USA</addressCountry>
+    <addressPostalCode>10038</addressPostalCode>
+    <addressState>NY</addressState>
+    <addressType>work</addressType>
+    <contactEmail>shaskins@doitt.nyc.gov</contactEmail>
+    <contactFacsimile>212-232-1180</contactFacsimile>
+    <contactOrganization>NYC - DoITT - GIS</contactOrganization>
+    <contactPerson>Sarah Haskins</contactPerson>
+    <contactPosition>Developer</contactPosition>
+    <contactVoice>212-232-1174</contactVoice>
+  </contact>
+  <charset>UTF-8</charset>
+  <numDecimals>0</numDecimals>
+  <onlineResource>http://geoserver.org</onlineResource>
+  <verbose>false</verbose>
+  <verboseExceptions>false</verboseExceptions>
+  <localWorkspaceIncludesPrefix>false</localWorkspaceIncludesPrefix>
+</settings>

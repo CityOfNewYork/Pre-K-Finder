@@ -1,0 +1,87 @@
+#dirToggles{
+	display:none;
+}
+#dirPanel{
+	position:absolute;
+	top:0;
+	right:0;
+	height:100%;
+	width:320px;
+	box-shadow:-5px 0 5px rgba(0,0,0,.15);
+	background-color:white;
+	z-index:1000;
+}
+#dirContent{
+	margin:5px;
+}	
+#directions{
+	margin:5px 0 0 5px;	
+	overflow:auto;
+}
+#main{
+	position:absolute;
+	top:0;
+	left:0;
+	height:100%;
+	width:calc(100% - 320px);
+}
+#modes{
+	width:100%;
+	border-collapse:collapse;
+	height:50px;
+}
+#modes td{
+	padding: 0 13px;	
+}
+.modeBtn {
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	background-repeat:no-repeat;
+	background-position:center;
+	background-size: 20px;
+	background-color: rgba(1,51,100,0.5) !important;	
+}
+.activeMode, .modeBtn:hover{
+	background-color: rgba(1,51,100,1) !important;
+}
+#driving{
+	background-image:url(../img/car.png);
+}
+#transit{	
+	background-image:url(../img/rail.png);
+}
+#bicycling{
+	background-image:url(../img/bike.png);
+}
+#walking{
+	background-image:url(../img/walk.png);
+}
+#address{
+	display:none;
+}
+@media only screen and (max-width : 485px) {
+	#page{
+		overflow:auto;
+	}
+	#dirToggles{
+		display:block;
+		position:absolute;
+		top:0;
+		right:0;
+		margin:3px;
+		z-index:2000;
+	}
+	#main{
+		width:100%;
+	}
+	#dirPanel{
+		width:100%;
+	}
+	#dirContent{
+		margin:47px 5px 5px 5px;
+	}
+	#directions{
+		overflow: hidden;
+	}	
+}
