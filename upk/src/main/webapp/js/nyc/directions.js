@@ -39,7 +39,7 @@ nyc.Directions = (function(){
 							panel: $("#directions")[0],
 							directions: response
 						});
-						$("#from").html(addrA);
+						$("#from").val(addrA);
 						$("#to").html(addrB);
 					}
 					$(".modeBtn").removeClass("activeMode");
@@ -148,19 +148,18 @@ $(document).ready(function(){
 		directionArgs[p[0]] = decodeURIComponent(p[1]);
 	};
 	
+	$("#from").keypress(function(e){
+		if (e.keyCode == 13){
+			directionArgs.from = $("#from").val();
+			window.directions.directions(directionArgs);
+		}
+	});
 	$("#toUpk").html(directionArgs.upk);
 	window.directions = new nyc.Directions(map);
 	if (directionArgs.from){
 		window.directions.directions(directionArgs);
 	}else{
-		$("#address").show();
 		$("#to").html(directionArgs.to);
-		$("#address").keypress(function(e){
-			if (e.keyCode == 13){
-				directionArgs.from = $("#address").val();
-				window.directions.directions(directionArgs);
-			}
-		});
 	}
 	
 	$(window).resize(window.directions.height);
