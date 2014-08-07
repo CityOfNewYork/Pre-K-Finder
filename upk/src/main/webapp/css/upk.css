@@ -345,7 +345,7 @@ span.noshow{
 	height:100%;
 	display:none;
 	z-index:2000;
-	background-color:#E8E8E8;
+	background-color:white;
 }
 #iframeContainer{
 	height: calc(100% - 52px);
