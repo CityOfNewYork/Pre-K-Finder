@@ -1,10 +1,10 @@
-This app is a standalone HTML5 app that can be 
+This app is a stand-alone HTML5 app that can be 
 dropped into the doc root of any web server.
 
 The upk.json file included is a snapshot of the 
 Pre-K facilities data for development use only.
 
-In production the Pre-K facilities data is servered
+In production the Pre-K facilities data is served
 by GeoServer as http://maps.nyc.gov/upk/upk.json.
 This data may be modified and is cached at a CDN daily.
 
