@@ -333,6 +333,7 @@ span.noshow{
 	background-repeat:no-repeat;
 	width:34px;
 	height:34px;
+	cursor:pointer;
 }
 #feedback:hover{
 	background-image:url(../img/feedback1.png);
