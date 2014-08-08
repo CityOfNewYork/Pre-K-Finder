@@ -53,6 +53,7 @@ nyc.App = (function(){
 				}
 			}, 200);
 			$("#callout").remove();
+			$("#alert").fadeOut();
 			me.pop = null;
 		});
 		
