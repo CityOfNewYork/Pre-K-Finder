@@ -23,16 +23,17 @@ nyc.UpkInfo = (function(){
 				"<div class='name'><img class='upkType' src='img/" + upk.type() + "0.png'/>" + upk.name() + "</div>" +
 				"<div class='addr'>" + upk.address1() + "</div>" +
 				"<div class='addr'>" + upk.address2() + "</div>" +
-				"<div class='phone_directions'><a class='phone' href='tel:" + encodeURI(upk.phone()) + "'>" + upk.phone() + "</a> " +
-				"<a class='directions' target='directions' data-href=\"directions.html?from=" + encodeURIComponent(this.currentLocation) + 
-				"&to=" + encodeURIComponent(upk.address()) + "&upk=" + encodeURIComponent(upk.name()) + "\" onclick='nyc.app.external(this);'>Directions</a></div>" + 			
+				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "'>" + upk.phone() + "</a></div>" +
 				"<div class='upkDetail'>" +
 				"<div class='sched'>" + DAY_LENGTH[upk.dayLength()] + 
 				(upk.seats() ? ("<span class='seats'> - " + upk.seats() + " seats</span></div></div>") : "</div>") +
 				"<table class='upkAction'><tbody><tr>" +
-				"<td><a class='ui-btn mapIt' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
-				"<td><a class='ui-btn detailIt' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
-				"<td><a class='ui-btn applyIt ' target='apply' data-href='" + APPLICATION_URL + "' onclick='nyc.app.external(this);'>Apply</a></td>" +
+				"<td class='directions'><a class='ui-btn' target='directions' data-href=\"directions.html?from=" + encodeURIComponent(this.currentLocation) + 
+				"&to=" + encodeURIComponent(upk.address()) + "&upk=" + encodeURIComponent(upk.name()) + 
+				"\" onclick='nyc.app.external(this);'>Directions</a></td>" +
+				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
+				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
+				"<td class='apply'><a class='ui-btn' target='apply' data-href='" + APPLICATION_URL + "' onclick='nyc.app.external(this);'>Apply</a></td>" +
 				"</tr></tbody></table>" +
 				"</div>";
 		}

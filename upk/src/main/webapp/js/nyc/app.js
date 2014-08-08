@@ -37,7 +37,6 @@ nyc.App = (function(){
 		
 		me.map.zoomToExtent(NYC_EXT);			
 		me.map.events.register("featureover", map, me.hover);
-		me.map.events.register("featureclick", map, me.hover);
 		me.map.events.register("featureout", map, me.out);
 		
 		$(window).resize(function(){
@@ -148,12 +147,21 @@ nyc.App = (function(){
 				$("#srch").animate({left:left});
 			},
 			centerUpk: function(id){
-				var upk = this.upkList.upk(id), g = upk.geometry;
-				this.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
+				var me = this, upk = me.upkList.upk(id), g = upk.geometry;
+				me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
 				upk.upkFeature.renderIntent = "select";
 				$("#toggleToMap").trigger("click");
-				this.upkLayer.redraw();
-				this.identify(upk);
+				me.upkLayer.redraw();
+		    	if ($(window).height() < 550){
+		    		var id = function(){
+		    			me.map.events.un({moveend:id});
+		    			me.identify(upk);
+		    		};
+					me.map.events.on({moveend:id});
+		    		me.map.pan(100, 100);
+		    	}else{
+	    			me.identify(upk);
+		    	}
 			},
 			hover: function(e){
 			    var f = e.feature;
@@ -200,13 +208,17 @@ nyc.App = (function(){
 				map.zoomTo(map.getZoom() + by);
 			},
 			removeCallout: function(){
+				var f = this.upkList.upk(this.pop._f.id).upkFeature;
 				$("#callout").remove();
-				this.pop = null;
-				$(this.upkLayer.div).trigger("click"); /* if we don't do this you can't identify same feature after closing popup - why? - dunno */
-				$(nyc).trigger("app.removeCallout");
+				f.renderIntent = "default";
+			    this.pop = null;
+			    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
+				this.upkLayer.removeFeatures([f]);
+				this.upkLayer.addFeatures([f]);
+				$(this.upkLayer.div).trigger("click");
 			},
 			identify:function(f){
-				var me = this, 
+				var me = this,
 					g = f.geometry, 
 					p = new OpenLayers.LonLat(g.x, g.y), 
 					upk = me.upkList.upk(f.id),
@@ -215,8 +227,14 @@ nyc.App = (function(){
 			    if (me.pop) me.removeCallout();
 				me.pop = new OpenLayers.Popup.FramedCloud("callout", p, null, html, null, true, function(){me.removeCallout();});
 				me.pop._f = f;
-				me.pop.maxSize = new OpenLayers.Size(300, 175);
-		    	me.map.addPopup(me.pop);
+				me.pop.panMapIfOutOfView = true;
+				
+				$("#infoSizeChecker").html(html);	
+				me.pop.maxSize = new OpenLayers.Size(320, $("#infoSizeChecker").height());				
+				me.pop.minSize = new OpenLayers.Size(320, $("#infoSizeChecker").height());				
+				
+				me.map.addPopup(me.pop);
+
 		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
 		    	$(me.pop.closeDiv).addClass("ui-icon-delete");
 		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
