@@ -285,9 +285,8 @@ $(document).ready(function(){
 				protocol = document.location.protocol + "//",
 				host = document.location.hostname;
 			if (host == "localhost") host = DEV_HOST;
-			if (host != "maps.nyc.gov"){
-				uris.push(protocol + host + BASEMAP_URI);
-			}else{
+			uris.push(protocol + host + BASEMAP_URI);
+			if (host == "maps.nyc.gov"){
 				for (var i = 1; i < 4; i++){
 					var parts = host.split(".");
 					uris.push(protocol + parts[0] + i + host.substr(host.indexOf(".")) + BASEMAP_URI);
