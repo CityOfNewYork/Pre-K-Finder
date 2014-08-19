@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<title>NYC Pre-K Finder - Apply</title>
+
+	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+	
+	<style type="text/css">
+		body, label, #review span{
+			color: #013364 !important;
+		}
+		h2, h3{
+			color: #5681ac;
+		}
+		.sect{
+			border:1px solid #5681ac;
+			border-radius:4px;
+			padding:5px;
+			margin:0 0 10px 0;
+		}
+		#ui-datepicker-div{
+			z-index:100 !important;
+		}
+		.ui-selectmenu-button{
+			width:100% !important;
+		}
+		.err{
+			color:red !important;
+			font-weight:bold !important;
+		}
+		#review{
+			position: relative;
+			margin: 20px auto;
+			width: 270px;
+			border-radius: 4px;
+			border: 1px solid lightgrey;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+			display: none;
+			background-color: white;
+			padding: 5px;
+			z-index: 1000;
+		}
+		#review h3{
+			text-align:center;
+		}
+		.name{
+			font-weight:bold;
+		}
+		#reviewBtns{
+			width:300px;
+			margin:20px 29px;
+		}
+		#thanks{
+			margin: 20px auto;
+			width: 270px;
+		}
+	</style>
+	
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+	
+	<script type="text/javascript">
+		$("document").ready(function(){
+			$("#dob").datepicker({
+		      changeMonth: true,
+		      changeYear: true,
+		      defaultDate: -4 * 365 /* 4 yrs ago */
+		    });			
+			try{ /* parse query string and prepopulate form */
+				var params = document.location.search.substr(1).split("&");
+				for (var i = 0; i < params.length; i++){
+					var p = params[i].split("=");
+					$("#" + p[0]).val(decodeURIComponent(p[1]))					
+				}
+				$("#borough").selectmenu("refresh");
+			}catch(ignore){}
+		});
+
+		function valid(){ //TODO validate email
+			var err = [];
+			$("label").removeClass("err");
+			$.each($("input, select"), function(_, n){
+				if (n.type != "submit" && n.type != "reset"){
+					var lbl = $("label[for='" + n.id + "']");
+					if (!lbl.length) lbl = $("label[for='" + n.id + "-button']"); /* jquery changes this when it creates the select button */ 
+					if ($(n).data("required")){
+						 if (n.name == "email"){
+								var r = /[\w-]+@([\w-]+\.)+[\w-]+/;
+							    if (!r.test($(n).val())){
+									 err.push(n);
+									 lbl.addClass("err");				
+								} 
+						 }else if (n.type == "checkbox" && !$(n).prop("checked")){
+							 err.push(n);
+							 lbl.addClass("err");
+						 }else if (!$(n).val() || $(n).val() == "Choose..."){
+							 err.push(n);
+							 lbl.addClass("err");
+						 }else if ($(n).data("number")){
+							 if ($(n).data("number") != $(n).val().length || isNaN($(n).val())){
+								 err.push(n);
+								 lbl.addClass("err");
+							 }
+						 }
+					}
+				}
+			});
+			if (err.length){
+				$(err[0]).focus();
+			}else{
+				review();
+			}
+		};	
+	
+		function review(){
+			$("#review_lang").html("");
+			$.each($("input, select"), function(_, n){
+				if (n.type != "submit" && n.type != "reset" && n.type != "checkbox"){
+					var val = $($("form")[0][n.name]).val();
+					$("#review_" + n.id).html(val);
+				}
+			});
+			$("#review_moreInfo")[$("#moreInfo").prop("checked") ? "show" : "hide"]();
+			$("#review_gender").html($($("form")[0].gender).val());
+			$.each($($("form")[0].lang), function(_, n){
+				if ($(n).prop("checked")){
+					$("#review_lang").append($("label[for='" + n.id + "']").html() + ", ");
+				}
+			})
+			$("body").scrollTop(0);
+			$("body").append($("#review"));
+			$("#review").fadeIn();
+		};
+		
+		function apply(){
+			var f = $("form")[0], data = {id:0, method:"apply", jsonrpc:"2.0", params:{action:"apply", formfields:{submissionlanguage:"english"}}};
+			$.each($("input, select"), function(_, n){
+				if (n.name){
+					if (n.type == "checkbox"){
+						var cbs = $(f[n.name]), vals = [];
+						if (cbs.length == 1 && cbs.prop("checked")){
+							vals.push("on");
+						}else{
+							$.each(cbs, function(_, c){
+								if ($(c).prop("checked")){
+									vals.push($(c).data("value"));
+								}
+							});
+						}
+						data.params.formfields[n.name] = vals;
+					}else if (n.type != "submit" && n.type != "reset"){
+						data.params.formfields[n.name] = $(n).val();
+					}
+				}
+			});
+			$.ajax({
+				url:"fred",
+				beforeSend: function(request){
+					request.setRequestHeader("Content-Type", "application/json; charset-utf-8");
+				},
+				method:"POST",
+				dataType:"json",
+				data:JSON.stringify(data),
+				success: function(){
+					$("body").html("<div id='thanks'>Thank you for completing our online Community-Based Early Childhood Center application form! The following information is being sent to a DOE enrollment facilitator, who will contact you soon.</div>");
+				},
+				error: function(){
+					$("body").html("<div id='thanks'>There was an error processing your submission data.  Please reload the page and try again.</div>");
+				}
+			});
+			return false;
+		};
+	</script>
+</head>
+<body>
+	<div id="page" data-role="page">
+		<div id="main" role="main" class="ui-content">
+			<form>
+				<div class="sect">
+					<h2>Student Information</h2>
+					<label for="first_name">First name:</label>
+					<input id="first_name" name="first_name" type="text" data-required="true">
+					<label for="last_name">Last name:</label>
+					<input id="last_name" name="last_name" type="text" data-required="true">
+					<label for="dob">Date of birth:</label>
+					<input id="dob" name="dob" type="text" data-required="true">
+					<label>Gender (optional):</label>
+					<label for="male">Male</label>
+					<input id="male" name="gender" type="radio" value="Male">
+					<label for="female">Female</label>
+					<input id="female" name="gender" type="radio" value="Female">
+					<h3>Current address</h3>
+					<label for="house_number">House number:</label>
+					<input id="house_number" name="house_number" type="text" data-required="true">
+					<label for="street_name">Street name:</label>
+					<input id="street_name" name="street_name" type="text" data-required="true">
+					<label for="apt">Apt:</label>
+					<input id="apt" name="apt" type="text">					
+					<label for="borough">Borough:</label>
+					<select id="borough" name="borough" data-required="true">
+						<option>Choose...</option>
+						<option>Bronx</option>
+						<option>Brooklyn</option>
+						<option>Manhattan</option>
+						<option>Queens</option>
+						<option>Staten Island</option>
+					</select>					
+					<label for="city">City:</label>
+					<input id="city" name="city" type="text" data-required="true">					
+					<label for="zip">5 Digit ZIP Code (numbers only):</label>
+					<input id="zip" name="zip" type="text" data-required="true" data-number="5" placeholder="12345">
+				</div>					
+				<div class="sect">
+					<h2>Parent Choice</h2>
+					<label for="cbeccText">If you know the name of the CBECC you would like your child to attend, please enter it here:</label>
+					<input id="cbeccText" name="cbeccText" type="text">
+					<input id="moreInfo" name="moreInfo" type="checkbox">
+					<label for="moreInfo">I am not sure where to send my child. I would like more information about applying to a CBECC.</label>
+				</div>					
+				<div class="sect">
+					<h2>Home Language (Optional)</h2>
+					<label>In which language would you like to receive written and/or oral communication regarding the Pre-Kindergarten Admissions Process?</label>
+					<input id="english" name="lang" type="checkbox" data-value="English">
+					<label for="english">English</label>
+					<input id="arabic" name="lang" type="checkbox" data-value="Arabic">
+					<label for="arabic">Arabic</label>
+					<input id="bengali" name="lang" type="checkbox" data-value="Bengali">
+					<label for="bengali">Bengali</label>
+					<input id="chinese" name="lang" type="checkbox" data-value="Chinese">
+					<label for="chinese">Chinese</label>
+					<input id="french" name="lang" type="checkbox" data-value="French">
+					<label for="french">French</label>
+					<input id="haitian" name="lang" type="checkbox" data-value="Haitian">
+					<label for="haitian">Haitian</label>
+					<input id="korean" name="lang" type="checkbox" data-value="Korean">
+					<label for="korean">Korean</label>
+					<input id="russian" name="lang" type="checkbox" data-value="Russian">
+					<label for="russian">Russian</label>
+					<input id="spanish" name="lang" type="checkbox" data-value="Spanish">
+					<label for="spanish">Spanish</label>
+					<input id="urdu" name="lang" type="checkbox" data-value="Urdu">
+					<label for="urdu">Urdu</label>
+					<label for="other_lang">Other:</label>
+					<input id="other_lang" name="other_lang" type="text">
+				</div>					
+				<div class="sect">
+					<h2>Parent/Guardian Information</h2>
+					<label for="parent_first_name">First name:</label>
+					<input id="parent_first_name" name="parent_first_name" type="text" data-required="true">
+					<label for="parent_last_name">Last name:</label>
+					<input id="parent_last_name" name="parent_last_name" type="text" data-required="true">
+					<label for="relationship">Relationship:</label>
+					<select id="relationship" name="relationship" data-required="true">
+						<option>Choose...</option>
+						<option>Mother</option>
+						<option>Father</option>
+						<option>Grandparent</option>
+						<option>Sister/Brother</option>
+						<option>Other Relative</option>
+						<option>Step Parent</option>
+						<option>Foster Parent</option>
+						<option>Agency</option>
+						<option>Ward Of State</option>
+						<option>Other Legal Guardian</option>
+						<option>Non-Relative</option>
+					</select>
+					<h3>Contact Information</h3>
+					<label for="day_telephone">Day Telephone (numbers only):</label>
+					<input id="day_telephone" name="day_telephone" type="text" data-required="true" data-nuber="10" placeholder="2125555555">
+					<label for="evening_telephone">Evening Telephone (numbers only):</label>
+					<input id="evening_telephone" name="evening_telephone" type="text" data-required="true" data-number="10" placeholder="2125555555">
+					<label for="email">Email address:</label>
+					<input id="email" name="email" type="text" data-required="true">
+					<span>
+						I understand that daily attendance and promptness are required.
+						I must arrange for a responsible adult to bring my child to school and pick him/her up daily.
+						I understand that no transportation is provided.
+					</span>
+					<input id="confirm" name="confirm" type="checkbox" data-required="true">
+					<label for="confirm">I acknowledge the above statements and understand that the information in this form will be sent to my chosen CBECC in order to proceed with my application.</label>
+				</div>
+				<input type="reset" value="Reset">
+				<input type="button" value="Apply Now" onclick="valid();">
+			</form>
+		</div>
+		<div id="review">
+			<h3>Please review your submission, are you sure you want to apply to:</h3>
+			<div><span class="name">Student name:</span> <span id="review_first_name"></span>, <span id="review_last_name"></span></div>
+			<div><span class="name">Student gender:</span> <span id="review_gender"></span></div>
+			<div>
+				<span class="name">Student address:</span><br><span id="review_house_number"></span> <span id="review_street_name"></span> <span id="review_apt"></span><br>
+				<span id="review_city"></span> (<span id="review_borough"></span>), NY <span id="review_zip"></span>
+			</div>
+			<div><span class="name">Parent choice:</span> <span id="review_cbeccText"></span>, <span id="review_moreInfo">I would like more information about applying to a CBECC.</span></div>
+			<div><span class="name">Home language:</span> <span id="review_lang"></span> <span id="review_other_lang"></span></div>
+			<div><span class="name">Parent/Guardian name:</span><br><span id="review_parent_first_name"></span>, <span id="review_parent_last_name"></span></div>
+			<div><span class="name">Relationship:</span> <span id="review_relationship"></span></div>
+			<div><span class="name">Day Telephone:</span> <span id="review_day_telephone"></span></div>
+			<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
+			<div><span class="name">Email address:</span> <span id="review_email"></span></div>
+			<div id="reviewBtns">
+				<input type="button" onclick="$('#review').fadeOut();" value="Cancel">
+				<input type="button" onclick="apply();" value="Submit">
+			</div>
+		</div>
+	</div>
+	<script>
+		/* google analytics */
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		ga('create', 'UA-41281554-9', 'auto');
+		ga('send', 'pageview');
+	</script>	
+</body>
+</html>
