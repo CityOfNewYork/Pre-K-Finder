@@ -5,7 +5,7 @@ var	RESOLUTIONS = [434.027777777778, 303.819444444444, 222.222222222222, 111.111
 	NYC_EXT = new OpenLayers.Bounds(912090, 119053, 1068317, 273931),
 	EPSG_2263 = new OpenLayers.Projection("EPSG:2263"),
 	GEOCLIENT_URL = "/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input=",
-	APPLICATION_URL = document.domain == "maps.nyc.gov" ? "http://schools.nyc.gov/schoolsearch/apply.html" : "apply.html",
+	APPLICATION_URL = document.domain == "maps.nyc.gov" ? "http://schools.nyc.gov/schoolsearch/apply.html" : "http://schoolsstg.nycenet.edu/schoolsearch/apply.html",
 	DEV_HOST = "csgis-dev-web.csc.nycnet",
 	BASEMAP_URI = "/gis/data/tiles/basic/",
 	DAY_LENGTH = {
