@@ -4,14 +4,14 @@ nyc.UpkInfo = (function(){
 	/*
 	 * nyc.UpkInfo extends an  nyc.Upk object to provide Upk rendering functionality
 	 * @constructor
-	 * 
+	 *
 	 * @param {nyc.Upk} upk
 	 * @param {string} currentLocation
-	 * 
+	 *
 	 */
 	var upkInfoClass = function(upk, currentLocation){
 		this.upk = upk;
-		this.currentLocation = currentLocation;
+		this.currentLocation = currentLocation || {geometry:null, attributes:{}};
 	};
 	upkInfoClass.prototype = {
 		schedule: function(upk){
@@ -25,17 +25,28 @@ nyc.UpkInfo = (function(){
 				"<div class='addr'>" + upk.address2() + "</div>" +
 				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "'>" + upk.phone() + "</a></div>" +
 				"<div class='upkDetail'>" +
-				"<div class='sched'>" + DAY_LENGTH[upk.dayLength()] + 
+				"<div class='sched'>" + DAY_LENGTH[upk.dayLength()] +
 				(upk.seats() ? ("<span class='seats'> - " + upk.seats() + " seats</span></div></div>") : "</div>") +
 				"<table class='upkAction'><tbody><tr>" +
-				"<td class='directions'><a class='ui-btn' target='directions' data-href=\"directions.html?from=" + encodeURIComponent(this.currentLocation) + 
-				"&to=" + encodeURIComponent(upk.address()) + "&upk=" + encodeURIComponent(upk.name()) + 
+				"<td class='directions'><a class='ui-btn' target='directions' data-href=\"directions.html?from=" + encodeURIComponent(this.currentLocation.attributes.title) +
+				"&to=" + encodeURIComponent(upk.address()) + "&upk=" + encodeURIComponent(upk.name()) +
 				"\" onclick='nyc.app.external(this);'>Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
-				"<td class='apply'><a class='ui-btn' target='apply' data-href='" + APPLICATION_URL + "' onclick='nyc.app.external(this);'>Apply</a></td>" +
+				"<td class='apply'><a class='ui-btn' target='apply' data-href='" + APPLICATION_URL + this.qstr(upk) + "' onclick='nyc.app.external(this);'>Apply</a></td>" +
 				"</tr></tbody></table>" +
 				"</div>";
+		},
+		qstr: function(upk){
+			var boro = this.currentLocation.attributes.borough || "";
+			if (boro){
+				boro = boro.substr(0, 1) + boro.substr(1).toLowerCase(); 
+			}
+			return "?cbeccText=" + upk.name() +
+				"&house_number=" + (this.currentLocation.attributes.houseNumber || "") +
+				"&street_name=" + (this.currentLocation.attributes.streetName || "") +
+				"&borough=" + boro +
+				"&zip=" + (this.currentLocation.attributes.zip || "");
 		}
 	};
 	return upkInfoClass;
@@ -45,24 +56,24 @@ nyc.UpkTable = (function(){
 	/*
 	 * nyc.UpkInfo extends an  nyc.UpkTable object to provide UpkList rendering functionality
 	 * @constructor
-	 * 
+	 *
 	 */
 	var upkTableClass = function(){
 		$(window).resize(this.fixJqCss);
 		this.upkList = null;
-		this.currentLocation = null;
+		this.currentLocation = {geometry:null, attributes:{}};
 	};
 	upkTableClass.prototype = {
-		render: function(upkList, p){			
+		render: function(upkList, currentLocation){
 			var tbl = $("#upkTable");
 			this.upkList = upkList;
-			this.currentLocation = p;
+			this.currentLocation = currentLocation;
 			tbl.html("<tbody></tbody>");
 			$("#more").data("current-pg", "0");
 			this.rows(tbl[0], 0);
 		},
 		rows: function(tbl, pg){
-			var start = pg * 10, end = start + 10, upks = this.upkList.upks(this.currentLocation);
+			var start = pg * 10, end = start + 10, upks = this.upkList.upks(this.currentLocation.geometry);
 			if (end >= upks.length){
 				end = upks.length;
 				$("#pgCtrl").hide();
@@ -70,7 +81,7 @@ nyc.UpkTable = (function(){
 				$("#pgCtrl").show();
 			}
 			for (var i = start; i < end; i++){
-				var upk = upks[i], tr0 = tbl.insertRow(i), td0 = tr0.insertCell(0), td1 = tr0.insertCell(1), info = new nyc.UpkInfo(upk);
+				var upk = upks[i], tr0 = tbl.insertRow(i), td0 = tr0.insertCell(0), td1 = tr0.insertCell(1), info = new nyc.UpkInfo(upk, this.currentLocation);
 				tr0.id = "table" + upk.id;
 				tr0.className = upk.type();
 				if (i % 2 == 0) $(tr0).addClass("oddRow");
@@ -86,13 +97,13 @@ nyc.UpkTable = (function(){
 				if (!$(n).html()) $(n).parent().hide();
 			});
 			$("#more").data("current-pg", pg + 1);
-			this.fixJqCss();				
+			this.fixJqCss();
 		},
 		more: function(){
 			this.rows($("#upkTable")[0], $("#more").data("current-pg") * 1);
 		},
 		fixJqCss: function(){
-			$("#upkContent").height($("body").height() - $("#banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height());		
+			$("#upkContent").height($("body").height() - $("#banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height());
 		}
 	};
 	return upkTableClass;

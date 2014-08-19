@@ -18,7 +18,7 @@ nyc.App = (function(){
 	var appClass = function(map, locate, upkList, upkTable){
 		var me = this;
 		me.po = null;
-		me.currentLocation = {attributes:{title:""}};
+		me.currentLocation = {geometry:null, attributes:{title:""}};
 		me.map = map;
 		me.locate = locate;
 		me.upkList = upkList;
@@ -47,7 +47,7 @@ nyc.App = (function(){
 			me.currentLocation = f;
 			var i = setInterval(function(){
 				if (me.upkList.ready){
-					me.upkTable.render(me.upkList, f.geometry);		
+					me.upkTable.render(me.upkList, f);		
 					me.upkInView();
 					clearInterval(i);
 				}
@@ -224,7 +224,7 @@ nyc.App = (function(){
 					p = new OpenLayers.LonLat(g.x, g.y), 
 					upk = me.upkList.upk(f.id),
 					loc = me.currentLocation,
-					html = new nyc.UpkInfo(upk, loc.attributes.title).render("callout");
+					html = new nyc.UpkInfo(upk, loc).render("callout");
 			    if (me.pop) me.removeCallout();
 				me.pop = new OpenLayers.Popup.FramedCloud("callout", p, null, html, null, true, function(){me.removeCallout();});
 				me.pop._f = f;
@@ -245,23 +245,19 @@ nyc.App = (function(){
 				var url = $(n).data("href"), target = n.target;
 		    	$("#iframeContainer iframe").prop("src", "");
 				$("#iframeContainer")[target == "feedback" ? "addClass" : "removeClass"]("feedback");
-				if (navigator.standalone){ /* safari in standalone mode on ios */
-					$("#iframeContainer").addClass("firstLoad");
-					$("#iframeContainer iframe").css("visibility", "hidden");
-					$("#iframeContainer iframe").one("load", function(){
-						if (target == "feedback"){
-							try{
-								$($("#iframeContainer iframe")[0].contentWindow.document.body).width($(window).width());
-							}catch(ignore){}
-						}
-						$("#iframeContainer").removeClass("firstLoad");
-						$("#iframeContainer iframe").css("visibility", "visible");
-					});
-			    	$("#iframeContainer iframe").prop("src", url);
-			    	$("#external").slideToggle();
-				}else{
-					window.open(url, target);
-				}
+				$("#iframeContainer").addClass("firstLoad");
+				$("#iframeContainer iframe").css("visibility", "hidden");
+				$("#iframeContainer iframe").one("load", function(){
+					if (target == "feedback"){
+						try{
+							$($("#iframeContainer iframe")[0].contentWindow.document.body).width($(window).width());
+						}catch(ignore){}
+					}
+					$("#iframeContainer").removeClass("firstLoad");
+					$("#iframeContainer iframe").css("visibility", "visible");
+				});
+		    	$("#iframeContainer iframe").prop("src", url);
+		    	$("#external").slideToggle();
 			}
 		};
 		

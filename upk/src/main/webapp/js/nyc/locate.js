@@ -102,7 +102,13 @@ nyc.Locate = (function(){
 			return{
 				type:typ,
 				point:p,
-				title: this.capitalize(ln1 + ", " + r.firstBoroughName) + ", NY " + (r.zipCode || r.leftSegmentZipCode)
+				attributes: {
+					title: this.capitalize(ln1 + ", " + r.firstBoroughName) + ", NY " + (r.zipCode || r.leftSegmentZipCode),
+					houseNumber: r.houseNumber || "",
+					streetName:  r.firstStreetNameNormalized || "",
+					borough: r.firstBoroughName || "",
+					zip: r.zipCode || r.leftSegmentZipCode || ""
+				}
 			};
 		},
 		capitalize: function(s){
@@ -116,16 +122,16 @@ nyc.Locate = (function(){
 			return result.trim();
 		},
 		mapLocation: function(location, zoom){
-			var map = this.map, lyr = this.locationLyr, p = location.point, feats;
-			if (!location.title){
+			var map = this.map, lyr = this.locationLyr, p = location.point, attrs = location.attributes, feats;
+			if (!attrs.title){
 				var epsg2263 = new Proj4js.Point(p.x, p.y), epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263);
-				location.title = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6);
+				location.attributes.title = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6);
 				$("#address").val("");
 			}else{
-				$("#address").val(location.title.replace(/\s+/g, " "));
+				$("#address").val(attrs.title.replace(/\s+/g, " "));
 			}
 			
-			feats = [new OpenLayers.Feature.Vector(p, {title:location.title})];
+			feats = [new OpenLayers.Feature.Vector(p, location.attributes)];
 		    this.currentLocation = location;
 			if (zoom){
 				var add = function(){
@@ -202,7 +208,7 @@ nyc.Locate = (function(){
 				if (r.status = "POSSIBLE_MATCH"){
 					$("#possible").append(
 						"<div onclick='nyc.app.locate.mapGeoClientResp(" + i + ");'>" + 
-						me.parseGeoClientResp(r).title + "</div>"
+						me.parseGeoClientResp(r).attributes.title + "</div>"
 					);
 				}
 			});
@@ -228,7 +234,7 @@ nyc.Locate = (function(){
 		    	$(nyc).trigger("locate.fail", "Your location is not in the vicinity of NYC");
 		    	me.locFail = true;    	
 		    }else{
-			    me.mapLocation({point:p}, true);
+			    me.mapLocation({point:p, attributes:{}}, true);
 		    }
 		}
 	};
