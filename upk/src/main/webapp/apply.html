@@ -9,7 +9,6 @@
 	<title>NYC Pre-K Finder - Apply</title>
 
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 	
 	<style type="text/css">
 		body, label, #review span{
@@ -17,6 +16,9 @@
 		}
 		h2, h3{
 			color: #5681ac;
+		}
+		form {
+			margin: 0 20px 100px 20px;
 		}
 		.sect{
 			border:1px solid #5681ac;
@@ -36,7 +38,7 @@
 		}
 		#review{
 			position: relative;
-			margin: 20px auto;
+			margin: 12px auto;
 			width: 270px;
 			border-radius: 4px;
 			border: 1px solid lightgrey;
@@ -64,25 +66,28 @@
 	
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 	
 	<script type="text/javascript">
-		$("document").ready(function(){
-			$("#dob").datepicker({
-		      changeMonth: true,
-		      changeYear: true,
-		      defaultDate: -4 * 365 /* 4 yrs ago */
-		    });			
+		$("document").ready(function(){		
 			try{ /* parse query string and prepopulate form */
 				var params = document.location.search.substr(1).split("&");
 				for (var i = 0; i < params.length; i++){
 					var p = params[i].split("=");
-					$("#" + p[0]).val(decodeURIComponent(p[1]))					
+					if (p[1]) $("#" + p[0]).val(decodeURIComponent(p[1]))					
 				}
 				$("#borough").selectmenu("refresh");
 			}catch(ignore){}
 		});
 
+		function validDate(d){
+			var dParts = d.split("/");
+			if (dParts.length != 3) return false;
+			if (dParts[0].length != 2 || isNaN(dParts[0])) return false;
+			if (dParts[1].length != 2 || isNaN(dParts[1])) return false;
+			if (dParts[2].length != 4 || isNaN(dParts[2])) return false;
+			return true;
+		};
+		
 		function valid(){ //TODO validate email
 			var err = [];
 			$("label").removeClass("err");
@@ -91,7 +96,12 @@
 					var lbl = $("label[for='" + n.id + "']");
 					if (!lbl.length) lbl = $("label[for='" + n.id + "-button']"); /* jquery changes this when it creates the select button */ 
 					if ($(n).data("required")){
-						 if (n.name == "email"){
+						if (n.name == "dob"){
+							if (!validDate($(n).val())){
+								 err.push(n);
+								 lbl.addClass("err");												
+							}
+						}else if (n.name == "email"){
 								var r = /[\w-]+@([\w-]+\.)+[\w-]+/;
 							    if (!r.test($(n).val())){
 									 err.push(n);
@@ -189,8 +199,8 @@
 					<input id="first_name" name="first_name" type="text" data-required="true">
 					<label for="last_name">Last name:</label>
 					<input id="last_name" name="last_name" type="text" data-required="true">
-					<label for="dob">Date of birth:</label>
-					<input id="dob" name="dob" type="text" data-required="true">
+					<label for="dob">Date of birth (mm/dd/yyyy):</label>
+					<input id="dob" name="dob" type="text" data-required="true" placeholder="mm/dd/yyyy">
 					<label>Gender (optional):</label>
 					<label for="male">Male</label>
 					<input id="male" name="gender" type="radio" value="Male">
@@ -272,9 +282,9 @@
 						<option>Non-Relative</option>
 					</select>
 					<h3>Contact Information</h3>
-					<label for="day_telephone">Day Telephone (numbers only):</label>
+					<label for="day_telephone">Day Telephone (numbers only 2125555555):</label>
 					<input id="day_telephone" name="day_telephone" type="text" data-required="true" data-nuber="10" placeholder="2125555555">
-					<label for="evening_telephone">Evening Telephone (numbers only):</label>
+					<label for="evening_telephone">Evening Telephone (numbers only 2125555555):</label>
 					<input id="evening_telephone" name="evening_telephone" type="text" data-required="true" data-number="10" placeholder="2125555555">
 					<label for="email">Email address:</label>
 					<input id="email" name="email" type="text" data-required="true">

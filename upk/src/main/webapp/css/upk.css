@@ -364,14 +364,20 @@ span.noshow{
 	height:100%;
 	width:100%;
 }
+#iframeContainer iframe.ios{
+	height:10000px;
+	width:100%;
+	-webkit-transform:translate3d(0,0,0);
+}
+
 #iframeContainer.feedback, #iframeContainer.feedback iframe{
 	overflow-x:hidden;
 }
 #back {
-	margin:3px;
-	width:calc(100% - 8px);
-	font-size:20px;
-	padding:10px 0 14px 0;
+	margin: 3px auto;
+	width: 99%;
+	font-size: 20px;
+	padding: 10px 0 14px 0;
 }
 @media only screen and (max-width : 360px) {
 	#banner h1 {

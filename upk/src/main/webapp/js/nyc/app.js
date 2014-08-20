@@ -25,6 +25,7 @@ nyc.App = (function(){
 		me.upkTable = upkTable;
 		me.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		
+		if (me.ios) $("#iframeContainer iframe").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
 				  me.toggle({target:$("#toggleToMap")[0]});
