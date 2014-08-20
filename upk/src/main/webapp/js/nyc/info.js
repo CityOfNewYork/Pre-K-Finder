@@ -67,7 +67,7 @@ nyc.UpkTable = (function(){
 		render: function(upkList, currentLocation){
 			var tbl = $("#upkTable");
 			this.upkList = upkList;
-			this.currentLocation = currentLocation;
+			this.currentLocation = currentLocation || this.currentLocation;
 			tbl.html("<tbody></tbody>");
 			$("#more").data("current-pg", "0");
 			this.rows(tbl[0], 0);
