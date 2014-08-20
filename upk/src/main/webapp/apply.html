@@ -171,7 +171,7 @@
 				}
 			});
 			$.ajax({
-				url:APPLICATION_URL,
+				url:"./services/SchoolRpc.ashx?rpc",
 				beforeSend: function(request){
 					request.setRequestHeader("Content-Type", "application/json; charset-utf-8");
 				},
