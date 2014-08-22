@@ -80,7 +80,7 @@
 				var params = document.location.search.substr(1).split("&");
 				for (var i = 0; i < params.length; i++){
 					var p = params[i].split("=");
-					if (p[1]) $("#" + p[0]).val(decodeURIComponent(p[1]))					
+					if (p[1]) $("#" + p[0]).val(decodeURIComponent(p[1]));			
 				}
 				$("#borough").selectmenu("refresh");
 			}catch(ignore){}
