@@ -208,10 +208,11 @@
 						}
 						data.params.formfields[n.name] = vals;
 					}else if (n.type != "submit" && n.type != "reset"){
-						data.params.formfields[n.name] = $(n).val();
+						data.params.formfields[n.name] = $("form")[0][n.name].value;
 					}
 				}
 			});
+			console.warn(data);
 			$.ajax({
 				url:"./services/SchoolRpc.ashx?rpc",
 				beforeSend: function(request){
