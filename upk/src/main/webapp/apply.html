@@ -160,7 +160,7 @@
 					"Student name: " + data.first_name + " " + data.last_name + "\n" +
 					"Student gender: " + data.gender + "\n" +
 					"Student address: " + "\n" +
-					data.house_number + " " + data.street_name + data.apt + "\n" +
+					data.house_number + " " + data.street_name + " " + data.apt + "\n" +
 					data.city + " (" + data.borough + "), NY " +  data.zip + "\n" +
 					"Parent choice: " + data.cbeccText + 
 					(data.moreInfo.length ? " - I am not sure where to send my child. I would like more information about applying to a CBECC." : "") + "\n" +
@@ -188,6 +188,7 @@
 			if ($("#female").prop("checked")) result.gender = "Female";
 			result.house_number = $("#house_number").val();
 			result.street_name = $("#street_name").val();
+			result.apt = $("#apt").val();
 			result.borough = $("#borough").val();
 			result.city = $("#city").val();
 			result.zip = $("#zip").val();
