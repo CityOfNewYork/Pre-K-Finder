@@ -14,6 +14,14 @@
 		body, label, #review span{
 			color: #013364 !important;
 		}
+		body.loading{
+			background-image:url(http://maps.nyc.gov/upk/img/spin.gif);
+			background-position:center;
+			background-repeat:no-repeat;
+		}
+		.loading div, .loading span, .loading h1, .loading h2, .loading h3, .loading input, .loading select{
+			visibility:hidden;
+		}
 		h2, h3{
 			color: #5681ac;
 		}
@@ -37,16 +45,14 @@
 			font-weight:bold !important;
 		}
 		#review{
-			position: relative;
-			margin: 12px auto;
+			margin: 12px calc(50% - 135px);
 			width: 270px;
 			border-radius: 4px;
 			border: 1px solid lightgrey;
 			box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-			display: none;
 			background-color: white;
 			padding: 5px;
-			z-index: 1000;
+			display:none;
 		}
 		#review h3{
 			text-align:center;
@@ -68,6 +74,7 @@
 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	
 	<script type="text/javascript">
+		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		$("document").ready(function(){		
 			try{ /* parse query string and prepopulate form */
 				var params = document.location.search.substr(1).split("&");
@@ -77,10 +84,11 @@
 				}
 				$("#borough").selectmenu("refresh");
 			}catch(ignore){}
+			$("#applyNow").click(valid);
 		});
 
 		function validDate(d){
-			var dParts = d.split("/");
+			var dParts = d.split("/"), dt = null;
 			if (dParts.length != 3) return false;
 			if (dParts[0].length != 2 || isNaN(dParts[0])) return false;
 			if (dParts[1].length != 2 || isNaN(dParts[1])) return false;
@@ -88,7 +96,7 @@
 			return true;
 		};
 		
-		function valid(){ //TODO validate email
+		function valid(){ 
 			var err = [];
 			$("label").removeClass("err");
 			$.each($("input, select"), function(_, n){
@@ -130,27 +138,61 @@
 		};	
 	
 		function review(){
-			$("#review_lang").html("");
-			$.each($("input, select"), function(_, n){
-				if (n.type != "submit" && n.type != "reset" && n.type != "checkbox"){
-					var val = $($("form")[0][n.name]).val();
-					$("#review_" + n.id).html(val);
+			if (window.ios){
+				iosReview();
+			}else{
+				$("#review_lang").html("");
+				$.each($("input, select"), function(_, n){
+					if (n.type != "submit" && n.type != "reset" && n.type != "checkbox"){
+						var val = $($("form")[0][n.name]).val();
+						$("#review_" + n.id).html(val);
+					}
+				});
+				$("#review_moreInfo")[$("#moreInfo").prop("checked") ? "show" : "hide"]();
+				$("#review_gender").html($($("form")[0].gender).val());
+				$.each($($("form")[0].lang), function(_, n){
+					if ($(n).prop("checked")){
+						$("#review_lang").append($("label[for='" + n.id + "']").html() + ", ");
+					}
+				});
+				$("form").hide();
+				$("#review").show();
+				window.scrollTo(0, 0);				
+			}
+		};
+		
+		function iosReview(){
+			var msg = "Please review your submission, are you sure you want to apply to:\n\n" +
+				"Student name: " + $("#first_name").val() + " " + $("#last_name").val() + "\n" +
+				"Student gender: " + $("#gender").val() + "\n" +
+				"Student address: " + "\n" +
+				$("#house_number").val() + " " + $("#street_name").val() + $("#apt").val() + "\n" +
+				$("#city").val() + " ()" + $("#borough").val() + ") , NY " +  $("#zip").val() + "\n" +
+				"Parent choice: " + $("#cbeccText").val() + 
+				($("#moreInfo").prop("checked") ? " - I am not sure where to send my child. I would like more information about applying to a CBECC." : "") + "\n" +
+				"Home language: " +
+				(function(){
+					var lang = "";
+					$.each($($("form")[0].lang), function(_, n){
+						if ($(n).prop("checked")){
+							lang += ($("label[for='" + n.id + "']").html() + ", ");
+						}
+					});
+					return lang.substr(0, lang.length - 1);
+				}())
+				"Parent/Guardian name: " + $("#parent_first_name").val() + " " + $("#parent_last_name").val() + "\n" +
+				"Day Telephone: " + $("#day_telephone").val() + "\n" +
+				"Evening Telephone: " + $("#evening_telephone").val() + "\n" +
+				"Email address: " + $("#email").val() + "\n";
+				$("form").hide();
+				if (confirm(msg)){
+					apply();
 				}
-			});
-			$("#review_moreInfo")[$("#moreInfo").prop("checked") ? "show" : "hide"]();
-			$("#review_gender").html($($("form")[0].gender).val());
-			$.each($($("form")[0].lang), function(_, n){
-				if ($(n).prop("checked")){
-					$("#review_lang").append($("label[for='" + n.id + "']").html() + ", ");
-				}
-			})
-			$("body").scrollTop(0);
-			$("body").append($("#review"));
-			$("#review").fadeIn();
 		};
 		
 		function apply(){
 			var f = $("form")[0], data = {id:0, method:"apply", jsonrpc:"2.0", params:{action:"apply", formfields:{submissionlanguage:"english"}}};
+			if (!window.ios) $("body").addClass("loading");
 			$.each($("input, select"), function(_, n){
 				if (n.name){
 					if (n.type == "checkbox"){
@@ -178,11 +220,28 @@
 				method:"POST",
 				dataType:"json",
 				data:JSON.stringify(data),
-				success: function(){
-					$("body").html("<div id='thanks'>Thank you for completing our online Community-Based Early Childhood Center application form! The following information is being sent to a DOE enrollment facilitator, who will contact you soon.</div>");
+				success: function(response){
+					if (!response.result || (!response.result.ApplicationSubmitFlag && !response.result.EmailSentFlag)){
+						this.error();
+						return;
+					}
+					if (window.ios){
+						alert("Thank you for completing our online Community-Based Early Childhood Center application form! The following information is being sent to a DOE enrollment facilitator, who will contact you soon.");
+					}else{
+						$("body").html("<div id='thanks'>Thank you for completing our online Community-Based Early Childhood Center application form! The following information is being sent to a DOE enrollment facilitator, who will contact you soon.</div>");
+					}
+					$("form")[0].reset();
+					$("form").show();
+					$("body").removeClass("loading");
 				},
 				error: function(){
-					$("body").html("<div id='thanks'>There was an error processing your submission data.  Please reload the page and try again.</div>");
+					if (window.ios){
+						alert("There was an error processing your submission data.  Please try again.");
+					}else{
+						$("body").html("<div id='thanks'>There was an error processing your submission data.  Please return to the map and try again.</div>");	
+					}
+					$("form").show();
+					$("body").removeClass("loading");
 				}
 			});
 			return false;
@@ -297,28 +356,28 @@
 					<label for="confirm">I acknowledge the above statements and understand that the information in this form will be sent to my chosen CBECC in order to proceed with my application.</label>
 				</div>
 				<input type="reset" value="Reset">
-				<input type="button" value="Apply Now" onclick="valid();">
+				<input id="applyNow" type="button" value="Apply Now"">
 			</form>
-		</div>
-		<div id="review">
-			<h3>Please review your submission, are you sure you want to apply to:</h3>
-			<div><span class="name">Student name:</span> <span id="review_first_name"></span>, <span id="review_last_name"></span></div>
-			<div><span class="name">Student gender:</span> <span id="review_gender"></span></div>
-			<div>
-				<span class="name">Student address:</span><br><span id="review_house_number"></span> <span id="review_street_name"></span> <span id="review_apt"></span><br>
-				<span id="review_city"></span> (<span id="review_borough"></span>), NY <span id="review_zip"></span>
-			</div>
-			<div><span class="name">Parent choice:</span> <span id="review_cbeccText"></span>, <span id="review_moreInfo">I would like more information about applying to a CBECC.</span></div>
-			<div><span class="name">Home language:</span> <span id="review_lang"></span> <span id="review_other_lang"></span></div>
-			<div><span class="name">Parent/Guardian name:</span><br><span id="review_parent_first_name"></span>, <span id="review_parent_last_name"></span></div>
-			<div><span class="name">Relationship:</span> <span id="review_relationship"></span></div>
-			<div><span class="name">Day Telephone:</span> <span id="review_day_telephone"></span></div>
-			<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
-			<div><span class="name">Email address:</span> <span id="review_email"></span></div>
-			<div id="reviewBtns">
-				<input type="button" onclick="$('#review').fadeOut();" value="Cancel">
-				<input type="button" onclick="apply();" value="Submit">
-			</div>
+			<div id="review">		
+				<h3>Please review your submission, are you sure you want to apply to:</h3>
+				<div><span class="name">Student name:</span> <span id="review_first_name"></span>, <span id="review_last_name"></span></div>
+				<div><span class="name">Student gender:</span> <span id="review_gender"></span></div>
+				<div>
+					<span class="name">Student address:</span><br><span id="review_house_number"></span> <span id="review_street_name"></span> <span id="review_apt"></span><br>
+					<span id="review_city"></span> (<span id="review_borough"></span>), NY <span id="review_zip"></span>
+				</div>
+				<div><span class="name">Parent choice:</span> <span id="review_cbeccText"></span>, <span id="review_moreInfo">I would like more information about applying to a CBECC.</span></div>
+				<div><span class="name">Home language:</span> <span id="review_lang"></span> <span id="review_other_lang"></span></div>
+				<div><span class="name">Parent/Guardian name:</span><br><span id="review_parent_first_name"></span>, <span id="review_parent_last_name"></span></div>
+				<div><span class="name">Relationship:</span> <span id="review_relationship"></span></div>
+				<div><span class="name">Day Telephone:</span> <span id="review_day_telephone"></span></div>
+				<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
+				<div><span class="name">Email address:</span> <span id="review_email"></span></div>
+				<div id="reviewBtns">
+					<input type="button" onclick="$('#review').fadeOut();$('#page').fadeIn();" value="Cancel">
+					<input type="button" onclick="apply();" value="Submit">
+				</div>
+			</div>				
 		</div>
 	</div>
 	<script>
