@@ -198,7 +198,7 @@ nyc.App = (function(){
 						filters[name] = values;
 					});
 					me.upkList.filter(filters);
-					me.upkTable.render(me.upkList, me.currentLocation.geometry);
+					me.upkTable.render(me.upkList, me.currentLocation);
 					me.upkLayer.removeAllFeatures();
 					me.upkLayer.addFeatures(me.upkList.features());
 					$("#callout").remove();
