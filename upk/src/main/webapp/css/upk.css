@@ -11,6 +11,9 @@ body.firstLoad, #iframeContainer.firstLoad{
 	background-position:center;
 	background-color:#E8E8E8;
 }
+span.duh{
+	color:red;
+}
 #popPreload{
 	position:absolute;
 	left:-5000px;
