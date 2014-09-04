@@ -42,7 +42,7 @@ nyc.UpkInfo = (function(){
 			if (boro){
 				boro = boro.substr(0, 1) + boro.substr(1).toLowerCase(); 
 			}
-			return "?cbeccText=" + upk.name() +
+			return "?cbeccText=" + upk.name().replace(/\<span class=\"duh\"\>\<br\>Call 311 for opening info\<\/span\>/, "") + /* remove hack html added to db because last minute bs */
 				"&house_number=" + (this.currentLocation.attributes.houseNumber || "") +
 				"&street_name=" + (this.currentLocation.attributes.streetName || "") +
 				"&borough=" + boro +
