@@ -23,7 +23,7 @@ nyc.UpkInfo = (function(){
 				"<div class='name'><img class='upkType' src='img/" + upk.type() + "0.png'/>" + upk.name() + "</div>" +
 				"<div class='addr'>" + upk.address1() + "</div>" +
 				"<div class='addr'>" + upk.address2() + "</div>" +
-				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "'>" + upk.phone() + "</a></div>" +
+				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "' target='_blank'>" + upk.phone() + "</a></div>" +
 				"<div class='upkDetail'>" +
 				"<div class='sched'>" + DAY_LENGTH[upk.dayLength()] +
 				(upk.seats() ? ("<span class='seats'> - " + upk.seats() + " seats</span></div></div>") : "</div></div>") +
