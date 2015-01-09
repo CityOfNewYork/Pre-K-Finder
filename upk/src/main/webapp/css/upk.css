@@ -11,6 +11,11 @@ body.firstLoad, #iframeContainer.firstLoad{
 	background-position:center;
 	background-color:#E8E8E8;
 }
+/* comment out below this rule to show apply buttons */
+td.apply {
+	display: none;
+}
+/* comment out above this rule to show apply buttons */
 span.duh{
 	color:red;
 }
