@@ -85,6 +85,7 @@
 				$("#borough").selectmenu("refresh");
 			}catch(ignore){}
 			$("#applyNow").click(valid);
+			$("select").on("change",function(e){$(e.target).focus();})
 		});
 
 		function validDate(d){
