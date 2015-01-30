@@ -13,7 +13,7 @@ body.firstLoad, #iframeContainer.firstLoad{
 }
 /* comment out below this rule to show apply buttons */
 td.apply {
-	display: none;
+	/* display: none; */
 }
 /* comment out above this rule to show apply buttons */
 span.duh{

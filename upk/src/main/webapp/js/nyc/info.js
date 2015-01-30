@@ -33,7 +33,7 @@ nyc.UpkInfo = (function(){
 				"\" onclick='nyc.app.external(this);'>Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
-				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' target='apply' data-href='" + APPLICATION_URL + this.qstr(upk) + "' onclick='nyc.app.external(this);'>Apply</a></td>") : "") +
+				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' target='apply' data-href='" + APPLICATION_URL + this.qstr(upk) + "' onclick='nyc.app.external(this);'>Get in Touch</a></td>") : "") +
 				"</tr></tbody></table>" +
 				"</div>";
 		},
