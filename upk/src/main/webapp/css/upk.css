@@ -196,6 +196,7 @@ span.noshow{
 	width:100%;
 }
 .upkAction a {
+	padding: 12px 9px;
 	margin: 10px 0 0 0;
 	border-radius: 4px;
 }
