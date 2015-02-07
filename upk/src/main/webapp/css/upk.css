@@ -52,8 +52,8 @@ a, div, span, td, .ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-bod
 span.noshow{
 	display:none;
 }
-#banner{
-	background-color:#013364;
+.banner{
+	background-color:#013364 !important;
 	height: 44px;
 }
 .nycLogo{
@@ -61,16 +61,15 @@ span.noshow{
     margin:0 0 -3px 3px;
     cursor:pointer;
 }
-#banner h1{
-	margin:-9px 0 0 0;
+.banner h1{
+	margin:-9px 0 0 0 !important;
 	color: white;
 	cursor: pointer;
-	font-size: 24px;
-	font-weight: bold;
-	text-align: left;
-	width: auto;
+	font-size: 24px !important;
+	font-weight: bold !important;
+	text-align: left !important;
+	text-shadow: none !important;
 	white-space:nowrap;
-	max-width:230px;
 }
 #toggles{
 	position: absolute;
@@ -403,7 +402,7 @@ span.noshow{
 	padding: 10px 0 14px 0;
 }
 @media only screen and (max-width : 360px) {
-	#banner h1 {
+	#.banner h1 {
 		margin: -7px 0 0 0;
 		font-size: 22px;
 	}

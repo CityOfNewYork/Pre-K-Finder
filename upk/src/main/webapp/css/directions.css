@@ -66,6 +66,12 @@
 #dir-toggle{
 	display: none;
 }
+#dir-mode .dir-mode-btn{
+	background-color: rgba(1,51,100,0.5); 	
+}
+#dir-mode .dir-mode-btn.active-mode, #dir-mode .dir-mode-btn:hover{
+	background-color: rgba(1,51,100,1); 
+}
 @media only screen and (max-width : 485px) {
 	#page{
 		overflow:auto;
