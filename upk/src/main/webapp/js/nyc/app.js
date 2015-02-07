@@ -24,8 +24,9 @@ nyc.App = (function(){
 		me.upkList = upkList;
 		me.upkTable = upkTable;
 		me.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
+		me.initPages();
 		
-		if (me.ios) $("#iframeContainer iframe").addClass("ios");		
+		if (me.ios) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
 				  me.toggle({target:$("#toggleToMap")[0]});
@@ -108,6 +109,46 @@ nyc.App = (function(){
 		};
 		
 		appClass.prototype = {
+			initPages: function(){
+				var me = this, change = function(e, ui){
+						if (this.ios){
+							$('html').css({
+								height: ui.toPage.attr('id') == 'external-page' ? '10000000px' : '100%',
+								'overflow-y': 'scroll'
+							});
+						}else{
+							$('#external-page iframe').height($(window).height() - $('.banner').height());
+						}
+						if (ui.toPage.attr('id') == 'map-page' && me.openPanel){
+							$('#toggle-list').trigger('click');
+						}
+					};
+				$('body').pagecontainer({change: change});
+			},
+			isPanelOpen: function(){
+				return $('#toggle .ui-btn-active').attr('id') == 'toggleToList';
+			},
+			direct: function(from, to, name){
+				var me = this;
+				me.openPanel = me.isPanelOpen();
+				$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
+				if (me.lastDir != from + '|' + to){
+					var args = {from: from, to: to, facility: name};
+					me.lastDir = from + '|' + to;
+					if (me.directions){
+						me.directions.directions(args);
+					}else{
+						setTimeout(function(){
+							me.directions = new nyc.Directions(args, $('#dir-map'));
+						}, 500);
+					}
+				}
+			},
+			changePage: function(url){
+				this.openPanel = this.isPanelOpen();
+				$('#external-page iframe').attr('src', url);
+				$('body').pagecontainer('change', $('#external-page'), {transition: 'slideup'});
+			},
 			more: function(){
 				this.upkTable.more();
 			},

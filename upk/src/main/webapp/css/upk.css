@@ -1,10 +1,24 @@
-html, body, #page, #main{
+html, body, .ui-mobile .ui-page-active, #main {
 	width:100%;
 	height:100%;
 	margin:0;
 	padding:0;
 	overflow:hidden;
 }
+/* ======================== external ========================= */
+#external-page, #external-content, #external-page iframe {
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+#external-page iframe {
+	overflow: hidden;
+}
+.ios #external-page, .ios #external-content, .ios #external-content iframe {
+	height: 10000000px;
+	overflow: hidden !important;
+}
+/* ======================== external ========================= */
 body.firstLoad, #iframeContainer.firstLoad{
 	background-image:url(../img/firstLoad.gif);
 	background-repeat:no-repeat;
@@ -75,7 +89,8 @@ span.noshow{
 #map{
 	position:absolute;
 	width:100%;
-	height:100%;
+	height: calc(100% - 45px);
+	top: 45px;
 }
 .mapCtl{
 	position:fixed;

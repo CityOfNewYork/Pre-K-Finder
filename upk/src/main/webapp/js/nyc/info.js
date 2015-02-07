@@ -28,12 +28,12 @@ nyc.UpkInfo = (function(){
 				"<div class='sched'>" + DAY_LENGTH[upk.dayLength()] +
 				(upk.seats() ? ("<span class='seats'> - " + upk.seats() + " seats</span></div></div>") : "</div></div>") +
 				"<table class='upkAction'><tbody><tr>" +
-				"<td class='directions'><a class='ui-btn' target='directions' data-href=\"directions.html?from=" + encodeURIComponent(this.currentLocation.attributes.title) +
-				"&to=" + encodeURIComponent(upk.address()) + "&upk=" + encodeURIComponent(upk.name()) +
-				"\" onclick='nyc.app.external(this);'>Directions</a></td>" +
+				"<td class='directions'><a class='ui-btn' onclick=\"nyc.app.direct('" +
+				this.currentLocation.attributes.title + "','" + upk.address() + "','" + upk.name() +
+				"');\">Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
-				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' target='apply' data-href='" + APPLICATION_URL + this.qstr(upk) + "' onclick='nyc.app.external(this);'>Get in Touch</a></td>") : "") +
+				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' onclick=\"nyc.app.changePage('" + APPLICATION_URL + this.qstr(upk) + "');\">Get in Touch</a></td>") : "") +
 				"</tr></tbody></table>" +
 				"</div>";
 		},
