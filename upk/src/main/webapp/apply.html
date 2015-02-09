@@ -68,6 +68,11 @@
 			margin: 20px auto;
 			width: 270px;
 		}
+		.wtfios a{
+			text-decoration: none !important;
+			font-weight: normal !important;
+			color: #013364 !important;
+		}
 	</style>
 	
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -347,9 +352,9 @@
 						<option>Non-Relative</option>
 					</select>
 					<h3>Contact Information</h3>
-					<label for="day_telephone">Day Telephone (numbers only 2125555555):</label>
+					<label for="day_telephone">Day Telephone (numbers only <span class="wtfios">2125555555</span>):</label>
 					<input id="day_telephone" name="day_telephone" type="text" data-required="true" data-nuber="10" placeholder="2125555555">
-					<label for="evening_telephone">Evening Telephone (numbers only 2125555555):</label>
+					<label for="evening_telephone">Evening Telephone (numbers only <span class="wtfios">2125555555</span>):</label>
 					<input id="evening_telephone" name="evening_telephone" type="text" data-required="true" data-number="10" placeholder="2125555555">
 					<label for="email">Email address:</label>
 					<input id="email" name="email" type="text" data-required="true">

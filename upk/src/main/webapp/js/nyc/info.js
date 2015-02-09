@@ -29,7 +29,9 @@ nyc.UpkInfo = (function(){
 				(upk.seats() ? ("<span class='seats'> - " + upk.seats() + " seats</span></div></div>") : "</div></div>") +
 				"<table class='upkAction'><tbody><tr>" +
 				"<td class='directions'><a class='ui-btn' onclick=\"nyc.app.direct('" +
-				this.currentLocation.attributes.title + "','" + upk.address() + "','" + upk.name() +
+				escape(this.currentLocation.attributes.title) + "','" + 
+				escape(upk.address()) + "','" + 
+				escape(upk.name().replace(/\<span class=\"duh\"\>\<br\>Call 311 for opening info\<\/span\>/, "")) + /* remove hack html added to db because last minute bs */
 				"');\">Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
@@ -43,8 +45,8 @@ nyc.UpkInfo = (function(){
 				boro = boro.substr(0, 1) + boro.substr(1).toLowerCase(); 
 			}
 			return "?cbeccText=" + upk.name().replace(/\<span class=\"duh\"\>\<br\>Call 311 for opening info\<\/span\>/, "") + /* remove hack html added to db because last minute bs */
-				"&house_number=" + (this.currentLocation.attributes.houseNumber || "") +
-				"&street_name=" + (this.currentLocation.attributes.streetName || "") +
+				"&house_number=" + escape(this.currentLocation.attributes.houseNumber || "") +
+				"&street_name=" + escape(this.currentLocation.attributes.streetName || "") +
 				"&borough=" + boro +
 				"&zip=" + (this.currentLocation.attributes.zip || "");
 		}
@@ -103,7 +105,7 @@ nyc.UpkTable = (function(){
 			this.rows($("#upkTable")[0], $("#more").data("current-pg") * 1);
 		},
 		fixJqCss: function(){
-			$("#upkContent").height($("body").height() - $("#banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height());
+			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height());
 		}
 	};
 	return upkTableClass;

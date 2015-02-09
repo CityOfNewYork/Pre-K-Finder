@@ -86,7 +86,7 @@
 	        <a id="zOut" data-role="button" data-icon="minus" class="mapCtl mapBtn ui-btn-left" title="Zoom out" onclick="nyc.app.zoom(-1);">
 	        	<span class="noshow">Zoom out</span>
 	        </a>
-	        <a id="feedback" class="mapCtl" title="Feedback" target="feedback" data-href="http://www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml" onclick="nyc.app.external(this);">
+	        <a id="feedback" class="mapCtl" title="Feedback" onclick="nyc.app.changePage('http://www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml');">
 	        	<span class="noshow">Feedback</span>
 	        </a>
 			<div id="possibleMenu">
@@ -101,7 +101,7 @@
 		</div>
 		<div id="alert">
 			<div id="msg"></div>
-			<input data-role="button" title="OK" onclick="$('#alert').fadeOut();" type="button" value="OK"/>
+			<input data-role="button" title="OK" type="button" value="OK"/>
 		</div>
 	</div>
 	<div id="dir-page" data-role="page">

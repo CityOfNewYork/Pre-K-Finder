@@ -45,6 +45,10 @@ nyc.App = (function(){
 			me.map.render(map.div);
 		});
 		
+		$('#alert').click(function(){
+			$('#alert').fadeOut();
+		});
+					
 		$(nyc).on("locate.found", function(_, f){
 			me.currentLocation = f;
 			var i = setInterval(function(){
@@ -133,7 +137,7 @@ nyc.App = (function(){
 				me.openPanel = me.isPanelOpen();
 				$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
 				if (me.lastDir != from + '|' + to){
-					var args = {from: from, to: to, facility: name};
+					var args = {from: unescape(from), to: unescape(to), facility: unescape(name)};
 					me.lastDir = from + '|' + to;
 					if (me.directions){
 						me.directions.directions(args);
@@ -282,24 +286,6 @@ nyc.App = (function(){
 		    	$(me.pop.closeDiv).addClass("ui-icon-delete");
 		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
 		    	$(nyc).trigger("app.identify");
-			},
-			external:function(n){
-				var url = $(n).data("href"), target = n.target;
-		    	$("#iframeContainer iframe").prop("src", "");
-				$("#iframeContainer")[target == "feedback" ? "addClass" : "removeClass"]("feedback");
-				$("#iframeContainer").addClass("firstLoad");
-				$("#iframeContainer iframe").css("visibility", "hidden");
-				$("#iframeContainer iframe").one("load", function(){
-					if (target == "feedback"){
-						try{
-							$($("#iframeContainer iframe")[0].contentWindow.document.body).width($(window).width());
-						}catch(ignore){}
-					}
-					$("#iframeContainer").removeClass("firstLoad");
-					$("#iframeContainer iframe").css("visibility", "visible");
-				});
-		    	$("#iframeContainer iframe").prop("src", url);
-		    	$("#external").slideToggle();
 			}
 		};
 		
