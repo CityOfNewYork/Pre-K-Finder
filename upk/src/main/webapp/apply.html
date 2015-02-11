@@ -75,7 +75,7 @@
 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	
 	<script type="text/javascript">
-		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
+		//window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		$("document").ready(function(){		
 			try{ /* parse query string and prepopulate form */
 				var params = document.location.search.substr(1).split("&");
@@ -140,9 +140,9 @@
 		};	
 	
 		function review(){
-			if (window.ios){
-				iosReview();
-			}else{
+// 			if (window.ios){
+// 				iosReview();
+// 			}else{
 				var data = formData();
 				$("#review_lang").html("");
 				for (var d in data){
@@ -153,7 +153,7 @@
 				$("form").hide();
 				$("#review").show();
 				window.scrollTo(0, 0);				
-			}
+// 			}
 		};
 		
 		function iosReview(){
@@ -216,7 +216,7 @@
 		
 		function apply(){
 			var data = {id:0, method:"apply", jsonrpc:"2.0", params:{action:"apply", formfields:formData()}};
-			if (!window.ios) $("body").addClass("loading");
+			$("body").addClass("loading");
 			$.ajax({
 				url:"./services/SchoolRpc.ashx?rpc",
 				beforeSend: function(request){
@@ -230,21 +230,21 @@
 						this.error();
 						return;
 					}
-					if (window.ios){
-						alert(" Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
-						$("form")[0].reset();
-					}else{
+// 					if (window.ios){
+// 						alert(" Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
+// 						$("form")[0].reset();
+// 					}else{
 						$("body").html("<div id='thanks'> Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
-					}
+// 					}
 					$("form").show();
 					$("body").removeClass("loading");
 				},
 				error: function(){
-					if (window.ios){
-						alert("There was an error processing your submission data.  Please try again.");
-					}else{
+// 					if (window.ios){
+// 						alert("There was an error processing your submission data.  Please try again.");
+// 					}else{
 						$("body").html("<div id='thanks'>There was an error processing your submission data.  Please return to the map and try again.</div>");	
-					}
+// 					}
 					$("form").show();
 					$("body").removeClass("loading");
 				}
