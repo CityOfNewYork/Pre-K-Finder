@@ -231,19 +231,12 @@
 					}else{
 						$("body").html("<div id='thanks'>Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
 					}
-					$("form")[0].reset();
-					$("form").show();
 					$("body").removeClass("loading");
 				},
 				error: function(){
-					if (window.ios){
-						alert("There was an error processing your submission data.  Please try again.");
-						$("form").show();
-					}else{
-						$("body").html("<div id='thanks'>There was an error processing your submission data.  Please return to the map and try again.</div>");	
-					}
-					$("form").show();
 					$("body").removeClass("loading");
+					alert("There was an error processing your submission data.  Please try again.");
+					$("form").show();
 				}
 			});
 			return false;
