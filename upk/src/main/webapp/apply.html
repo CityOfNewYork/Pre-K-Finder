@@ -46,9 +46,7 @@
 			font-weight:bold !important;
 		}
 		#review{
-			position: fixed;
-			top: 12px;
-			margin: 0 calc(50% - 135px);
+			margin: 12px calc(50% - 135px);
 			width: 270px;
 			border-radius: 4px;
 			border: 1px solid lightgrey;
@@ -77,7 +75,7 @@
 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	
 	<script type="text/javascript">
-		//window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
+		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		$("document").ready(function(){		
 			try{ /* parse query string and prepopulate form */
 				var params = document.location.search.substr(1).split("&");
@@ -100,7 +98,7 @@
 			return true;
 		};
 
-		function valid(){ 
+		function valid(){
 			var err = [];
 			$("label").removeClass("err");
 			$.each($("input, select"), function(_, n){
@@ -142,9 +140,9 @@
 		};	
 	
 		function review(){
-// 			if (window.ios){
-// 				iosReview();
-// 			}else{
+			if (window.ios){
+				iosReview();
+			}else{
 				var data = formData();
 				$("#review_lang").html("");
 				for (var d in data){
@@ -154,26 +152,23 @@
 				$("#review_moreInfo")[data.moreInfo.length ? "show" : "hide"]();
 				$("form").hide();
 				$("#review").show();
-// 			}
+			}
 		};
 		
 		function iosReview(){
 			var data = formData(),
-				msg = "Please review your submission, are you sure you want to apply to:\n\n" +
-// 					"Student name: " + data.first_name + " " + data.last_name + "\n" +
-// 					"Student gender: " + data.gender + "\n" +
+				msg = "Please review your submission:\n\n" +
+					"Date of birth: " + data.dob + "\n" +
 					"Student address: " + "\n" +
 					data.house_number + " " + data.street_name + " " + data.apt + "\n" +
 					data.city + " (" + data.borough + "), NY " +  data.zip + "\n" +
 					"Parent choice: " + data.cbeccText + 
-					(data.moreInfo.length ? " - I am not sure where to send my child. I would like more information about applying to a CBECC." : "") + "\n" +
-// 					"Home language: " + data.lang.toString() + "\n" +
+					(data.moreInfo.length ? " - I am not sure where to send my child. I would like more information about applying to pre-K." : "") + "\n" +
 					"Parent/Guardian name: " + data.parent_first_name + " " + data.parent_last_name + "\n" +
 					"Day Telephone: " + data.day_telephone + "\n" +
 					"Evening Telephone: " + data.evening_telephone + "\n" +
 					"Email address: " + data.email + "\n";
 			$("form").hide();
-			//console.warn(msg);
 			if (confirm(msg)){
 				apply();
 			}else{
@@ -231,21 +226,22 @@
 						this.error();
 						return;
 					}
-// 					if (window.ios){
-// 						alert(" Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
-// 						$("form")[0].reset();
-// 					}else{
-						$("body").html("<div id='thanks'> Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
-// 					}
+					if (window.ios){
+						alert("Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
+					}else{
+						$("body").html("<div id='thanks'>Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
+					}
+					$("form")[0].reset();
 					$("form").show();
 					$("body").removeClass("loading");
 				},
 				error: function(){
-// 					if (window.ios){
-// 						alert("There was an error processing your submission data.  Please try again.");
-// 					}else{
+					if (window.ios){
+						alert("There was an error processing your submission data.  Please try again.");
+						$("form").show();
+					}else{
 						$("body").html("<div id='thanks'>There was an error processing your submission data.  Please return to the map and try again.</div>");	
-// 					}
+					}
 					$("form").show();
 					$("body").removeClass("loading");
 				}
