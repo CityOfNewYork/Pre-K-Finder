@@ -46,7 +46,9 @@
 			font-weight:bold !important;
 		}
 		#review{
-			margin: 12px calc(50% - 135px);
+			position: fixed;
+			top: 12px;
+			margin: 0 calc(50% - 135px);
 			width: 270px;
 			border-radius: 4px;
 			border: 1px solid lightgrey;
@@ -152,7 +154,6 @@
 				$("#review_moreInfo")[data.moreInfo.length ? "show" : "hide"]();
 				$("form").hide();
 				$("#review").show();
-				window.scrollTo(0, 0);				
 // 			}
 		};
 		
