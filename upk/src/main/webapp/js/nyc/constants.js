@@ -13,7 +13,7 @@ var	RESOLUTIONS = [434.027777777778, 303.819444444444, 222.222222222222, 111.111
 	 * change the appropriate values below
 	 * 
 	 */
-	APPLICATION_URL = document.domain == "maps.nyc.gov" ? "//schools.nyc.gov/schoolsearch/apply.html" : "//schoolsstg.nycenet.edu/schoolsearch/apply.html",
+	APPLICATION_URL = document.domain == "maps.nyc.gov" ? "//www.nycenet.edu/schoolsearch/apply.html" : "http://schoolsstg.nycenet.edu/schoolsearch/apply.html",
 	/* 
 	 * un-comment to revert to DOE form	if they decide not to use doitt replacement form
 	 * 
