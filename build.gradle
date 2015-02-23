@@ -8,6 +8,8 @@ buildscript {
 apply plugin: 'base'
 apply plugin: 'jetty'
 
+ext{}
+
 jettyRun {
 	httpPort 8088
 	stopPort 8090
