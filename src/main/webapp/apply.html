@@ -178,12 +178,7 @@
 		
 		function formData(){
 			var result = {};
-// 			result.first_name = $("#first_name").val();
-// 			result.last_name = $("#last_name").val();
 			result.dob = $("#dob").val();
-// 			result.gender = "";
-// 			if ($("#male").prop("checked")) result.gender = "Male";
-// 			if ($("#female").prop("checked")) result.gender = "Female";
 			result.house_number = $("#house_number").val();
 			result.street_name = $("#street_name").val();
 			result.apt = $("#apt").val();
@@ -192,13 +187,6 @@
 			result.zip = $("#zip").val();
 			result.cbeccText = $("#cbeccText").val();
 			result.moreInfo = $("#moreInfo").prop("checked") ? ["on"] : [];
-// 			result.lang = [];
-// 			$.each($("form")[0].lang, function(_, n){
-// 				if ($(n).prop("checked")){
-// 					result.lang.push($(n).data("value"));
-// 				}
-// 			});
-// 			if ($("#other_lang").val()) result.lang.push($("#other_lang").val());
 			result.parent_first_name = $("#parent_first_name").val();
 			result.parent_last_name = $("#parent_last_name").val();
 			result.relationship = $("#relationship").val();
@@ -206,7 +194,6 @@
 			result.evening_telephone = $("#evening_telephone").val();
 			result.email = $("#email").val();
 			result.confirm = $("#confirm").prop("checked") ? ["on"] : [];
-			//console.warn(result);
 			return result;
 		};
 		
@@ -249,18 +236,9 @@
 			<form>
 				<div class="sect">
 					<h2>Student Information</h2>
-<!-- 					<label for="first_name">First name:</label> -->
-<!-- 					<input id="first_name" name="first_name" type="text" data-required="true"> -->
-<!-- 					<label for="last_name">Last name:</label> -->
-<!-- 					<input id="last_name" name="last_name" type="text" data-required="true"> -->
 					<label for="dob">Date of birth (mm/dd/yyyy):</label>
 					<input id="dob" name="dob" type="text" data-required="true" placeholder="mm/dd/yyyy">
 					(Note:  To be eligible for pre-K for the 2015-16 school year, your child must have been born in the year 2011.)
-<!-- 					<label>Gender (optional):</label> -->
-<!-- 					<label for="male">Male</label> -->
-<!-- 					<input id="male" name="gender" type="radio" value="Male"> -->
-<!-- 					<label for="female">Female</label> -->
-<!-- 					<input id="female" name="gender" type="radio" value="Female"> -->
 					<h3>Current address</h3>
 					<label for="house_number">House number:</label>
 					<input id="house_number" name="house_number" type="text" data-required="true">
@@ -277,45 +255,9 @@
 						<option>Queens</option>
 						<option>Staten Island</option>
 					</select>					
-					<label for="city">City:</label>
-					<input id="city" name="city" type="text" data-required="true">					
 					<label for="zip">5 Digit ZIP Code (numbers only):</label>
 					<input id="zip" name="zip" type="text" data-required="true" data-number="5" placeholder="12345">
 				</div>					
-				<div class="sect">
-					<h2>Parent Choice</h2>
-<!-- 					<label for="cbeccText">If you know the name of the CBECC you would like your child to attend, please enter it here:</label> -->
-					<label for="cbeccText">If you know the name of the pre-K program you would like your child to attend, please enter it here:</label>
-					<input id="cbeccText" name="cbeccText" type="text">
-					<input id="moreInfo" name="moreInfo" type="checkbox">
-					<label for="moreInfo">I am not sure where to send my child. I would like more information about applying to pre-K.</label>
-				</div>					
-<!-- 				<div class="sect"> -->
-<!-- 					<h2>Home Language (Optional)</h2> -->
-<!-- 					<label>In which language would you like to receive written and/or oral communication regarding the Pre-Kindergarten Admissions Process?</label> -->
-<!-- 					<input id="english" name="lang" type="checkbox" data-value="English"> -->
-<!-- 					<label for="english">English</label> -->
-<!-- 					<input id="arabic" name="lang" type="checkbox" data-value="Arabic"> -->
-<!-- 					<label for="arabic">Arabic</label> -->
-<!-- 					<input id="bengali" name="lang" type="checkbox" data-value="Bengali"> -->
-<!-- 					<label for="bengali">Bengali</label> -->
-<!-- 					<input id="chinese" name="lang" type="checkbox" data-value="Chinese"> -->
-<!-- 					<label for="chinese">Chinese</label> -->
-<!-- 					<input id="french" name="lang" type="checkbox" data-value="French"> -->
-<!-- 					<label for="french">French</label> -->
-<!-- 					<input id="haitian" name="lang" type="checkbox" data-value="Haitian"> -->
-<!-- 					<label for="haitian">Haitian</label> -->
-<!-- 					<input id="korean" name="lang" type="checkbox" data-value="Korean"> -->
-<!-- 					<label for="korean">Korean</label> -->
-<!-- 					<input id="russian" name="lang" type="checkbox" data-value="Russian"> -->
-<!-- 					<label for="russian">Russian</label> -->
-<!-- 					<input id="spanish" name="lang" type="checkbox" data-value="Spanish"> -->
-<!-- 					<label for="spanish">Spanish</label> -->
-<!-- 					<input id="urdu" name="lang" type="checkbox" data-value="Urdu"> -->
-<!-- 					<label for="urdu">Urdu</label> -->
-<!-- 					<label for="other_lang">Other:</label> -->
-<!-- 					<input id="other_lang" name="other_lang" type="text"> -->
-<!-- 				</div>					 -->
 				<div class="sect">
 					<h2>Parent/Guardian Information</h2>
 					<label for="parent_first_name">First name:</label>
@@ -344,23 +286,12 @@
 					<input id="evening_telephone" name="evening_telephone" type="text" data-required="true" data-number="10" placeholder="2125555555">
 					<label for="email">Email address:</label>
 					<input id="email" name="email" type="text" data-required="true">
-					<span>
-						I understand that daily attendance and promptness are required.
-						I must arrange for a responsible adult to bring my child to school and pick him/her up daily.
-						I understand that no transportation is provided.
-					</span>
-<!-- 					<input id="confirm" name="confirm" type="checkbox" data-required="true"> -->
-<!-- 					<label for="confirm">I acknowledge the above statements and understand that the information in this form will be sent to my chosen CBECC in order to proceed with my application.</label> -->
 				</div>
 				<input type="reset" value="Reset">
-<!-- 				<input id="applyNow" type="button" value="Apply Now"> -->
 				<input id="applyNow" type="button" value="Submit Info">
 			</form>
 			<div id="review">		
-<!-- 				<h3>Please review your submission, are you sure you want to apply to:</h3> -->
 				<h3>Please review your submission:</h3>
-<!-- 				<div><span class="name">Student name:</span> <span id="review_first_name"></span>, <span id="review_last_name"></span></div> -->
-<!-- 				<div><span class="name">Student gender:</span> <span id="review_gender"></span></div> -->
 				<div>
 					<span class="name">Date of birth:</span><br><span id="review_dob"></span><br>
 				</div>
@@ -369,7 +300,6 @@
 					<span id="review_city"></span> (<span id="review_borough"></span>), NY <span id="review_zip"></span>
 				</div>
 				<div><span class="name">Parent choice:</span> <span id="review_cbeccText"></span><span id="review_moreInfo"> - I would like more information about applying to pre-K.</span></div>
-<!-- 				<div><span class="name">Home language:</span> <span id="review_lang"></span> <span id="review_other_lang"></span></div> -->
 				<div><span class="name">Parent/Guardian name:</span><br><span id="review_parent_first_name"></span> <span id="review_parent_last_name"></span></div>
 				<div><span class="name">Relationship:</span> <span id="review_relationship"></span></div>
 				<div><span class="name">Day Telephone:</span> <span id="review_day_telephone"></span></div>

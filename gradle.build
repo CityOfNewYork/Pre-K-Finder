@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {}
+}
+
+apply plugin: 'base'
+apply plugin: 'jetty'
+
+jettyRun {
+	httpPort 8088
+	stopPort 8090
+	stopKey 'stopKey'
+	reload 'automatic'
+	scanIntervalSeconds 2
+}
+
+jettyStop {
+	stopPort 8090
+	stopKey 'stopKey'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion '2.3'
+}

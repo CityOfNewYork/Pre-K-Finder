@@ -21,6 +21,7 @@ nyc.UpkInfo = (function(){
 			var upk = this.upk, id = idPrefix + upk.id;
 			return "<div id='" + id + "' class='upkInfo'>" +
 				"<div class='name'><img class='upkType' src='img/" + upk.type() + "0.png'/>" + upk.name() + "</div>" +
+				"<div class='addr'>" + upk.specialMessage() + "</div>" +
 				"<div class='addr'>" + upk.address1() + "</div>" +
 				"<div class='addr'>" + upk.address2() + "</div>" +
 				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "' target='_blank'>" + upk.phone() + "</a></div>" +
@@ -35,20 +36,9 @@ nyc.UpkInfo = (function(){
 				"');\">Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
-				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' onclick=\"nyc.app.changePage('" + APPLICATION_URL + this.qstr(upk) + "');\">Get in Touch</a></td>") : "") +
+				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' onclick=\"nyc.app.changePage('" + APPLICATION_URL + "');\">Get in Touch</a></td>") : "") +
 				"</tr></tbody></table>" +
 				"</div>";
-		},
-		qstr: function(upk){
-			var boro = this.currentLocation.attributes.borough || "";
-			if (boro){
-				boro = boro.substr(0, 1) + boro.substr(1).toLowerCase(); 
-			}
-			return "?cbeccText=" + escape(upk.name().replace(/\<span class=\"duh\"\>\<br\>Call 311 for opening info\<\/span\>/, "")) + /* remove hack html added to db because last minute bs */
-				"&house_number=" + escape(this.currentLocation.attributes.houseNumber || "") +
-				"&street_name=" + escape(this.currentLocation.attributes.streetName || "") +
-				"&borough=" + boro +
-				"&zip=" + (this.currentLocation.attributes.zip || "");
 		}
 	};
 	return upkInfoClass;
