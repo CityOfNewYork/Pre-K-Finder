@@ -41,7 +41,7 @@ task copyFiles << {
 	}
 }
 
-task rewriteConstants(dependsOn: [clean, copyFiles]) << {
+task buildApp(dependsOn: [clean, copyFiles]) << {
 	def env = project.hasProperty('env') ? env : default_env
 	def infoUrl = project.ext["${env}_info_url"];
 	def applyUrl = project.ext["${env}_apply_url"];
