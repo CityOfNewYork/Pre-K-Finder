@@ -5,6 +5,12 @@ html, body, .ui-mobile .ui-page-active, #main {
 	padding:0;
 	overflow:hidden;
 }
+/* ======================== buttons galore ================== */
+#buttonsGalore {
+	z-index: 1000;
+	position: absolute;
+	top: 40px;
+}
 /* ======================== external ========================= */
 #external-page, #external-content, #external-page iframe {
 	padding: 0;
@@ -54,7 +60,7 @@ span.noshow{
 }
 .banner{
 	background-color:#013364 !important;
-	height: 44px;
+	height: 88px;
 }
 .nycLogo{
     height: 24px;

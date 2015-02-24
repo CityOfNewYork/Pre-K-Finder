@@ -65,6 +65,7 @@ nyc.App = (function(){
 		
 		$.ajax({
 			url:"upk.json",
+			dataType: "json",
 			success: function(data){
 				if (!data.features){
 					this.error();

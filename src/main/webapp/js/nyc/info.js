@@ -36,9 +36,20 @@ nyc.UpkInfo = (function(){
 				"');\">Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
-				(upk.type() != "DOE" ? ("<td class='apply'><a class='ui-btn' onclick=\"nyc.app.changePage('" + APPLICATION_URL + "');\">Get in Touch</a></td>") : "") +
+				this.renderFormBtn(upk) +
 				"</tr></tbody></table>" +
 				"</div>";
+		},
+		renderFormBtn: function(upk){
+			var url, title;
+			if (DO_APPLY && (upk.type() == "DOE" || upk.dayLength() == 1)){
+				url = APPLY_URL;
+				title = APPLY_TITLE;
+			}else{
+				url = INFO_URL;
+				title = INFO_TITLE;
+			}
+			return "<td class='apply'><a class='ui-btn' onclick=\"nyc.app.changePage('" + url + "');\">" + title + "</a></td>";
 		}
 	};
 	return upkInfoClass;

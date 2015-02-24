@@ -1,26 +1,16 @@
-var	RESOLUTIONS = [434.027777777778, 303.819444444444, 222.222222222222, 111.111111111111, 55.5555555555556, 27.7777777777778, 13.8888888888889, 6.94444444444444, 3.47222222222222, 1.73611111111111, 0.868055555555556],
+var	TODAY = new Date(),
+	DO_APPLY = TODAY >= new Date(TODAY.getFullYear() + "-03-16") && TODAY < new Date(TODAY.getFullYear() + "-04-25") , //TODO is this rule right?
+	APPLY_TITLE = "Apply Now",
+	INFO_TITLE = "Get in Touch", 
+	RESOLUTIONS = [434.027777777778, 303.819444444444, 222.222222222222, 111.111111111111, 55.5555555555556, 27.7777777777778, 13.8888888888889, 6.94444444444444, 3.47222222222222, 1.73611111111111, 0.868055555555556],
 	SIZE = new OpenLayers.Size(512, 512),
 	ORIGIN = new OpenLayers.LonLat(700000.0, 440000.0),
 	MAX_EXT = new OpenLayers.Bounds(700000.0, -4444.444444444671, 1366666.666666667, 440000.0),
 	NYC_EXT = new OpenLayers.Bounds(912090, 119053, 1068317, 273931),
 	EPSG_2263 = new OpenLayers.Projection("EPSG:2263"),
 	GEOCLIENT_URL = "/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input=",
-	
-	/* 
-	 * any APPLICATION_URL value should use HTTPS protocol
-	 * 
-	 * if/when DOE makes these URLs available via HTTPS
-	 * change the appropriate values below
-	 * 
-	 */
-	APPLICATION_URL = document.domain == "maps.nyc.gov" ? "//www.nycenet.edu/schoolsearch/apply.html" : "http://schoolsstg.nycenet.edu/schoolsearch/apply.html",
-	/* 
-	 * un-comment to revert to DOE form	if they decide not to use doitt replacement form
-	 * 
-	 * APPLICATION_URL = "//schools.nyc.gov/schoolsearch/apply.html",
-	 * 
-	 */
-			
+	INFO_URL = "//www.nycenet.edu/schoolsearch/apply.html", //TODO dev/stg builds swap urls - chg apply.html go info.html for clarity	
+	APPLY_URL = "//www.semsnycdoe.com/parentsite", //TODO dev/stg builds swap urls - better be ssl	
 	DEV_HOST = "csgis-dev-web.csc.nycnet",
 	BASEMAP_URI = "/gis/data/tiles/basic/",
 	DAY_LENGTH = {
