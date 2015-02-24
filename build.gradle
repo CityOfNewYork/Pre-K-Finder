@@ -11,12 +11,12 @@ apply plugin: 'jetty'
 ext{
 	default_env = 'dev'
 	
-	local_info_url = '//www.nycenet.edu/schoolsearch/info.html'
+	local_info_url = 'info.html'
 	local_apply_url = '//www.semsnycdoe.com/parentsite'
 	local_geoclient_url = 'http://maps.nyc.gov/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input='
 	local_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	
-	dev_info_url = 'http://schoolsstg.nycenet.edu/schoolsearch/info.html' //TODO is there a dev url
+	dev_info_url = 'info.html' //TODO is there a dev url
 	dev_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a dev url
 	dev_geoclient_url = 'http://csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input='
 	dev_basemap_urls = '["//csgis-dev-web.csc.nycnet/gis/data/tiles/basic/"]'
@@ -47,18 +47,12 @@ task rewriteConstants(dependsOn: [clean, copyFiles]) << {
 	def applyUrl = project.ext["${env}_apply_url"];
 	def geoUrl = project.ext["${env}_geoclient_url"];
 	def baseUrls = project.ext["${env}_basemap_urls"];
+
  	println "\nbuilding for env=${env}...\n"
  	println "INFO_URL=${infoUrl}"
  	println "APPLY_URL=${applyUrl}" 
  	println "GEOCLIENT_URL=${geoUrl}"
  	println "BASEMAP_URLS=${baseUrls}\n"
- 	
- 	println local_info_url
-	println local_apply_url
-	println local_geoclient_url
-	println local_basemap_urls
- 	
- 	println ''
  	
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
 	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_info_url, value: infoUrl)

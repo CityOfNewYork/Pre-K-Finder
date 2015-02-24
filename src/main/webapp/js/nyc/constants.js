@@ -4,7 +4,7 @@ var	TODAY = new Date(),
 	APPLY_TITLE = "Apply Now",
 	INFO_TITLE = "Get in Touch", 
 	SCHOOL_YEAR = THIS_YEAR + "-" + new String(THIS_YEAR + 1).substr(2), // this year and next year - //TODO is this right for all months?
-	INFO_URL = '//www.nycenet.edu/schoolsearch/info.html',
+	INFO_URL = 'info.html',
 	APPLY_URL = '//www.semsnycdoe.com/parentsite',
 	GEOCLIENT_URL = 'http://maps.nyc.gov/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input=',
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],
