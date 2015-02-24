@@ -111,7 +111,7 @@
 		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		
 		var THIS_YEAR = new Date().getFullYear();
-		var SCHOOL_YEAR = THIS_YEAR + "-" + (THIS_YEAR + 1); //this year and next year - is this right for all months?
+		var SCHOOL_YEAR = THIS_YEAR + "-" + new String(THIS_YEAR + 1).substr(2); // this year and next year - //TODO is this right for all months?
 		var REQ_DOB_YEAR = THIS_YEAR - 4;
 		var DOB_AFTER = REQ_DOB_YEAR + "-01-01"; //the first day of the year 4 yrs ago
 		var DOB_BEFORE = (THIS_YEAR - 2) + "-12-31"; //the last day of the year 2 yrs ago
@@ -242,9 +242,9 @@
 						return;
 					}
 					if (window.ios){
-						alert("Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
+						alert("Thank you for completing our Pre-K for All information form!  Your submission is being sent to the Pre-K for All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
 					}else{
-						$("#result").html("<div id='thanks'>Thank you for completing our Pre-K For All information form!  Your submission is being sent to the Pre-K For All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
+						$("#result").html("<div id='thanks'>Thank you for completing our Pre-K for All information form!  Your submission is being sent to the Pre-K for All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
 						$("#review").fadeOut();
 						$("#result").fadeIn();
 					}

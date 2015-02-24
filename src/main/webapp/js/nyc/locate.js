@@ -153,11 +153,9 @@ nyc.Locate = (function(){
 			if (input.length == 5 && !isNaN(input)){
 				me.mapZip(ZIP_CODES[input], "ZIP Code: " + input);
 			}else if (input.length){
-				var host = document.location.hostname, protocol = document.location.protocol;
-				if (host == "localhost") host = DEV_HOST;
 				input = input.replace(/"/g, "").replace(/'/g, "").replace(/&/g, " and ");
 				$.ajax({
-					url: protocol + "//" + host + GEOCLIENT_URL + input,
+					url: GEOCLIENT_URL + input,
 					dataType:"jsonp",
 					success: function(response) {
 						me.geoClientFound(response);

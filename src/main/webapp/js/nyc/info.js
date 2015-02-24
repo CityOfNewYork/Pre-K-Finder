@@ -32,11 +32,11 @@ nyc.UpkInfo = (function(){
 				"<td class='directions'><a class='ui-btn' onclick=\"nyc.app.direct('" +
 				escape(this.currentLocation.attributes.title) + "','" + 
 				escape(upk.address()) + "','" + 
-				escape(upk.name().replace(/\<span class=\"duh\"\>\<br\>Call 311 for opening info\<\/span\>/, "")) + /* remove hack html added to db because last minute bs */
+				escape(upk.name()) +
 				"');\">Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
-				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
 				this.renderFormBtn(upk) +
+				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
 				"</tr></tbody></table>" +
 				"</div>";
 		},

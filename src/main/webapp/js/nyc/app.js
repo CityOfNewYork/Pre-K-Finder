@@ -305,20 +305,7 @@ $(document).ready(function(){
 	);
 	var base = new OpenLayers.Layer.ArcGISCache(
 		"Street Map",
-		(function(){
-			var uris = [],
-				protocol = document.location.protocol + "//",
-				host = document.location.hostname;
-			if (host == "localhost") host = DEV_HOST;
-			uris.push(protocol + host + BASEMAP_URI);
-			if (host == "maps.nyc.gov"){
-				for (var i = 1; i < 4; i++){
-					var parts = host.split(".");
-					uris.push(protocol + parts[0] + i + host.substr(host.indexOf(".")) + BASEMAP_URI);
-				}
-			}
-			return uris;
-		})(),
+		BASEMAP_URLS,
 		{
 		    tileOrigin: ORIGIN,
 		    resolutions: RESOLUTIONS,
@@ -337,5 +324,5 @@ $(document).ready(function(){
 	nyc.app = new nyc.App(map, new nyc.Locate(map), new nyc.UpkList(), new nyc.UpkTable()); 
 	
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
-	
+	$(".schoolYr").html("for School Year " + SCHOOL_YEAR);
 });
