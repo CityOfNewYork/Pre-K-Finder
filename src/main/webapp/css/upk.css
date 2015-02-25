@@ -268,7 +268,7 @@ a.mapBtn:after{
 	background-color: white !important;
 }
 #upkTypes .upkType{
-	margin: 0 75px 0 0;
+	margin: 0 60px 0 0;
 	float: right;
 }
 .mapBtn:hover, .upkAction a:hover, #alert .ui-btn:hover, #pgCtrl .ui-btn:hover, #back:hover{
@@ -309,7 +309,7 @@ a.mapBtn:after{
 	margin:3px 5px;
 }
 #filters .ui-collapsible-content {
-	padding: 1px 5px 0 5px;
+	padding: 1px 20px 0 20px;
 }
 #filters h3 a{
 	text-align: center;

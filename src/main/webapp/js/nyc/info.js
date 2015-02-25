@@ -76,7 +76,7 @@ nyc.UpkTable = (function(){
 			this.rows(tbl[0], 0);
 		},
 		rows: function(tbl, pg){
-			var start = pg * 10, end = start + 10, upks = this.upkList.upks(this.currentLocation.geometry);
+			var start = pg * 10, end = start + 10, upks = this.upkList.features(this.currentLocation.geometry);
 			if (end >= upks.length){
 				end = upks.length;
 				$("#pgCtrl").hide();
@@ -106,7 +106,7 @@ nyc.UpkTable = (function(){
 			this.rows($("#upkTable")[0], $("#more").data("current-pg") * 1);
 		},
 		fixJqCss: function(){
-			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height());
+			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height() + 15);
 		}
 	};
 	return upkTableClass;

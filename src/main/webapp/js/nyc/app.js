@@ -32,6 +32,10 @@ nyc.App = (function(){
 			  }
 		});
 		$("#panel").panel("open");
+		$("#filters").collapsible({
+			expand: me.upkTable.fixJqCss,
+			collapse: me.upkTable.fixJqCss
+		});
 		$("#filters input[type=checkbox]").change($.proxy(me.filter, me));
 		$("#toggles").click(me.toggle);
 		$(nyc).on("locate.fail", function(_, msg){me.alert(msg);});
@@ -64,13 +68,15 @@ nyc.App = (function(){
 		});
 		
 		$.ajax({
-			url:"upk.json",
-			dataType: "json",
-			success: function(data){
-				if (!data.features){
-					this.error();
-					return;
-				}
+			url:"upk.csv",
+			dataType: "text",
+			success: function(csvData){
+				var csvFeatures = $.csv.toObjects(csvData), features = [], wkt = new OpenLayers.Format.WKT();;
+				$.each(csvFeatures, function(_, f){
+					var feature = wkt.read(f.SHAPE);
+					feature.attributes = f;
+					features.push(feature);
+				});
 				me.upkLayer = new OpenLayers.Layer.Vector("", {
 					styleMap: UPK_STYLE_MAP,
 					maxResolution: RESOLUTIONS[3],
@@ -101,8 +107,8 @@ nyc.App = (function(){
 				);				
 				me.map.addLayer(me.upkLayer);
 				me.map.setLayerIndex(me.upkLayer, UPK_LAYER_IDX);
-				me.upkList.populate(data.features);
-				me.upkLayer.addFeatures(me.upkList.features());
+				me.upkList.populate(features);
+				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);				
 			},
 			error: function(){
@@ -230,26 +236,6 @@ nyc.App = (function(){
 				$("#panel").panel(target.html() == "Map" ? "close" : "open");
 				setTimeout(function(){target.addClass("ui-btn-active");}, 100);
 			},
-//			filter: function(e){
-//				var me = this, target = $(e.target);
-//				if (!target.data("filter-name")) target = target.parent(); /* user clicked on the hand icon */
-//				target.parent().children().removeClass("ui-btn-active");
-//				target.addClass("ui-btn-active");
-//				setTimeout(function(){ /* timeout allows applied css to rerender before more expensive filtering and table rendering */
-//					var filters = {type:[], dayLength:[]};
-//					$.each($("#upkTypes .ui-btn-active, #dayLengths .ui-btn-active"), function(_, n){
-//						var name = $(n).data("filter-name"), values = $(n).data("filter-values");
-//						values = filters[name].concat(values.split(","));
-//						filters[name] = values;
-//					});
-//					me.upkList.filter(filters);
-//					me.upkTable.render(me.upkList, me.currentLocation);
-//					me.upkLayer.removeAllFeatures();
-//					me.upkLayer.addFeatures(me.upkList.features());
-//					$("#callout").remove();
-//					me.upkLayer.redraw();
-//				}, 2);
-//			},
 			filter: function(e){
 				var me = this;
 				var filters = {type:[], dayLength:[]};

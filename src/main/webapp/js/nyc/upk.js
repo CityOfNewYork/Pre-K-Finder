@@ -1,57 +1,37 @@
 window.nyc = window.nyc || {};
 
-nyc.Upk = (function(){
-	/*
-	 * nyc.Upk extends a geoJSON Feature with fields and convenience methods
-	 * @constructor
-	 * 
-	 * @param {Object} f
-	 * 
-	 */
-	var upkClass = function(f){
-		var c = f.geometry.coordinates,
-			pt = new OpenLayers.Geometry.Point(c[0], c[1]),
-			attr = f.properties;
-		this.upkFeature = new OpenLayers.Feature.Vector(pt, attr);
-		this.geometry = this.upkFeature.geometry;
-		this.attributes = this.upkFeature.attributes;
-		this.id = this.upkFeature.id;
-		this.distance = null;
-	};
-	upkClass.prototype = {
-		name: function(){
-			return this.attributes.NAME;
-		},
-		note: function(){
-			return this.attributes.NOTE; //TODO modify schema
-		},
-		address1: function(){
-			return this.attributes.ADDRESS;
-		},
-		address2: function(){
-			return BOROUGH[this.attributes.BOROUGH] + ", NY " + this.attributes.ZIP;
-		},
-		address: function(){
-			return this.address1() + ", " + this.address2();
-		},
-		phone: function(){
-			return this.attributes.PHONE || "";
-		},
-		dayLength: function(){
-			return this.attributes.DAY_LENGTH;
-		},
-		seats: function(){
-			return this.attributes.SEATS;
-		},
-		type: function(){
-			return this.attributes.PREK_TYPE;
-		},
-		isFullDay: function(){
-			return this.dayLength() == 1 || this.dayLength() == 2;
-		}
-	};
-	return upkClass;
-}());
+window.nyc.UpkDecorator = {
+	name: function(){
+		return this.attributes.NAME;
+	},
+	note: function(){
+		return this.attributes.NOTE; //TODO modify schema
+	},
+	address1: function(){
+		return this.attributes.ADDRESS;
+	},
+	address2: function(){
+		return BOROUGH[this.attributes.BOROUGH] + ", NY " + this.attributes.ZIP;
+	},
+	address: function(){
+		return this.address1() + ", " + this.address2();
+	},
+	phone: function(){
+		return this.attributes.PHONE || "";
+	},
+	dayLength: function(){
+		return this.attributes.DAY_LENGTH;
+	},
+	seats: function(){
+		return this.attributes.SEATS;
+	},
+	type: function(){
+		return this.attributes.PREK_TYPE;
+	},
+	isFullDay: function(){
+		return this.dayLength() == 1 || this.dayLength() == 2;
+	}
+};
 
 nyc.UpkList = (function(){
 	/*
@@ -75,16 +55,14 @@ nyc.UpkList = (function(){
 					me.filteredFeatures[upk.id] = upk;
 			});
 		},
-		sorted: function(p, ol){
+		sorted: function(p){
 			var me = this, result = [];
 			for (var id in this.filteredFeatures){
-				var upk = this.filteredFeatures[id], f = upk.upkFeature;
-				f.distance = upk.distance;
-				result.push(ol ? f : upk);
+				result.push(this.filteredFeatures[id]);
 			}
 			if (p){
-				$.each(result, function(_, upk){
-					upk.distance = me.distance(p, upk.geometry);
+				$.each(result, function(_, f){
+					f.distance = me.distance(p, f.geometry);
 				});
 				result.sort(function(a, b){
 					if (a.distance < b.distance) return -1;
@@ -94,20 +72,19 @@ nyc.UpkList = (function(){
 			}
 			return result;
 		},
-		upks: function(p){
+		features: function(p){
 			return this.sorted(p);
 		},
-		features: function(p){
-			return this.sorted(p, true);
-		},
 		populate: function(features){
-			var me = this;
+			var me = this, decorator = window.nyc.UpkDecorator;
 			me.allFeatures = [];
 			me.filteredFeatures = {};
 			$.each(features, function(_, f){
-				var upk = new nyc.Upk(f);
-				me.allFeatures.push(upk);
-				me.filteredFeatures[upk.id] = upk;
+				for (var decoration in decorator){
+					f[decoration] = decorator[decoration];
+				}
+				me.allFeatures.push(f);
+				me.filteredFeatures[f.id] = f;
 			});
 			this.ready = true;
 		},
