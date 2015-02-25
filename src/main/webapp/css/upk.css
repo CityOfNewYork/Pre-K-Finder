@@ -18,7 +18,7 @@ div#splashContent{
 	padding: 10px;
 	background-color: white;
 	border: 2px solid #013364;
-	border-radius: 4px;
+	border-radius: 0.6em;
 	width: 280px;
 	margin: 5px auto;
 	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
@@ -28,7 +28,7 @@ div#splashContent{
 	margin: -5px 5px 3px -3px;
 }
 #splash .ui-btn{
-	background-color: orange;
+	background-color: #f8993a;
 }
 #splash .ui-btn:hover{
 	background-color: rgb(1,51,100);
@@ -140,7 +140,11 @@ span.noshow{
 	border-color:#013364;
 	padding:19px;
 	color:white;
-	border-radius:4px;
+	border-radius:0.6em !important;
+}
+a.mapBtn:after{
+	background-color: rgba(255,255,255,0);
+	background-size: 20px;
 }
 #srch, #_srch{
 	left: 377px;
@@ -172,7 +176,7 @@ span.noshow{
 }
 #address{
 	width:100%;
-	border-radius:4px;
+	border-radius:0.6em;
 	border:1px solid #013364;
 	font-size:17px;
 	padding:0 0 0 3px;
@@ -192,7 +196,7 @@ span.noshow{
 	width:320px;
 	background-color:white;
 	border:1px solid #013364;
-	border-radius:4px;
+	border-radius:0.6em;
  	overflow-y:auto;
  	overflow-x:hidden;
 	margin:3px 0 0 0;
@@ -255,7 +259,7 @@ span.noshow{
 .upkAction a {
 	padding: 12px 9px;
 	margin: 10px 0 0 0;
-	border-radius: 4px;
+	border-radius: 0.6em;
 }
 .oddRow .upkAction a {
 	background-color: white !important;
@@ -299,6 +303,18 @@ span.noshow{
 }
 #filters{
 	margin:3px 5px;
+}
+#filters h3 a{
+	text-align: center;
+}
+#filters h3 a:after{
+	background-image: url(../img/filter.png);
+	background-size: 12px;
+	background-color:#f8993a;
+}
+
+#filters label.ui-checkbox-on:after{
+	background-color: #80b34e;
 }
 #upkTypes .ui-controlgroup-controls, #dayLengths .ui-controlgroup-controls{
 	width:100%;	
@@ -358,7 +374,7 @@ span.noshow{
 	position:relative;
 	margin:100px auto;
 	width:303px;
-	border-radius:4px;
+	border-radius:0.6em;
 	border:1px solid lightgrey;
 	box-shadow:0 1px 3px rgba(0,0,0,0.5);
 	display:none;
@@ -381,7 +397,7 @@ span.noshow{
 	text-shadow: none;
 	background-color: rgba(1,51,100,0.5) !important;
 	color:white;
-	border-radius:4px;	
+	border-radius:0.6em;	
 }
 #pgCtrl{
 	width: 100%;
