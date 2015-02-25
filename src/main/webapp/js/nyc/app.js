@@ -2,7 +2,6 @@ window.nyc = window.nyc || {};
 
 OpenLayers.Util.DOTS_PER_INCH = 96.0;
 OpenLayers.Util.onImageLoadErrorColor = "transparent";		
-if (document.domain == "maps.nyc.gov") document.domain = "nyc.gov"; /* allow us to manipulate feedback form document */
 
 nyc.App = (function(){	
 	/*
@@ -15,7 +14,7 @@ nyc.App = (function(){
 	 * @param {nyc.UpkTable} upkTable
 	 * 
 	 */
-	var appClass = function(map, locate, upkList, upkTable){
+	var appClass = function(map, locate, upkList, upkTable, share){
 		var me = this;
 		me.po = null;
 		me.currentLocation = {geometry:null, attributes:{title:""}};
@@ -36,6 +35,7 @@ nyc.App = (function(){
 		$("#upkTypes a, #upkTypes img, #dayLengths a").click($.proxy(me.filter, me));
 		$("#toggles").click(me.toggle);
 		$(nyc).on("locate.fail", function(_, msg){me.alert(msg);});
+		$(share).on('feedback', function(){me.changePage(FEEDBACK_URL);});
 		
 		me.map.zoomToExtent(NYC_EXT);			
 		me.map.events.register("featureover", map, me.hover);
@@ -125,13 +125,13 @@ nyc.App = (function(){
 							$('#external-page iframe').height($(window).height() - $('.banner').height());
 						}
 						if (ui.toPage.attr('id') == 'map-page' && me.openPanel){
-							$('#toggle-list').trigger('click');
+							$('#toggleToList').trigger('click');
 						}
 					};
 				$('body').pagecontainer({change: change});
 			},
 			isPanelOpen: function(){
-				return $('#toggle .ui-btn-active').attr('id') == 'toggleToList';
+				return $('#toggleToList').hasClass('ui-btn-active');
 			},
 			direct: function(from, to, name){
 				var me = this;
@@ -271,11 +271,16 @@ nyc.App = (function(){
 					p = new OpenLayers.LonLat(g.x, g.y), 
 					upk = me.upkList.upk(f.id),
 					loc = me.currentLocation,
-					html = new nyc.UpkInfo(upk, loc).render("callout");
+					html = new nyc.UpkInfo(upk, loc).render("callout"),
+					sz;
 			    if (me.pop) me.removeCallout();
-				me.pop = new OpenLayers.Popup.FramedCloud("callout", p, null, html, null, true, function(){me.removeCallout();});
+				
+				$("#infoSizeChecker").html(html);	
+			    sz = new OpenLayers.Size($("#infoSizeChecker").width(), $("#infoSizeChecker").height());				
+				
+			    me.pop = new OpenLayers.Popup.FramedCloud("callout", p, sz, html, null, true, function(){me.removeCallout();});
 				me.pop._f = f;
-				me.pop.panMapIfOutOfView = true;
+				me.pop.autoSize = false;				
 				me.map.addPopup(me.pop);
 		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
 		    	$(me.pop.closeDiv).addClass("ui-icon-delete");
@@ -315,8 +320,14 @@ $(document).ready(function(){
 	
 	map.addLayer(base);
 
-	nyc.app = new nyc.App(map, new nyc.Locate(map), new nyc.UpkList(), new nyc.UpkTable()); 
-	
+	nyc.app = new nyc.App(
+		map, 
+		new nyc.Locate(map), 
+		new nyc.UpkList(), 
+		new nyc.UpkTable(), 
+		new nyc.Share('#main')
+	); 
+		
 	if (DO_APPLY){
 		$("#splash .info").html(MORE_INFO_TITLE);
 	}else{

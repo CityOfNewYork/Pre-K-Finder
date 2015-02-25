@@ -26,6 +26,7 @@
 	<link rel="stylesheet" href="js/OpenLayers-2.13.1/theme/default/style.mobile.tidy.css" type="text/css">
 	<link rel="stylesheet" href="css/upk.css" type="text/css"> 
 	<link rel="stylesheet" href="css/directions.css" type="text/css"> 
+	<link rel="stylesheet" href="css/share.css" type="text/css"> 
 
 	<link rel="apple-touch-icon" sizes="60x60" href="img/apple-touch-icon-60.png">
 	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76.png">
@@ -102,9 +103,6 @@
 	        <a id="btnSplash" data-role="button" data-icon="info" class="mapCtl mapBtn ui-btn-left" title="Zoom out" onclick="$('#splash').fadeIn();">
 	        	<span class="noshow">Zoom out</span>
 	        </a>
-	        <a id="feedback" class="mapCtl" title="Feedback" onclick="nyc.app.changePage('//www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml');">
-	        	<span class="noshow">Feedback</span>
-	        </a>
 			<div id="possibleMenu">
 				<div id="possibleMsg">Did you mean...
 					<a id="closePossible" title="Close" onclick="$('#possibleMenu').slideUp(500);">
@@ -179,11 +177,13 @@
 		</div>
 		<div id="external-content" data-role="content"><iframe frameborder="0"></iframe></div>
 	</div>
+	<div id="infoSizeChecker"></div>
 	<script src="js/nyc/constants.js" type="text/javascript"></script>
 	<script type="text/javascript" src="js/nyc/upk.js"></script>
 	<script type="text/javascript" src="js/nyc/info.js"></script>
 	<script type="text/javascript" src="js/nyc/locate.js"></script>
 	<script type="text/javascript" src="js/nyc/directions.js"></script>
+	<script type="text/javascript" src="js/nyc/share.js"></script>
 	<script type="text/javascript" src="js/nyc/app.js"></script>
 	<script>
 		/* google analytics */
