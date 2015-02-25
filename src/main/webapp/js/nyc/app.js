@@ -276,13 +276,7 @@ nyc.App = (function(){
 				me.pop = new OpenLayers.Popup.FramedCloud("callout", p, null, html, null, true, function(){me.removeCallout();});
 				me.pop._f = f;
 				me.pop.panMapIfOutOfView = true;
-				
-				$("#infoSizeChecker").html(html);	
-				me.pop.maxSize = new OpenLayers.Size(320, $("#infoSizeChecker").height());				
-				me.pop.minSize = new OpenLayers.Size(320, $("#infoSizeChecker").height());				
-				
 				me.map.addPopup(me.pop);
-
 		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
 		    	$(me.pop.closeDiv).addClass("ui-icon-delete");
 		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
@@ -323,6 +317,14 @@ $(document).ready(function(){
 
 	nyc.app = new nyc.App(map, new nyc.Locate(map), new nyc.UpkList(), new nyc.UpkTable()); 
 	
+	if (DO_APPLY){
+		$("#splash .info").html(MORE_INFO_TITLE);
+	}else{
+		$("#splash .apply").hide();
+		$("#splash .info").html(INFO_TITLE);
+	}
+	$("#main").append($("#splash"));
+	$("#splash").fadeIn();
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
 	$(".schoolYr").html("for School Year " + SCHOOL_YEAR);
 });

@@ -21,7 +21,7 @@ nyc.UpkInfo = (function(){
 			var upk = this.upk, id = idPrefix + upk.id;
 			return "<div id='" + id + "' class='upkInfo'>" +
 				"<div class='name'><img class='upkType' src='img/" + upk.type() + "0.png'/>" + upk.name() + "</div>" +
-				"<div class='addr'>" + upk.specialMessage() + "</div>" +
+				(upk.note() ? ("<div class='note'>" + upk.note() + "</div>") : "") +
 				"<div class='addr'>" + upk.address1() + "</div>" +
 				"<div class='addr'>" + upk.address2() + "</div>" +
 				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "' target='_blank'>" + upk.phone() + "</a></div>" +

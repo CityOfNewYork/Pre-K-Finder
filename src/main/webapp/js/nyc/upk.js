@@ -22,8 +22,8 @@ nyc.Upk = (function(){
 		name: function(){
 			return this.attributes.NAME;
 		},
-		specialMessage: function(){
-			return ''; //TODO modify schema
+		note: function(){
+			return this.attributes.NOTE; //TODO modify schema
 		},
 		address1: function(){
 			return this.attributes.ADDRESS;

@@ -41,6 +41,15 @@
 </head>
 <body class="firstLoad">
 	<div id="map-page" data-role="page" data-title="NYC Pre-K Finder">
+	<div id="splash">
+		<div id="splashContent">
+	        <a class="mapBtn" data-role="button" data-icon="info" onclick="$('#splash').fadeOut();"></a>
+			<div class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
+			<a class="info" class="ui-btn" data-role="button">Get in Touch</a>
+			<a class="apply" class="ui-btn" data-role="button">I am ready to apply for Pre-K</a>
+			<a class="continue" class="ui-btn" data-role="button" onclick="$('#splash').fadeOut();">Continue to the Pre-K Finder...</a>
+		</div>
+	</div>
 		<div id="panel" data-role="panel" data-position="right" data-display="overlay">
 			<div id="panelContent">
 				<div id="filters">
@@ -88,6 +97,9 @@
 	        	<span class="noshow">Zoom in</span>
         	</a>
 	        <a id="zOut" data-role="button" data-icon="minus" class="mapCtl mapBtn ui-btn-left" title="Zoom out" onclick="nyc.app.zoom(-1);">
+	        	<span class="noshow">Zoom out</span>
+	        </a>
+	        <a id="btnSplash" data-role="button" data-icon="info" class="mapCtl mapBtn ui-btn-left" title="Zoom out" onclick="$('#splash').fadeIn();">
 	        	<span class="noshow">Zoom out</span>
 	        </a>
 	        <a id="feedback" class="mapCtl" title="Feedback" onclick="nyc.app.changePage('//www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml');">
@@ -167,7 +179,6 @@
 		</div>
 		<div id="external-content" data-role="content"><iframe frameborder="0"></iframe></div>
 	</div>
-	<div id="infoSizeChecker"></div>
 	<script src="js/nyc/constants.js" type="text/javascript"></script>
 	<script type="text/javascript" src="js/nyc/upk.js"></script>
 	<script type="text/javascript" src="js/nyc/info.js"></script>

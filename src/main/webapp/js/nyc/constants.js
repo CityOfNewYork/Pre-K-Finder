@@ -3,6 +3,7 @@ var	TODAY = new Date(),
 	DO_APPLY = TODAY >= new Date(THIS_YEAR + "-03-16") && TODAY < new Date(THIS_YEAR + "-04-25") , //TODO is this rule right?
 	APPLY_TITLE = "Apply Now",
 	INFO_TITLE = "Get in Touch", 
+	MORE_INFO_TITLE = "I would like more info about Pre-K",
 	SCHOOL_YEAR = THIS_YEAR + "-" + new String(THIS_YEAR + 1).substr(2), // this year and next year - //TODO is this right for all months?
 	INFO_URL = 'info.html',
 	APPLY_URL = '//www.semsnycdoe.com/parentsite',
