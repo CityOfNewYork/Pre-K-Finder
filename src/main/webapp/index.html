@@ -46,9 +46,9 @@
 		<div id="splashContent">
 	        <a class="mapBtn" data-role="button" data-icon="info" onclick="$('#splash').fadeOut();"></a>
 			<div class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
-			<a class="info" class="ui-btn" data-role="button">Get in Touch</a>
-			<a class="apply" class="ui-btn" data-role="button">I am ready to apply for Pre-K</a>
-			<a class="continue" class="ui-btn" data-role="button" onclick="$('#splash').fadeOut();">Continue to the Pre-K Finder...</a>
+			<a class="info" data-role="button">Get in Touch</a>
+			<a class="apply" data-role="button">I am ready to apply for Pre-K</a>
+			<a class="continue" data-role="button" onclick="$('#splash').fadeOut();">Continue to the Pre-K Finder...</a>
 		</div>
 	</div>
 		<div id="panel" data-role="panel" data-position="right" data-display="overlay">
@@ -56,37 +56,22 @@
 
 				<div id="filters" data-role="collapsible">
 					<h3>Filter school and program types...</h3>
-					<p>
+					<div>
 						<div id="upkTypes" data-role="controlgroup" data-type="vertical">
-							<input id="filter-doe" type="checkbox"checked  data-filter-name="type" data-filter-values="DOE">
-							<label for="filter-doe">District School</label>
+							<input id="filter-doe" type="checkbox" checked  data-filter-name="type" data-filter-values="DOE">
+							<label for="filter-doe">District School<img class="upkType" alt="District School" src="img/DOE0.png"></label>
 							<input id="filter-cbecc" type="checkbox" checked data-filter-name="type" data-filter-values="CBECC">
-							<label for="filter-cbecc">Early Ed Center</label>
+							<label for="filter-cbecc">Early Ed Center<img class="upkType" alt="Early Ed Center" src="img/CBECC0.png"></label>
 							<input id="filter-charter" type="checkbox" checked data-filter-name="type" data-filter-values="CHARTER">
-							<label for="filter-charter">Charter School</label>
+							<label for="filter-charter">Charter School<img class="upkType" alt="Charter SchooL" src="img/CHARTER0.png"></label>
 						</div>
 						<div id="dayLengths" data-role="controlgroup" data-type="vertical">
 							<input id="day-full" type="checkbox" checked data-filter-name="dayLength" data-filter-values="2,3"><label for="day-full">Full Day</label>
 							<input id="day-5hr" type="checkbox" checked data-filter-name="dayLength" data-filter-values="2,3"><label for="day-5hr">Five Hour Day</label>
 							<input id="day-half" type="checkbox" checked data-filter-name="dayLength" data-filter-values="1"><label for="day-half">Half Day</label>
 						</div>
-					</p>
-				</div>
-<!-- 
-				<div id="filters">
-					<div id="upkTypes" data-role="controlgroup" data-type="horizontal">
-						<a class="ui-btn" data-role="button" data-filter-name="type" data-filter-values="DOE" data-transition="fade">District<br>School<img class="upkType" src="img/DOE0.png"></a>
-						<a id="allTypes" class="ui-btn ui-btn-active" data-filter-name="type" data-filter-values="DOE,CBECC" data-role="button" data-transition="fade">All<img class="upkType" src="img/DOE0.png"><img class="upkType" src="img/CBECC0.png"></a>
-						<a class="ui-btn" data-role="button" data-filter-name="type" data-filter-values="CBECC" data-transition="fade">Early Ed<br>Centers<img class="upkType" src="img/CBECC0.png"></a>
-					</div>
-					<div id="dayLengths" data-role="controlgroup" data-type="horizontal">
-						<a class="ui-btn" data-role="button" data-filter-name="dayLength" data-filter-values="2,3" data-transition="fade">Half Day</a>
-						<a class="ui-btn" data-filter-name="dayLength" data-filter-values="1,2,3" data-role="button" data-transition="fade">All</a>
-						<a class="ui-btn ui-btn-active" data-role="button" data-filter-name="dayLength" data-filter-values="1,2" data-transition="fade">Full Day</a>
 					</div>
 				</div>
- -->
- 				
 				<div id="upkContent">
 					<table id="upkTable"></table>
 					<table id="pgCtrl"><tbody><tr><td>
@@ -102,7 +87,7 @@
 				Pre-K Finder
 			</h1>
 			<div id="toggles" data-role="controlgroup" data-type="horizontal">
-				<a id="toggleToMap" class="ui-btn" data-role="button" data-transition="fade" href="#map">Map</a>
+				<a class="toggleToMap" data-role="button" data-transition="fade" href="#map">Map</a>
 				<a id="toggleToList" class="ui-btn ui-btn-active" data-role="button" data-transition="fade">List</a>
 			</div>
 		</div>
@@ -181,7 +166,7 @@
 				<div id="dir-map"></div>
 			</div>
 			<div id="dir-toggle" data-role="controlgroup" data-type="horizontal">
-				<a id="toggleToMap" data-role="button">Map</a>
+				<a class="toggleToMap" data-role="button">Map</a>
 				<a class="ui-btn-active" data-role="button">Directions</a>
 			</div>
 		</div>
@@ -217,6 +202,6 @@
 		ga('create', 'UA-41281554-9', 'auto');
 		ga('send', 'pageview');
 	</script>	
-	<img id="popPreload" src="js/OpenLayers-2.13.1/img/cloud-popup-relative.png">
+	<img id="popPreload" src="js/OpenLayers-2.13.1/img/cloud-popup-relative.png" alt="">
 </body>
 </html>

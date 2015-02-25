@@ -28,11 +28,11 @@ nyc.App = (function(){
 		if (me.ios) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
-				  me.toggle({target:$("#toggleToMap")[0]});
+				  me.toggle({target:$(".toggleToMap")[0]});
 			  }
 		});
 		$("#panel").panel("open");
-		$("#upkTypes a, #upkTypes img, #dayLengths a").click($.proxy(me.filter, me));
+		$("#filters input[type=checkbox]").change($.proxy(me.filter, me));
 		$("#toggles").click(me.toggle);
 		$(nyc).on("locate.fail", function(_, msg){me.alert(msg);});
 		$(share).on('feedback', function(){me.changePage(FEEDBACK_URL);});
@@ -102,7 +102,6 @@ nyc.App = (function(){
 				me.map.addLayer(me.upkLayer);
 				me.map.setLayerIndex(me.upkLayer, UPK_LAYER_IDX);
 				me.upkList.populate(data.features);
-				me.upkList.filter({dayLength:["1", "2"], type:["DOE", "CBECC"]});
 				me.upkLayer.addFeatures(me.upkList.features());
 				me.upkTable.render(me.upkList);				
 			},
@@ -198,7 +197,7 @@ nyc.App = (function(){
 				var me = this, upk = me.upkList.upk(id), g = upk.geometry;
 				me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
 				upk.upkFeature.renderIntent = "select";
-				$("#toggleToMap").trigger("click");
+				$($(".toggleToMap")[0]).trigger("click");
 				me.upkLayer.redraw();
 		    	if ($(window).height() < 550){
 		    		var id = function(){
@@ -231,25 +230,40 @@ nyc.App = (function(){
 				$("#panel").panel(target.html() == "Map" ? "close" : "open");
 				setTimeout(function(){target.addClass("ui-btn-active");}, 100);
 			},
+//			filter: function(e){
+//				var me = this, target = $(e.target);
+//				if (!target.data("filter-name")) target = target.parent(); /* user clicked on the hand icon */
+//				target.parent().children().removeClass("ui-btn-active");
+//				target.addClass("ui-btn-active");
+//				setTimeout(function(){ /* timeout allows applied css to rerender before more expensive filtering and table rendering */
+//					var filters = {type:[], dayLength:[]};
+//					$.each($("#upkTypes .ui-btn-active, #dayLengths .ui-btn-active"), function(_, n){
+//						var name = $(n).data("filter-name"), values = $(n).data("filter-values");
+//						values = filters[name].concat(values.split(","));
+//						filters[name] = values;
+//					});
+//					me.upkList.filter(filters);
+//					me.upkTable.render(me.upkList, me.currentLocation);
+//					me.upkLayer.removeAllFeatures();
+//					me.upkLayer.addFeatures(me.upkList.features());
+//					$("#callout").remove();
+//					me.upkLayer.redraw();
+//				}, 2);
+//			},
 			filter: function(e){
-				var me = this, target = $(e.target);
-				if (!target.data("filter-name")) target = target.parent(); /* user clicked on the hand icon */
-				target.parent().children().removeClass("ui-btn-active");
-				target.addClass("ui-btn-active");
-				setTimeout(function(){ /* timeout allows applied css to rerender before more expensive filtering and table rendering */
-					var filters = {type:[], dayLength:[]};
-					$.each($("#upkTypes .ui-btn-active, #dayLengths .ui-btn-active"), function(_, n){
-						var name = $(n).data("filter-name"), values = $(n).data("filter-values");
-						values = filters[name].concat(values.split(","));
-						filters[name] = values;
-					});
-					me.upkList.filter(filters);
-					me.upkTable.render(me.upkList, me.currentLocation);
-					me.upkLayer.removeAllFeatures();
-					me.upkLayer.addFeatures(me.upkList.features());
-					$("#callout").remove();
-					me.upkLayer.redraw();
-				}, 2);
+				var me = this;
+				var filters = {type:[], dayLength:[]};
+				$.each($("#filters input[type=checkbox]:checked"), function(_, n){
+					var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
+					values = filters[name].concat(values.split(","));
+					filters[name] = values;
+				});
+				me.upkList.filter(filters);
+				me.upkTable.render(me.upkList, me.currentLocation);
+				me.upkLayer.removeAllFeatures();
+				me.upkLayer.addFeatures(me.upkList.features());
+				$("#callout").remove();
+				me.upkLayer.redraw();
 			},
 			zoom: function(by){
 				var map = this.map;

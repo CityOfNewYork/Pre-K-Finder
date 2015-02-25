@@ -8,7 +8,7 @@ html, body, .ui-mobile .ui-page-active, #main, #splash {
 html, body, div, span, a{
 	text-shadow: none !important;
 }	
-/* ======================== splah ========================= */
+/* ======================== splash ========================= */
 #splash{
 	display:none;
 	position: absolute;
@@ -135,12 +135,15 @@ span.noshow{
 	position:fixed;
 	z-index:750; /* one less than callout popup */
 }
+.ui-corner-all{
+	border-radius:0.6em;
+}
 .mapBtn{
+	border-radius:0.6em !important;
 	background-color: rgba(1,51,100,0.5) !important;
 	border-color:#013364;
 	padding:19px;
 	color:white;
-	border-radius:0.6em !important;
 }
 a.mapBtn:after{
 	background-color: rgba(255,255,255,0);
@@ -265,7 +268,8 @@ a.mapBtn:after{
 	background-color: white !important;
 }
 #upkTypes .upkType{
-	margin:-4px -4px -4px 2px;
+	margin: 0 75px 0 0;
+	float: right;
 }
 .mapBtn:hover, .upkAction a:hover, #alert .ui-btn:hover, #pgCtrl .ui-btn:hover, #back:hover{
 	background-color:#013364 !important;
@@ -303,6 +307,9 @@ a.mapBtn:after{
 }
 #filters{
 	margin:3px 5px;
+}
+#filters .ui-collapsible-content {
+	padding: 1px 5px 0 5px;
 }
 #filters h3 a{
 	text-align: center;
