@@ -53,6 +53,26 @@
 	</div>
 		<div id="panel" data-role="panel" data-position="right" data-display="overlay">
 			<div id="panelContent">
+
+				<div id="filters" data-role="collapsible">
+					<h3>Filters</h3>
+					<p>
+						<div id="upkTypes" data-role="controlgroup" data-type="vertical">
+							<input id="filter-doe" type="checkbox"checked  data-filter-name="type" data-filter-values="DOE">
+							<label for="filter-doe">District School</label>
+							<input id="filter-cbecc" type="checkbox" checked data-filter-name="type" data-filter-values="CBECC">
+							<label for="filter-cbecc">Early Ed Center</label>
+							<input id="filter-charter" type="checkbox" checked data-filter-name="type" data-filter-values="CHARTER">
+							<label for="filter-charter">Charter School</label>
+						</div>
+						<div id="dayLengths" data-role="controlgroup" data-type="vertical">
+							<input id="day-full" type="checkbox" checked data-filter-name="dayLength" data-filter-values="2,3"><label for="day-full">Full Day</label>
+							<input id="day-5hr" type="checkbox" checked data-filter-name="dayLength" data-filter-values="2,3"><label for="day-5hr">Five Hour Day</label>
+							<input id="day-half" type="checkbox" checked data-filter-name="dayLength" data-filter-values="1"><label for="day-half">Half Day</label>
+						</div>
+					</p>
+				</div>
+<!-- 
 				<div id="filters">
 					<div id="upkTypes" data-role="controlgroup" data-type="horizontal">
 						<a class="ui-btn" data-role="button" data-filter-name="type" data-filter-values="DOE" data-transition="fade">District<br>School<img class="upkType" src="img/DOE0.png"></a>
@@ -65,6 +85,8 @@
 						<a class="ui-btn ui-btn-active" data-role="button" data-filter-name="dayLength" data-filter-values="1,2" data-transition="fade">Full Day</a>
 					</div>
 				</div>
+ -->
+ 				
 				<div id="upkContent">
 					<table id="upkTable"></table>
 					<table id="pgCtrl"><tbody><tr><td>

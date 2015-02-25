@@ -42,7 +42,7 @@ nyc.UpkInfo = (function(){
 		},
 		renderFormBtn: function(upk){
 			var url, title;
-			if (DO_APPLY && (upk.type() == "DOE" || upk.dayLength() == 1)){
+			if (DO_APPLY && (upk.type() == "DOE" || upk.isFullDay())){
 				url = APPLY_URL;
 				title = APPLY_TITLE;
 			}else{

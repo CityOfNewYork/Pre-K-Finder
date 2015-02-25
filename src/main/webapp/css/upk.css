@@ -298,7 +298,7 @@ span.noshow{
 	z-index:999;
 }
 #filters{
-	margin:0 5px;
+	margin:3px 5px;
 }
 #upkTypes .ui-controlgroup-controls, #dayLengths .ui-controlgroup-controls{
 	width:100%;	

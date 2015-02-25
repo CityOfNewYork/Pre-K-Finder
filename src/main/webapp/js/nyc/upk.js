@@ -45,6 +45,9 @@ nyc.Upk = (function(){
 		},
 		type: function(){
 			return this.attributes.PREK_TYPE;
+		},
+		isFullDay: function(){
+			return this.dayLength() == 1 || this.dayLength() == 2;
 		}
 	};
 	return upkClass;
