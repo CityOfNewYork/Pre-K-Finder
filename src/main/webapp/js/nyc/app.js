@@ -328,12 +328,18 @@ $(document).ready(function(){
 		new nyc.Share('#main')
 	); 
 		
+	var changePage = function(url){
+		nyc.app.changePage(url);
+		$("#splash").fadeOut();
+	};
 	if (DO_APPLY){
 		$("#splash .info").html(MORE_INFO_TITLE);
+		$("#splash .apply").click(function(){changePage(APPLY_URL);});
 	}else{
 		$("#splash .apply").hide();
 		$("#splash .info").html(INFO_TITLE);
 	}
+	$("#splash .info").click(function(){changePage(INFO_URL);});
 	$("#main").append($("#splash"));
 	$("#splash").fadeIn();
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
