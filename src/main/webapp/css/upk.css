@@ -148,6 +148,7 @@ span.noshow{
 a.mapBtn:after{
 	background-color: rgba(255,255,255,0);
 	background-size: 20px;
+	margin-left: 0.2px;
 }
 #srch, #_srch{
 	left: 377px;
@@ -157,12 +158,12 @@ a.mapBtn:after{
 #_srch{
 	z-index:-100;
 }
-#search, #_search{
+#address, #_address{
 	width:324px;
 	left: 48px;
-	top: 40px;
+	top: 48px;
 }
-#_srch, #_search{
+#_srch, #_address{
 	z-index:-100;
 }
 #zIn{
@@ -178,18 +179,22 @@ a.mapBtn:after{
 	top:130px;
 }
 #address{
-	width:100%;
+	background-color:rgba(255,255,255,0.7);
 	border-radius:0.6em;
 	border:1px solid #013364;
 	font-size:17px;
 	padding:0 0 0 3px;
 	color:#013364;
 }
-#search .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset{
-	background-color:rgba(255,255,255,0.7);
-}
-#search .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.active{
+#address.active{
 	background-color:rgba(255,255,255,1);
+}
+#schools {
+	margin: 0;
+	border-radius:0.6em;
+	max-height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 #possibleMenu{
 	display:none;
@@ -444,7 +449,7 @@ a.mapBtn:after{
 	#srch, #_srch{
 		left:277px;
 	}
-	#search, #_search{
+	#address, #_address{
 		width:224px;
 	}
 	#possibleMenu{

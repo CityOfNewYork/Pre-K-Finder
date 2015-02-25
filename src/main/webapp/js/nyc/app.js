@@ -108,8 +108,9 @@ nyc.App = (function(){
 				me.map.addLayer(me.upkLayer);
 				me.map.setLayerIndex(me.upkLayer, UPK_LAYER_IDX);
 				me.upkList.populate(features);
+				me.setSchoolSearch(me.upkList.features());
 				me.upkLayer.addFeatures(features);
-				me.upkTable.render(me.upkList);				
+				me.upkTable.render(me.upkList);
 			},
 			error: function(){
 				$("body").removeClass("firstLoad");
@@ -117,8 +118,13 @@ nyc.App = (function(){
 				}
 			});	
 		};
-		
+
 		appClass.prototype = {
+			setSchoolSearch: function(features){
+				$.each(features, function(_, f){
+					$("#schools").append("<li data-fid='" + f.id + "'>" + f.name() + "</li>");
+				});
+			},
 			initPages: function(){
 				var me = this, change = function(e, ui){
 						if (this.ios){
@@ -183,14 +189,14 @@ nyc.App = (function(){
 			},
 			search: function(){
 				var me = this,
-					width = $("#search").width() > 1 ? 1 : $("#_search").width(),
-					left = width == 1 ? $("#search").position().left : $("#_srch").position().left;					
-				$("#search").css("visibility", "visible");
-				$("#search").animate({width:width},
+					width = $("#address").width() > 1 ? 1 : $("#_address").width(),
+					left = width == 1 ? $("#address").position().left : $("#_srch").position().left;					
+				$("#address").css("visibility", "visible");
+				$("#address").animate({width:width},
 					function(){
 						if (width == 1){
 							me.locate.search();
-							$("#search").css("visibility", "hidden");
+							$("#address").css("visibility", "hidden");
 						}else{
 							$("#address").focus();
 							$("#address").select();
@@ -248,6 +254,7 @@ nyc.App = (function(){
 				me.upkTable.render(me.upkList, me.currentLocation);
 				me.upkLayer.removeAllFeatures();
 				me.upkLayer.addFeatures(me.upkList.features());
+				me.setSchoolSearch(me.upkList.features());				
 				$("#callout").remove();
 				me.upkLayer.redraw();
 			},
