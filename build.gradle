@@ -13,22 +13,22 @@ ext{
 	
 	local_info_url = 'info.html'
 	local_apply_url = '//www.semsnycdoe.com/parentsite'
-	local_geoclient_url = 'http://maps.nyc.gov/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input='
+	local_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	local_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	
 	dev_info_url = 'info.html' //TODO is there a dev url
 	dev_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a dev url
-	dev_geoclient_url = 'http://csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input='
+	dev_geoclient_url = '//csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	dev_basemap_urls = '["//csgis-dev-web.csc.nycnet/gis/data/tiles/basic/"]'
 	
 	stg_info_url = 'http://schoolsstg.nycenet.edu/schoolsearch/info.html'
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
-	stg_geoclient_url = 'http://csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input='
+	stg_geoclient_url = 'http://csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	stg_basemap_urls = '["//csgis-stg-prx.csc.nycnet/gis/data/tiles/basic/"]'
 	
 	prd_info_url = '//www.nycenet.edu/schoolsearch/info.html'
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
-	prd_geoclient_url = 'http://maps.nyc.gov/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input='
+	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 }
 

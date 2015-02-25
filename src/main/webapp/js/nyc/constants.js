@@ -7,7 +7,7 @@ var	TODAY = new Date(),
 	SCHOOL_YEAR = THIS_YEAR + "-" + new String(THIS_YEAR + 1).substr(2), // this year and next year - //TODO is this right for all months?
 	INFO_URL = 'info.html',
 	APPLY_URL = '//www.semsnycdoe.com/parentsite',
-	GEOCLIENT_URL = 'http://maps.nyc.gov/geoclient/v1/search.json?app_key=572204d6172746961&app_id=citymap-gis&input=',
+	GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input=',
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],
 	FEEDBACK_URL = '//www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml',
 	RESOLUTIONS = [434.027777777778, 303.819444444444, 222.222222222222, 111.111111111111, 55.5555555555556, 27.7777777777778, 13.8888888888889, 6.94444444444444, 3.47222222222222, 1.73611111111111, 0.868055555555556],
