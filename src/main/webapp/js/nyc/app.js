@@ -289,7 +289,7 @@ nyc.App = (function(){
 				me.upkLayer.redraw();
 			},
 			removeCallout: function(){
-				var f = this.upkList.upk(this.pop._f.id).upkFeature;
+				var f = this.upkList.upk(this.pop._f.id);
 				$("#callout").remove();
 				f.renderIntent = "default";
 			    this.pop = null;

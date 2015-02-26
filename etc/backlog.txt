@@ -1,3 +1,7 @@
 feature search ul upper right corner looks funny on pc chrome when scrollbar is on
 
-http://msdlva-gisapp01.csc.nycnet:82/geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
+lost the close box on the popup somehow
+
+clear search field when switching search type
+
+/geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
