@@ -5,7 +5,7 @@ html, body, .ui-mobile .ui-page-active, #main, #splash {
 	padding:0;
 	overflow:hidden;
 }
-html, body, div, span, a{
+html, body, div, span, a, input, li{
 	text-shadow: none !important;
 }	
 /* ======================== splash ========================= */
@@ -134,7 +134,7 @@ span.noshow{
 }
 #btnSplash{
 	left:3px;
-	top:130px;
+	top: 127px;
 }
 #infoSizeChecker{
 	position:absolute;
@@ -146,6 +146,11 @@ span.noshow{
 }
 #infoSizeChecker .map, #infoSizeChecker .detail{
 	display:none;
+}
+.upkType{
+	width: 20px;
+	height: 20px;
+	margin:2px 12px -2px -32px;
 }
 #callout .upkType{
 	display:none;
