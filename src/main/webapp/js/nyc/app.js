@@ -71,7 +71,7 @@ nyc.App = (function(){
 			url:"upk.csv",
 			dataType: "text",
 			success: function(csvData){
-				var csvFeatures = $.csv.toObjects(csvData), features = [], wkt = new OpenLayers.Format.WKT();;
+				var csvFeatures = $.csv.toObjects(csvData), features = [], wkt = new OpenLayers.Format.WKT();
 				$.each(csvFeatures, function(_, f){
 					var feature = wkt.read(f.SHAPE);
 					feature.attributes = f;
@@ -121,8 +121,14 @@ nyc.App = (function(){
 
 		appClass.prototype = {
 			setSchoolSearch: function(features){
+				var me = this;
 				$.each(features, function(_, f){
-					$("#schools").append("<li data-fid='" + f.id + "'>" + f.name() + "</li>");
+					var it = $("<li>" + f.name() + "</li>");
+					it.click(function(){
+						me.centerUpk(f.id);
+						$("input[placeholder='Search schools...']").val(f.name());
+					});
+					$("#schools").append(it);
 				});
 			},
 			initPages: function(){
@@ -208,7 +214,7 @@ nyc.App = (function(){
 			centerUpk: function(id){
 				var me = this, upk = me.upkList.upk(id), g = upk.geometry;
 				me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
-				upk.upkFeature.renderIntent = "select";
+				upk.renderIntent = "select";
 				$($(".toggleToMap")[0]).trigger("click");
 				me.upkLayer.redraw();
 		    	if ($(window).height() < 550){
