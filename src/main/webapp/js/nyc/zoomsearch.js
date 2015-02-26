@@ -130,20 +130,20 @@ nyc.ZoomSearch.prototype.disambiguate = function(possibleValues){
 	if (possibleValues.length){
 		$.each(possibleValues, function(i, p){
 			var coords = p.coordinates,
-				li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden srch-type-addr">' + p.name + '</li>'),
+				li = $('<li class="ui-li-static ui-body-inherit srch-type-addr">' + p.name + '</li>'),
 				cls = me.cssClass({name: p.name + coords[0] + coords[1]});
 			$('li.' + cls).remove();
 			li.addClass(cls);
+			li.possible = p; //TODO: hack for now - more lipstick on the pig
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
-				$(me).trigger('disambiguated', {
-					name: p.name,
-					coordinates: coords
-				});
+				me.val(p.name);
+				$(me).trigger('disambiguated', li.possible);
 				li.parent().slideUp();
 			});
 		});
 		me.setSourceList('srch-type-addr', true);
+		$('#fld-srch').slideDown();
 	}
 };
 

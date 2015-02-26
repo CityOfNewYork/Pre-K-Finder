@@ -20,10 +20,24 @@ nyc.App = (function(){
 		me.currentLocation = {geometry:null, attributes:{title:""}};
 		me.map = map;
 		me.locate = locate;
+		me.parseQueryStr();
 		me.upkList = upkList;
 		me.upkTable = upkTable;
 		me.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		me.initPages();
+
+		$(controls).on('search', function(e, input){
+			me.search(input);
+		});
+		$(controls).on('disambiguated', function(e, data){
+			me.goToLocation(data);
+		});
+		$(locate).on('found', function(e, name){
+			controls.val(name);
+		});
+		$(locate).on('ambiguous', function(e, ambig){
+			controls.disambiguate(ambig.possible);
+		});
 		
 		if (me.ios) $("body").addClass("ios");		
 		$("#panel").panel({
@@ -121,6 +135,28 @@ nyc.App = (function(){
 		};
 
 		appClass.prototype = {
+			 goToLocation: function(data){
+				 if (data.fid){
+					 this.centerUpk(fid);
+				 }else{
+					 this.locate.mapLocation(data, true);
+					 this.map.setCenter(new OpenLayers.LonLat(data.coordinates[0], data.coordinates[1]), 8);
+				 }
+			},
+			 parseQueryStr: function(){
+				var searching = false;
+				try{//parse query string and geocode
+					var params = document.location.search.substr(1).split("&");
+					for (var i = 0; i < params.length; i++){
+						var p = params[i].split("=");
+						if (p[0] == "input"){
+							this.search(decodeURIComponent(p[1]).replace(/\s+/g, " "));
+							searching = true;
+						}
+					}
+				}catch(ignore){}
+				if (!searching) this.locate.locate();				
+			},
 			setSchoolSearch: function(features){
 				var me = this;
 				$.each(features, function(_, f){
@@ -194,23 +230,10 @@ nyc.App = (function(){
 					$("#alert input").focus();				
 				});
 			},
-			search: function(){
-				var me = this,
-					width = $("#address").width() > 1 ? 1 : $("#_address").width(),
-					left = width == 1 ? $("#address").position().left : $("#_srch").position().left;					
-				$("#address").css("visibility", "visible");
-				$("#address").animate({width:width},
-					function(){
-						if (width == 1){
-							me.locate.search();
-							$("#address").css("visibility", "hidden");
-						}else{
-							$("#address").focus();
-							$("#address").select();
-						}
-					}
-				);
-				$("#srch").animate({left:left});
+			search: function(input){
+				if (input.trim().length){
+					this.locate.search(input);
+				}
 			},
 			centerUpk: function(id){
 				var me = this, upk = me.upkList.upk(id), g = upk.geometry;

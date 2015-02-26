@@ -50,32 +50,7 @@ nyc.Locate = (function(){
 				$(nyc).trigger("locate.fail", "GPS is not supported by your device");
 			me.locFail = true;
 		});
-		$("#address").keypress(function(e){
-			if (e.keyCode == 13) me.search();
-		});
-		$("#address").dblclick(function(e){
-			return false;
-		});
-		$("#address").focus(function(){
-			$("#address").parent().addClass("active");
-		});
-		$("#address").blur(function(){
-			$("#address").parent().removeClass("active");
-		});
 		
-		var searching = false;
-		try{//parse query string and geocode
-			var params = document.location.search.substr(1).split("&");
-			for (var i = 0; i < params.length; i++){
-				var p = params[i].split("=");
-				if (p[0] == "input"){
-					$("#address").val(decodeURIComponent(p[1]).replace(/\s+/g, " "));
-					me.search();
-					searching = true;
-				}
-			}
-		}catch(ignore){}
-		if (!searching) me.locate();
 	};
 	
 	locateClass.prototype = {
@@ -126,9 +101,9 @@ nyc.Locate = (function(){
 			if (!attrs.title){
 				var epsg2263 = new Proj4js.Point(p.x, p.y), epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263);
 				location.attributes.title = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6);
-				$("#address").val("");
+				$(this).trigger("found", "");
 			}else{
-				$("#address").val(attrs.title.replace(/\s+/g, " "));
+				$(this).trigger("found", attrs.title.replace(/\s+/g, " "));
 			}
 			
 			feats = [new OpenLayers.Feature.Vector(p, location.attributes)];
@@ -148,11 +123,11 @@ nyc.Locate = (function(){
 			this.map.setLayerIndex(lyr, LOCATION_LAYER_IDX);
 			$(nyc).trigger("locate.found", feats[0]);
 		},
-		search: function(e){
-			var me = this, input = $("#address").val().trim();
+		search: function(input){
 			if (input.length == 5 && !isNaN(input)){
 				me.mapZip(ZIP_CODES[input], "ZIP Code: " + input);
 			}else if (input.length){
+				var me = this;
 				input = input.replace(/"/g, "").replace(/'/g, "").replace(/&/g, " and ");
 				$.ajax({
 					url: GEOCLIENT_URL + input,
@@ -199,25 +174,19 @@ nyc.Locate = (function(){
 			}
 		},
 		showPossible: function(results){
-			var me = this;
-			me.possible = results;
-			$("#possible").empty();
-			$.each(me.possible, function(i, r){
+			var me = this, possible = [];
+			$.each(results, function(i, r){
 				if (r.status = "POSSIBLE_MATCH"){
-					$("#possible").append(
-						"<div onclick='nyc.app.locate.mapGeoClientResp(" + i + ");'>" + 
-						me.parseGeoClientResp(r).attributes.title + "</div>"
-					);
+					var poss = me.parseGeoClientResp(r);
+					poss.name = poss.attributes.title;
+					poss.coordinates = [poss.point.x, poss.point.y];
+					possible.push(poss);
 				}
 			});
-			$("#possibleMenu").slideDown(500, me.menuSize);			
+			$(this).trigger("ambiguous", {possible:possible});			
 		},
 		mapGeoClientResp: function(result){
-			var r = isNaN(result) ? result : this.possible[result];
-			if (!isNaN(result)){//mapping from possible menu
-				$("#possibleMenu").slideUp(500);
-			}
-			var location = this.parseGeoClientResp(r);
+			var location = this.parseGeoClientResp(result);
 			this.mapLocation(location, true);
 		},
 		locate: function(){

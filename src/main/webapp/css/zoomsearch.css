@@ -64,6 +64,7 @@
 	margin: 0;
 	overflow-x: hidden;
 	overflow-y: auto;
+	z-index: 3000;
 }
 #fld-srch {
 	margin-top: -3px;
