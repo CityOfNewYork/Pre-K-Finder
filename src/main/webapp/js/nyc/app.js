@@ -14,7 +14,7 @@ nyc.App = (function(){
 	 * @param {nyc.UpkTable} upkTable
 	 * 
 	 */
-	var appClass = function(map, locate, upkList, upkTable, share){
+	var appClass = function(map, locate, upkList, upkTable, controls, share){
 		var me = this;
 		me.po = null;
 		me.currentLocation = {geometry:null, attributes:{title:""}};
@@ -111,6 +111,7 @@ nyc.App = (function(){
 				me.setSchoolSearch(me.upkList.features());
 				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);
+				controls.addSources([{name: 'School', source: me.upkList}]);
 			},
 			error: function(){
 				$("body").removeClass("firstLoad");
@@ -264,10 +265,6 @@ nyc.App = (function(){
 				$("#callout").remove();
 				me.upkLayer.redraw();
 			},
-			zoom: function(by){
-				var map = this.map;
-				map.zoomTo(map.getZoom() + by);
-			},
 			removeCallout: function(){
 				var f = this.upkList.upk(this.pop._f.id).upkFeature;
 				$("#callout").remove();
@@ -338,6 +335,7 @@ $(document).ready(function(){
 		new nyc.Locate(map), 
 		new nyc.UpkList(), 
 		new nyc.UpkTable(), 
+		new nyc.ZoomSearch('#main', map),
 		new nyc.Share('#main')
 	); 
 		

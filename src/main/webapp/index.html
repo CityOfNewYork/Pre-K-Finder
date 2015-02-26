@@ -21,22 +21,24 @@
  	
  	<title>NYC Pre-K Finder</title>
 
-	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
-<!-- 	<link rel="stylesheet" href="js/jq/jquery.mobile-1.4.3.min.css"> -->
+<!-- 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"> -->
+	<link rel="stylesheet" href="js/jq/jquery.mobile-1.4.3.min.css">
 	<link rel="stylesheet" href="js/OpenLayers-2.13.1/theme/default/style.mobile.tidy.css" type="text/css">
 	<link rel="stylesheet" href="css/upk.css" type="text/css"> 
 	<link rel="stylesheet" href="css/directions.css" type="text/css"> 
+	<link rel="stylesheet" href="css/control-common.css" type="text/css"> 
 	<link rel="stylesheet" href="css/share.css" type="text/css"> 
+	<link rel="stylesheet" href="css/zoomsearch.css" type="text/css"> 
 
 	<link rel="apple-touch-icon" sizes="60x60" href="img/apple-touch-icon-60.png">
 	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76.png">
 	<link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152.png">
 
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-<!-- 	<script type="text/javascript" src="js/jq/jquery-1.11.1.min.js"></script> -->
-<!-- 	<script type="text/javascript" src="js/jq/jquery.mobile-1.4.3.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script> -->
+	<script type="text/javascript" src="js/jq/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="js/jq/jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" src="js/jq/jquery.csv.js"></script>
 	<script type="text/javascript" src="js/OpenLayers-2.13.1/OpenLayers.js"></script>
 	<script type="text/javascript" src="js/proj4js/proj4js-compressed.js"></script>
@@ -45,7 +47,9 @@
 	<div id="map-page" data-role="page" data-title="NYC Pre-K Finder">
 	<div id="splash">
 		<div id="splashContent">
-	        <a class="mapBtn" data-role="button" data-icon="info" onclick="$('#splash').fadeOut();"></a>
+			<a class="ctl-btn" data-role="button" data-icon="info" data-iconpos="notext" title="Get in Touch" onclick="$('#splash').fadeOut();">
+				<span>Get in Touch</span>
+	        </a>
 			<div class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
 			<a class="info" data-role="button">Get in Touch</a>
 			<a class="apply" data-role="button">I am ready to apply for Pre-K</a>
@@ -94,33 +98,10 @@
 		</div>
 		<div id="main" role="main" class="ui-content">
 			<div id="map"></div>
-			<div id="_address" class="mapCtl"></div>
-			<div id="_srch" class="mapCtl"></div>
-
-				<input id="address" class="mapCtl" placeholder="Enter an address..."/>
-<!-- 				<ul id="schools" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search schools..."></ul> -->
-
-	        <a id="srch" data-role="button" data-icon="search" class="mapCtl mapBtn ui-btn-left" title="Search" onclick="nyc.app.search();">
-	        	<span class="noshow">Search</span>
+			<a id="btnSplash" class="ctl ctl-btn" data-role="button" data-icon="info" data-iconpos="notext" title="Get in Touch" onclick="$('#splash').fadeIn();">
+				<span>Get in Touch</span>
 	        </a>
-	        <a id="zIn" data-role="button" data-icon="plus" class="mapCtl mapBtn ui-btn-left" title="Zoom in" onclick="nyc.app.zoom(1);">
-	        	<span class="noshow">Zoom in</span>
-        	</a>
-	        <a id="zOut" data-role="button" data-icon="minus" class="mapCtl mapBtn ui-btn-left" title="Zoom out" onclick="nyc.app.zoom(-1);">
-	        	<span class="noshow">Zoom out</span>
-	        </a>
-	        <a id="btnSplash" data-role="button" data-icon="info" class="mapCtl mapBtn ui-btn-left" title="Zoom out" onclick="$('#splash').fadeIn();">
-	        	<span class="noshow">Zoom out</span>
-	        </a>
-			<div id="possibleMenu">
-				<div id="possibleMsg">Did you mean...
-					<a id="closePossible" title="Close" onclick="$('#possibleMenu').slideUp(500);">
-	        			<span class="noshow">Close</span>
-        			</a>
-        		</div>
-        		<div id="possible"></div>
-			</div>
-			<div id="copyright" class="mapCtl"></div>
+			<div id="copyright" class="ctl"></div>
 		</div>
 		<div id="alert">
 			<div id="msg"></div>
@@ -193,6 +174,7 @@
 	<script type="text/javascript" src="js/nyc/locate.js"></script>
 	<script type="text/javascript" src="js/nyc/directions.js"></script>
 	<script type="text/javascript" src="js/nyc/share.js"></script>
+	<script type="text/javascript" src="js/nyc/zoomsearch.js"></script>
 	<script type="text/javascript" src="js/nyc/app.js"></script>
 	<script>
 		/* google analytics */
