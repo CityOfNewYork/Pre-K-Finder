@@ -137,7 +137,7 @@ nyc.App = (function(){
 		appClass.prototype = {
 			 goToLocation: function(data){
 				 if (data.fid){
-					 this.centerUpk(fid);
+					 this.centerUpk(data.fid);
 				 }else{
 					 this.locate.mapLocation(data, true);
 					 this.map.setCenter(new OpenLayers.LonLat(data.coordinates[0], data.coordinates[1]), 8);

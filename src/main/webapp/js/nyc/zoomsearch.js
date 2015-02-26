@@ -82,6 +82,7 @@ nyc.ZoomSearch.prototype = {
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
 				$(me).trigger('disambiguated', {
+					fid: feature.id,
 					name: name,
 					coordinates: [p.x, p.y]
 				});
