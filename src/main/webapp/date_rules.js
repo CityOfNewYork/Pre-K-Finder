@@ -38,7 +38,7 @@
  * TODAY                   - Today.  DO NOT CHANGE!																 *
  *                           This value MUST NOT be assigned to any other variable besides MAX_DOB.				 *
  *                                																				 *
- *                           DO NTO CHANGE!																		 *
+ *                           DO NOT CHANGE!																		 *
  *                            																					 *
  * 																												 *
  * MIN_DOB                 - The minimum date of birth accepted by the "Get in Touch" form.						 *
@@ -104,9 +104,9 @@
  *****************************************************************************************************************
  * 																												 *
  * A DATE WILL ONLY BE CONSIDERED MALFORMED WHEN THE DATE CONSTRUCTOR FAILS!									 *
- * Any well formed date specification provided will be utilized by the											 *
- * "Pre-K Finder" application and "Get in Touch" form.  A well formed date will return							 *
- * a valid date when passed to the javascript Date constructor.													 *
+ * Any well formed date specification provided will be utilized by the "Pre-K Finder" application and            *
+ * "Get in Touch" form.  A well formed date will return	a valid date when passed to the javascript               *
+ * Date constructor.													                                         *
  * For example:																									 *
  * 																												 *
  *      "Valid" values according to the javascript Date constructor:											 *
