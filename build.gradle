@@ -15,21 +15,25 @@ ext{
 	local_apply_url = '//www.semsnycdoe.com/parentsite'
 	local_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	local_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
+	local_date_rules = 'date_rules.js'
 	
 	dev_info_url = 'info.html' //TODO is there a dev url
 	dev_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a dev url
 	dev_geoclient_url = '//csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	dev_basemap_urls = '["//csgis-dev-web.csc.nycnet/gis/data/tiles/basic/"]'
-	
+	dev_date_rules = 'date_rules.js'
+
 	stg_info_url = 'http://schoolsstg.nycenet.edu/schoolsearch/info.html'
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
 	stg_geoclient_url = 'http://csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	stg_basemap_urls = '["//csgis-stg-prx.csc.nycnet/gis/data/tiles/basic/"]'
+	stg_date_rules = 'http://schoolsstg.nycenet.edu/schoolsearch/date_rules.js'
 	
 	prd_info_url = '//www.nycenet.edu/schoolsearch/info.html'
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
 	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
+	prd_date_rules = '//www.nycenet.edu/schoolsearch/date_rules.js'
 }
 
 task copyFiles << {
@@ -47,6 +51,7 @@ task buildApp(dependsOn: [clean, copyFiles]) << {
 	def applyUrl = project.ext["${env}_apply_url"];
 	def geoUrl = project.ext["${env}_geoclient_url"];
 	def baseUrls = project.ext["${env}_basemap_urls"];
+	def dateRules = project.ext["${env}_date_rules"];
 
  	println "\nbuilding for env=${env}...\n"
  	println "INFO_URL=${infoUrl}"
@@ -59,6 +64,7 @@ task buildApp(dependsOn: [clean, copyFiles]) << {
 	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
 	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
 	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
+	ant.replace(file: 'build/webapp/index.html', token: local_date_rules, value: dateRules)
 }
 
 jettyRun {

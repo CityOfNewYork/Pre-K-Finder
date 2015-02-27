@@ -9,8 +9,7 @@
 	
 	<title>NYC Pre-K Finder - Get in Touch</title>
 
-<!-- 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"> -->
-	<link rel="stylesheet" href="js/jq/jquery.mobile-1.4.3.min.css">
+	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
 	
 	<style type="text/css">
 		body, label, span, div{
@@ -83,7 +82,7 @@
 			width: 50%;
 		}
 		#house_cell{
-			width: 100px;
+			width: 60px;
 		}
 		#apt_cell{
 			width: 50px;
@@ -96,7 +95,7 @@
 		}
 		@media only screen and (max-width : 360px) {
 			#house_cell{
-				width: 80px;
+				width: 60px;
 			}
 			#apt_cell{
 				width: 30px;
@@ -104,11 +103,9 @@
 		}
 	</style>
 	
-<!-- 	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
-<!-- 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script> -->
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	
-	<script type="text/javascript" src="js/jq/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" src="js/jq/jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" src="date_rules.js"></script>
 	
 	<script type="text/javascript">
@@ -147,8 +144,8 @@
 				}
 				return invalidDateProvided ? DEFAULT_DATES[dateVarName] : window[dateVarName];
 			};
-				
-			window.TODAY = window.TODAY || DEFAULT_DATES.TODAY;
+
+			window.TODAY = DEFAULT_DATES.TODAY;
 			window.MIN_DOB = validDateString("MIN_DOB");
 			window.MAX_DOB = validDateString("MAX_DOB");
 			window.DEFAULT_DOB_ENTRY = validDateString("DEFAULT_DOB_ENTRY");
@@ -180,7 +177,7 @@
 			$("label").removeClass("err");
 			$.each($("input, select"), function(_, n){
 				if ($(n).prop("required")){
-					var val = $(n).val(), pattern = $(n).attr("pattern"), valid = val.length;
+					var val = $(n).val(), pattern = $(n).attr("pattern") || $(n).data("pattern"), valid = val.length;
 					if (n.id == "dob"){
 						var dob = new Date(getIsoDob());
 						valid = dob >= new Date(MIN_DOB) && dob <= new Date(MAX_DOB);
@@ -349,7 +346,7 @@
 							<tr>
 								<td id="borough_cell">
 									<label for="borough">Borough:</label>
-									<select id="borough" name="borough" required pattern="^((?!Choose).)*$">
+									<select id="borough" name="borough" required data-pattern="^((?!Choose).)*$">
 										<option>Choose...</option>
 										<option>Bronx</option>
 										<option>Brooklyn</option>
@@ -383,7 +380,7 @@
 						</tbody>
 					</table>
 					<label for="relationship">Relationship:</label>
-					<select id="relationship" name="relationship" required pattern="^((?!Choose).)*$">
+					<select id="relationship" name="relationship" required data-pattern="^((?!Choose).)*$">
 						<option>Choose...</option>
 						<option>Mother</option>
 						<option>Father</option>
