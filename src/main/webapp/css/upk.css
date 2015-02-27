@@ -154,7 +154,7 @@ span.noshow{
 	margin:2px 12px -2px -32px;
 }
 #callout_close {
-	background-color: #013364;
+	background-color: rgba(1,51,100,0.5);
 	border: none;
 	border-radius: 12px;
 	overflow: hidden;
@@ -163,6 +163,9 @@ span.noshow{
 	margin: -2px -3px 0 0;
 	cursor: pointer;
 }
+#callout_close:hover {
+	background-color: rgb(1,51,100);
+	}
 #callout .upkType{
 	display:none;
 }
@@ -269,7 +272,7 @@ span.noshow{
 	cursor:pointer;
 }
 .oddRow {
-	background-color: #f6f6f6;
+	background-color: rgba(1,51,100,0.1);
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
 }

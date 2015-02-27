@@ -87,9 +87,11 @@ nyc.ZoomSearch.prototype = {
 	addFeatures: function(namedSource){
 		var me = this, src = namedSource.source;
 		$.each(src.features(), function(_, feature){
-			var name = feature.name(), p = feature.geometry.getCentroid(),
-				li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' +  
-					me.cssClass(namedSource) + '">' + name + '</li>');
+			var name = feature.name(),
+				type = feature.type(),
+				p = feature.geometry.getCentroid(),
+				li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' + me.cssClass(namedSource) + '">' +
+					'<img src="img/' + feature.type() + '0.png">' + name + '</li>');
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
 				me.val(name);
