@@ -87,6 +87,12 @@ span.noshow{
 	background-color:#013364 !important;
 	height: 44px;
 }
+.banner a.ui-btn:after{
+	background-color: rgba(1,51,100,0.5);
+}
+.banner a.ui-btn:hover:after{
+	background-color: rgb(1,51,100);
+}
 .nycLogo {
 	height: 24px;
 	cursor: pointer;

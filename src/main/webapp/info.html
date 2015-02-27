@@ -39,6 +39,12 @@
 		.ui-selectmenu-button{
 			width:100% !important;
 		}
+		.ui-btn:after{
+			background-color: rgba(1,51,100,0.5);
+		}
+		.ui-btn:hover:after{
+			background-color: rgb(1,51,100);
+		}
 		.err{
 			color:red !important;
 			font-weight:bold !important;
@@ -48,7 +54,7 @@
 			width: 270px;
 			border-radius: 0.6em;
 			border: 1px solid lightgrey;
-			box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+			box-shadow: 0 1px 3px rgba(1,51,100,0.5);
 			background-color: white;
 			padding: 5px;
 			display:none;
@@ -219,7 +225,7 @@
 					"Date of birth: " + data.dob + "\n" +
 					"Student address: " + "\n" +
 					data.house_number + " " + data.street_name + " " + data.apt + "\n" +
-					+ data.borough + ", NY " +  data.zip + "\n" +
+					data.borough + ", NY " +  data.zip + "\n" +
 					"Parent/Guardian name: " + data.parent_first_name + " " + data.parent_last_name + "\n" +
 					"Day Telephone: " + data.day_telephone + "\n" +
 					"Evening Telephone: " + data.evening_telephone + "\n" +
@@ -315,12 +321,12 @@
 </head>
 <body>
 	<div id="page" data-role="page">
-		<div id="main" role="main" class="ui-content">
+		<div id="main" data-role="main" class="ui-content">
 			<form autocomplete="on" novalidate>
 				<div class="sect">
 					<h2>Student Information</h2>
-					<label for="dob">Date of birth (mm/dd/yyyy):</label>
-					<input id="dob" name="dob" type="date" required maxlength="10">
+					<label for="dob">Date of birth:</label>
+					<input id="dob" name="dob" type="date" required maxlength="10" placeholder="mm/dd/yyyy">
 					(Note: To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.)
 					<h3>Current address</h3>
 					<table class="fields">

@@ -35,7 +35,7 @@
  * 																												 *
  *****************************************************************************************************************
  * 																												 *
- * TODAY                   - Today.  DO NTO CHANGE!																 *
+ * TODAY                   - Today.  DO NOT CHANGE!																 *
  *                           This value MUST NOT be assigned to any other variable besides MAX_DOB.				 *
  *                                																				 *
  *                           DO NTO CHANGE!																		 *
@@ -72,10 +72,10 @@
  *                           MUST BE SET TO A PROPERLY FORMATTED AND QUOTED DATE STRING.						 *
  *                                																				 *
  *																												 *
- * APPLY_END_DATE	   - The "Apply Now" buttons in the "Pre-K Finder" application will no longer				 *
- *                           appear at the start of APPLY_END_DATE (i.e. APPLY_END_DATE = "2015-04-25";  		 *
- *                           means the "Apply Now" buttons will no longer be displayed beginning at 			 *
- *                           2015-04-25 12:00 AM).																 *
+ * APPLY_END_DATE	       - The "Apply Now" buttons in the "Pre-K Finder" application will no longer            *
+ *                           appear at the start of APPLY_END_DATE (i.e. APPLY_END_DATE = "2015-04-25";          *
+ *                           means the "Apply Now" buttons will no longer be displayed beginning at              *
+ *                           2015-04-25 12:00 AM).                                                               *
  * 																												 *
  *                           MUST BE SET TO A PROPERLY FORMATTED AND QUOTED DATE STRING.						 *
  *                                																				 *
@@ -111,35 +111,42 @@
  * 																												 *
  *      "Valid" values according to the javascript Date constructor:											 *
  * 																												 *
- *           new Date("2010-01-01") = "Thu Dec 31 2009 19:00:00 GMT-0500 (EST)"										 *
- *           new Date("123") = "Fri Jan 01 123 00:00:00 GMT-0500 (EST)"												 *
+ *           new Date("2010-01-01") = "Thu Dec 31 2009 19:00:00 GMT-0500 (EST)"                                  *
+ *           new Date("123") = "Fri Jan 01 123 00:00:00 GMT-0500 (EST)"                                          *
  * 																												 *
  * 																												 *
  *      Invalid values:																							 *
  * 																												 *
- *           new Date("text") = "Invalid Date"																		 *
+ *           new Date("text") = "Invalid Date"                                                                   *
  * 																												 *
  * 																												 *
  *      Improper quotes:																						 *
  * 																												 *
- * 		     new Date(2010-01-01")																					 *
- *           "SyntaxError: Unexpected token ILLEGAL"																	 *
+ * 		     new Date(2010-01-01")                                                                               *
+ *           "SyntaxError: Unexpected token ILLEGAL"                                                             *
  * 																												 *
  *****************************************************************************************************************/
 
 /* DO NOT CHANGE! */
 TODAY = new Date();
 
+/* Date must be "YYYY-MM-DD" in quotes */
 MIN_DOB = "2010-01-01";
 
+/* Date must be "YYYY-MM-DD" in quotes or TODAY not in quotes */
 MAX_DOB = TODAY;
 
+/* Date must be "YYYY-MM-DD" in quotes */
 DEFAULT_DOB_ENTRY = "2011-01-01";
 
+/* String must be "anything" in quotes */
 PRE_K_REQUIRED_DOB_YEAR = "2011";
 
+/* Date must be "YYYY-MM-DD" in quotes */
 APPLY_START_DATE = "2015-03-16";
 
+/* Date must be "YYYY-MM-DD" in quotes */
 APPLY_END_DATE = "2015-04-25";
 
+/* String must be "anything" in quotes */
 SCHOOL_YEAR = "2015-16";
