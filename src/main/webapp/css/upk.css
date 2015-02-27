@@ -24,6 +24,12 @@ div#splashContent{
 	margin: 5px auto;
 	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
 }
+.ui-btn:after{
+	background-color: rgba(1,51,100,0.5);
+}
+.ui-btn:hover:after{
+	background-color: rgb(1,51,100);
+}
 #splash .ctl-btn.ui-btn {
 	background-color: rgba(1,51,100,0.5);
 	float: left;
@@ -86,12 +92,6 @@ span.noshow{
 .banner{
 	background-color:#013364 !important;
 	height: 44px;
-}
-.banner a.ui-btn:after{
-	background-color: rgba(1,51,100,0.5);
-}
-.banner a.ui-btn:hover:after{
-	background-color: rgb(1,51,100);
 }
 .nycLogo {
 	height: 24px;
