@@ -125,7 +125,7 @@ nyc.App = (function(){
 				me.setSchoolSearch(me.upkList.features());
 				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);
-				controls.addSources([{name: 'School', source: me.upkList}]);
+				controls.addSources([{name: UPK_SEARCH_BY_CHOICE, source: me.upkList}]);
 			},
 			error: function(){
 				$("body").removeClass("firstLoad");
@@ -316,7 +316,7 @@ nyc.App = (function(){
 				me.pop.autoSize = false;				
 				me.map.addPopup(me.pop);
 		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
-		    	$(me.pop.closeDiv).addClass("ui-icon-delete");
+		    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
 		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
 		    	$(nyc).trigger("app.identify");
 			}

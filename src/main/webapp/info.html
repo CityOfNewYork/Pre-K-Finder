@@ -9,8 +9,8 @@
 	
 	<title>NYC Pre-K Finder - Get in Touch</title>
 
-	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
-<!-- 	<link rel="stylesheet" href="js/jq/jquery.mobile-1.4.3.min.css"> -->
+<!-- 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css"> -->
+	<link rel="stylesheet" href="js/jq/jquery.mobile-1.4.3.min.css">
 	
 	<style type="text/css">
 		body, label, span, div{
@@ -101,20 +101,58 @@
 		}
 	</style>
 	
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+<!-- 	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script> -->
 	
-<!-- 	<script type="text/javascript" src="js/jq/jquery-1.11.1.min.js"></script> -->
-<!-- 	<script type="text/javascript" src="js/jq/jquery.mobile-1.4.3.min.js"></script> -->
+	<script type="text/javascript" src="js/jq/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="js/jq/jquery.mobile-1.4.3.min.js"></script>
+	<script type="text/javascript" src="date_rules.js"></script>
 	
 	<script type="text/javascript">
 		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		
-		var THIS_YEAR = new Date().getFullYear();
-		var SCHOOL_YEAR = THIS_YEAR + "-" + new String(THIS_YEAR + 1).substr(2); // this year and next year - //TODO is this right for all months?
-		var REQ_DOB_YEAR = THIS_YEAR - 4;
-		var DOB_AFTER = REQ_DOB_YEAR + "-01-01"; //the first day of the year 4 yrs ago
-		var DOB_BEFORE = (THIS_YEAR - 2) + "-12-31"; //the last day of the year 2 yrs ago
+		/* Set all global date strings and date-like strings */
+		(function(){
+			
+			var pad = function(number){
+				return number < 10 ? "0" + number : number + "";
+			};
+			
+			var DEFAULT_DATES = {
+				TODAY: new Date(),
+				MIN_DOB: "2010-01-01",
+				MAX_DOB: (function(){
+					var today = new Date();
+					return today.getFullYear() + "-" +
+						pad(today.getMonth() + 1) + "-" +
+						pad(today.getDate());
+				}()),
+				DEFAULT_DOB_ENTRY: "2011-01-01",
+				PRE_K_REQUIRED_DOB_YEAR: "2011",
+				SCHOOL_YEAR: "2015-16"
+			};
+							
+			var validDateString = function(dateVarName){
+				var invalidDateProvided = true;
+				if (window[dateVarName]){
+					try{
+						var dateTyr = new Date(window[dateVarName]);
+						invalidDateProvided = !isNaN(dateTyr.getFullYear());
+					}catch(ignore){
+						invalidDateProvided = true;
+					}
+				}
+				return invalidDateProvided ? DEFAULT_DATES[dateVarName] : window[dateVarName];
+			};
+				
+			window.TODAY = window.TODAY || DEFAULT_DATES.TODAY;
+			window.MIN_DOB = validDateString("MIN_DOB");
+			window.MAX_DOB = validDateString("MAX_DOB");
+			window.DEFAULT_DOB_ENTRY = validDateString("DEFAULT_DOB_ENTRY");
+			window.PRE_K_REQUIRED_DOB_YEAR = window.PRE_K_REQUIRED_DOB_YEAR || DEFAULT_DATES.PRE_K_REQUIRED_DOB_YEAR;
+			window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
+
+		}());
 		
 		$("document").ready(function(){		
 			try{ /parse query string and prepopulate form */
@@ -129,14 +167,10 @@
 			$("select").on("change",function(e){$(e.target).focus();});
 			
 			$("#school_yr").html(SCHOOL_YEAR);
-			$("#birth_yr").html(REQ_DOB_YEAR);
-			$("#dob").attr("min", DOB_AFTER);
-			$("#dob").attr("max", DOB_BEFORE);
+			$("#birth_yr").html(PRE_K_REQUIRED_DOB_YEAR);
+			$("#dob").attr("min", MIN_DOB);
+			$("#dob").attr("max", MAX_DOB);
 		});
-
-		function validDate(d){
-			return vavid;
-		};
 
 		function valid(){
 			var err = [];
@@ -145,8 +179,8 @@
 				if ($(n).prop("required")){
 					var val = $(n).val(), pattern = $(n).attr("pattern"), valid = val.length;
 					if (n.id == "dob"){
-						var dob = new Date(getDob());
-						valid = dob >= new Date(DOB_AFTER) && dob <= new Date(DOB_BEFORE);
+						var dob = new Date(getIsoDob());
+						valid = dob >= new Date(MIN_DOB) && dob <= new Date(MAX_DOB);
 					}else{
 						if (valid && pattern){
 							var regex = new RegExp(pattern);
@@ -198,7 +232,7 @@
 			}
 		};
 		
-		function getDob(){
+		function getDoeDob(){
 			var dob = $("#dob").val();
 			if (dob.indexOf("/") > -1){
 				return dob;
@@ -208,9 +242,27 @@
 			}
 		};
 		
+		function getIsoDob(){
+			var dob = $("#dob").val();
+			if (dob.indexOf("-") > -1){
+				return dob;
+			}else{
+				dob = dob.split("/");
+				if (dob[0].length == 2 && 
+						dob[1].length == 2 && 
+						dob[2].length == 4 &&
+						(dob[0] * 1) > 0 && (dob[0] * 1) < 13 &&
+						(dob[1] * 1) > 0 && (dob[1] * 1) < 32
+						){
+					return dob[2] + "-" + dob[0] + "-" + dob[1];				
+				}
+				return "invalid";				
+			}
+		};
+		
 		function formData(){
 			var result = {};
-			result.dob = getDob();
+			result.dob = getDoeDob();
 			result.house_number = $("#house_number").val();
 			result.street_name = $("#street_name").val();
 			result.apt = $("#apt").val();
@@ -268,7 +320,7 @@
 				<div class="sect">
 					<h2>Student Information</h2>
 					<label for="dob">Date of birth (mm/dd/yyyy):</label>
-					<input id="dob" name="dob" type="date" required>
+					<input id="dob" name="dob" type="date" required maxlength="10">
 					(Note: To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.)
 					<h3>Current address</h3>
 					<table class="fields">

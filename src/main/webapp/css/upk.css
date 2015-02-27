@@ -5,8 +5,9 @@ html, body, .ui-mobile .ui-page-active, #main, #splash {
 	padding:0;
 	overflow:hidden;
 }
-html, body, div, span, a, input, li{
+html, body, div, span, a, input, input[data-type="search"], li {
 	text-shadow: none !important;
+	color: rgb(1,51,100);
 }	
 /* ======================== splash ========================= */
 #splash{
@@ -151,6 +152,16 @@ span.noshow{
 	width: 20px;
 	height: 20px;
 	margin:2px 12px -2px -32px;
+}
+#callout_close {
+	background-color: #013364;
+	border: none;
+	border-radius: 12px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+	background-position: center;
+	margin: -2px -3px 0 0;
+	cursor: pointer;
 }
 #callout .upkType{
 	display:none;

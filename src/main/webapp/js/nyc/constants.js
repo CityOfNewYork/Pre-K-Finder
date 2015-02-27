@@ -1,10 +1,40 @@
-var	TODAY = new Date(),
+/* Set all global date strings and date-like strings */
+(function(){
+	
+	var DEFAULT_DATES = {
+		TODAY: new Date(),
+		APPLY_START_DATE: "2015-03-16",
+		APPLY_END_DATE: "2015-04-25",
+		SCHOOL_YEAR: "2015-16"
+	};
+					
+	var validDateString = function(dateVarName){
+		var invalidDateProvided = true;
+		if (window[dateVarName]){
+			try{
+				var dateTyr = new Date(window[dateVarName]);
+				invalidDateProvided = !isNaN(dateTyr.getFullYear());
+			}catch(ignore){
+				invalidDateProvided = true;
+			}
+		}
+		return invalidDateProvided ? DEFAULT_DATES[dateVarName] : window[dateVarName];
+	};
+		
+	window.TODAY = DEFAULT_DATES.TODAY;
+	window.APPLY_START_DATE = validDateString("APPLY_START_DATE");
+	window.APPLY_END_DATE = validDateString("APPLY_END_DATE");
+	window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
+
+}());
+
+var UPK_SEARCH_BY_CHOICE = "Program name",
+	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name...",
 	THIS_YEAR = TODAY.getFullYear(),
-	DO_APPLY = TODAY >= new Date(THIS_YEAR + "-03-16") && TODAY < new Date(THIS_YEAR + "-04-25") , //TODO is this rule right?
+	DO_APPLY = TODAY >= new Date(APPLY_START_DATE) && TODAY < new Date(APPLY_END_DATE),
 	APPLY_TITLE = "Apply Now",
 	INFO_TITLE = "Get in Touch", 
 	MORE_INFO_TITLE = "I would like more info about Pre-K",
-	SCHOOL_YEAR = THIS_YEAR + "-" + new String(THIS_YEAR + 1).substr(2), // this year and next year - //TODO is this right for all months?
 	INFO_URL = 'info.html',
 	APPLY_URL = '//www.semsnycdoe.com/parentsite',
 	GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input=',

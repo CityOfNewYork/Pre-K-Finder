@@ -2,14 +2,28 @@ nyc.ZoomSearch = function(target, map){
 	var me = this;
 	me.map = map;
 	$(target).append(nyc.ZoomSearch.HTML).trigger('create');
+	me.typBtn = $('#btn-srch-typ');
+	me.input = $('#fld-srch-container input');
+	me.list = $('#fld-srch');
+	me.typBtn.click($.proxy(me.chooseSource, me));
+	me.input.on('keyup change', $.proxy(me.key, me));
 	$('#btn-z-in, #btn-z-out').click($.proxy(me.zoom, me));
-	$('#btn-srch-typ').click($.proxy(me.chooseSource, me));
-	$('#fld-srch-container input').on('keyup change', $.proxy(me.key, me));
-	$('#fld-srch-container input').on('blur focus', function(e){
-		$('#btn-srch-typ')[e.type == 'focus' ? 'addClass' : 'removeClass']('ctl-active');
+	$('#fld-srch-container .ui-input-clear').click(function(){
+		me.list.hide();
 	});
 	$('#srch-type-addr').click(function(){
 		me.setSourceList('srch-type-addr');
+		me.val('');
+		me.input.focus();
+	});
+	me.input.on('blur focus', function(e){
+		if (e.type == 'focus'){
+			me.typBtn.addClass('ctl-active');
+			me.typBtn.removeClass('ui-icon-carat-u').addClass('ui-icon-carat-d');			
+			$('#mnu-srch-typ').slideUp();
+		}else{
+			me.typBtn.removeClass('ctl-active');
+		}
 	});
 };
 
@@ -23,30 +37,27 @@ nyc.ZoomSearch.prototype = {
 	},
 	/** @private */
 	key: function(e){
-		setTimeout(function(){
-			$('#btn-srch-typ')[$('#fld-srch-container input').val().trim().length ? 'hide' : 'fadeIn']();
-		}, 500);
+		this.typBtn[this.input.val().trim().length ? 'hide' : 'show']();
 		if (e.keyCode == 13){
 			this.search();
-			$('#fld-srch').slideUp();
+			this.list.slideUp();
 		}else{
-			$('#fld-srch').slideDown();
+			this.list.slideDown();
 		}
 	},
 	/** @private */
 	search: function(){
-		var input = $('#fld-srch-container input').val().trim();
+		var input = this.input.val().trim();
 		if (input.length)
 			$(this).trigger('search', input, this);
 	},
 	/** @private */
 	chooseSource: function(){
-		var button = $('#btn-srch-typ');
 		$('#mnu-srch-typ').slideToggle();
-		if (button.hasClass('ui-icon-carat-d')){
-			button.removeClass('ui-icon-carat-d').addClass('ui-icon-carat-u');
+		if (this.typBtn.hasClass('ui-icon-carat-d')){
+			this.typBtn.removeClass('ui-icon-carat-d').addClass('ui-icon-carat-u');
 		}else{
-			button.removeClass('ui-icon-carat-u').addClass('ui-icon-carat-d');			
+			this.typBtn.removeClass('ui-icon-carat-u').addClass('ui-icon-carat-d');			
 		}
 	},	
 	/** @private */
@@ -63,13 +74,13 @@ nyc.ZoomSearch.prototype = {
 	},	
 	/** @private */
 	setSourceList: function(cssClass, noChoose){
-		var plcHldr = cssClass == 'srch-type-addr' ? 'Search for an address...' : 'Search by school name...', name;
+		var plcHldr = cssClass == 'srch-type-addr' ? 'Search for an address...' : UPK_SEARCH_BY_PLACEHOLDER, name;
 		$.each(this.sources, function(_, src){
 			if (src.cssClass == cssClass) name = src.name;
 		});
-		$('#fld-srch').filterable('option', 'filterPlaceholder', plcHldr);
+		this.list.filterable('option', 'filterPlaceholder', plcHldr);
 		$('#fld-srch-retention').append($('#fld-srch li'));
-		$('#fld-srch').append($('li.' + cssClass));
+		this.list.append($('li.' + cssClass));
 		if (!noChoose) this.chooseSource();
 	},
 	/** @private */
@@ -81,6 +92,7 @@ nyc.ZoomSearch.prototype = {
 					me.cssClass(namedSource) + '">' + name + '</li>');
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
+				me.val(name);
 				$(me).trigger('disambiguated', {
 					fid: feature.id,
 					name: name,
@@ -103,6 +115,8 @@ nyc.ZoomSearch.prototype.addSources = function(sources){
 		var cls = me.cssClass(src), li = $('<li class="ui-li-static ui-body-inherit">' + src.name + '</li>');
 		li.click(function(){
 			me.setSourceList(cls);
+			me.val('');
+			me.input.focus();
 		});
 		$('#mnu-srch-typ').append(li);
 		$('li.' + cls).remove();
@@ -117,8 +131,8 @@ nyc.ZoomSearch.prototype.addSources = function(sources){
  * @param {string|undefined} val
  */
 nyc.ZoomSearch.prototype.val = function(val){
-	if (val) $('#fld-srch-container input').val(val);
-	return 	$('#fld-srch-container input').val();
+	if (val) this.input.val(val);
+	return 	this.input.val();
 };
 
 /**
@@ -144,7 +158,7 @@ nyc.ZoomSearch.prototype.disambiguate = function(possibleValues){
 			});
 		});
 		me.setSourceList('srch-type-addr', true);
-		$('#fld-srch').slideDown();
+		me.list.slideDown();
 	}
 };
 

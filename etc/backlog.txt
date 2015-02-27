@@ -1,7 +1,6 @@
-feature search ul upper right corner looks funny on pc chrome when scrollbar is on
 
-lost the close box on the popup somehow
 
-clear search field when switching search type
+
+<script type="text/javascript" src="date_rules.js"></script> <!-- TODO get from path to DOE svr -->
 
 /geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
