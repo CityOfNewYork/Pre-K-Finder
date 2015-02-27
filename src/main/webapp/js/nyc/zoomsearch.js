@@ -31,9 +31,9 @@ nyc.ZoomSearch.prototype = {
 	/** @private */
 	map: null,
 	/** @private */
-	zoom: function(by){
+	zoom: function(e){
 		var map = this.map;
-		map.zoomTo(map.getZoom() + by);
+		map.zoomTo(map.getZoom() + ($(e.target).data('zoom-incr') * 1));
 	},
 	/** @private */
 	key: function(e){
