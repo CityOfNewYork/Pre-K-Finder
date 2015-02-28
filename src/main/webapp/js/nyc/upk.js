@@ -1,11 +1,14 @@
 window.nyc = window.nyc || {};
 
 window.nyc.UpkDecorator = {
+	code: function(){
+		return this.attributes.SEMS_CODE;
+	},
 	name: function(){
 		return this.attributes.NAME;
 	},
 	note: function(){
-		return this.attributes.NOTE; //TODO modify schema
+		return this.attributes.NOTE;
 	},
 	address1: function(){
 		return this.attributes.ADDRESS;
@@ -19,17 +22,32 @@ window.nyc.UpkDecorator = {
 	phone: function(){
 		return this.attributes.PHONE || "";
 	},
-	dayLength: function(){
-		return this.attributes.DAY_LENGTH;
+	email: function(){
+		return this.attributes.EMAIL || "";
+	},
+	web: function(){
+		return this.attributes.WEBSITE || "";
+	},
+	meal: function(){
+		return this.attributes.MEALS;
+	},
+	inout: function(){
+		return this.attributes.INDOOR_OUTDOOR;
+	},
+	extend: function(){
+		return this.attributes.EXTENDED_DAY;
 	},
 	seats: function(){
 		return this.attributes.SEATS;
+	},
+	dayLength: function(){
+		return this.attributes.DAY_LENGTH;
 	},
 	type: function(){
 		return this.attributes.PREK_TYPE;
 	},
 	isFullDay: function(){
-		return this.dayLength() == 1 || this.dayLength() == 2;
+		return $.inArray(this.dayLength(), FULL_DAY) > -1;
 	}
 };
 

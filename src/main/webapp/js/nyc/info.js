@@ -18,16 +18,15 @@ nyc.UpkInfo = (function(){
 			return DAY_LENGTH[upk.dayLength()];
 		},
 		render: function(idPrefix){
-			var upk = this.upk, id = idPrefix + upk.id;
+			var upk = this.upk, id = idPrefix + upk.id, target = window.ios ? "' target='_blank'>" : "'>";
+
 			return "<div id='" + id + "' class='upkInfo'>" +
 				"<div class='name'><img class='upkType' src='img/" + upk.type() + "0.png'/>" + upk.name() + "</div>" +
 				(upk.note() ? ("<div class='note'>" + upk.note() + "</div>") : "") +
 				"<div class='addr'>" + upk.address1() + "</div>" +
 				"<div class='addr'>" + upk.address2() + "</div>" +
-				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + "' target='_blank'>" + upk.phone() + "</a></div>" +
-				"<div class='upkDetail'>" +
-				"<div class='sched'>" + DAY_LENGTH[upk.dayLength()] +
-				(upk.seats() ? ("<span class='seats'> - " + upk.seats() + " seats</span></div></div>") : "</div></div>") +
+				"<div class='phone'><a href='tel:" + encodeURI(upk.phone()) + target + upk.phone() + "</a></div>" +
+				this.renderDetail(upk, target) +
 				"<table class='upkAction'><tbody><tr>" +
 				"<td class='directions'><a class='ui-btn' onclick=\"nyc.app.direct('" +
 				escape(this.currentLocation.attributes.title) + "','" + 
@@ -38,6 +37,21 @@ nyc.UpkInfo = (function(){
 				this.renderFormBtn(upk) +
 				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
 				"</tr></tbody></table>" +
+				"</div>";
+		},
+		renderDetail: function(upk, target){
+			return "<div class='upkDetail'>" + 
+				"<div class='prg-code'><span class='name'>Program Code: </span>" + upk.code() + "</div>" +
+				"<div class='email'><a href='mailto:" + upk.email() + target + upk.email() + "</a></div>" +
+				"<div class='web'><a href='http://" + upk.web() + target + upk.web() + "</a></div>" +
+				"<div class='name'>Program Features:</div>" +
+				"<ul class='feats'>" +
+				"<li class='meal'>" + MEAL[upk.meal()] + "</li>" +
+				"<li class='inout'>" + IN_OUT[upk.inout()] + "</li>" +
+				"<li class='extend'>" + EXTEND[upk.extend()] + "</li>" +
+				"</ul>" +
+				"<div class='seats'>" +
+				"<span class='name'>" + SCHOOL_YEAR + " seats: </span>" + upk.seats() + " " + DAY_LENGTH[upk.dayLength()] + "</div>" +
 				"</div>";
 		},
 		renderFormBtn: function(upk){

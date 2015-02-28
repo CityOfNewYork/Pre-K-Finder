@@ -46,6 +46,7 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 	MAX_EXT = new OpenLayers.Bounds(700000.0, -4444.444444444671, 1366666.666666667, 440000.0),
 	NYC_EXT = new OpenLayers.Bounds(912090, 119053, 1068317, 273931),
 	EPSG_2263 = new OpenLayers.Projection("EPSG:2263"),
+	FULL_DAY = [1, 2, 5, 7],
 	DAY_LENGTH = {
 		"0": "Day length not available",
 		"1": "Full day",
@@ -56,12 +57,12 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 		"6": "Both half day and 5-hour",
 		"7": "Full day, half day and 5-hour"			
 	},
-	EXTENDED_DAY = {
-		"1": "Yes",
-		"2": "No",
-		"3": "Please contact site for more information"
+	EXTEND = {
+		"1": "Extended day offered",
+		"2": "Extended day not offered",
+		"3": "Please contact site for extended day information"
 	},
-	INDOOR_OUTDOOR = {
+	IN_OUT = {
 		"1": "Indoor playspace",
 		"2": "Indoor/Outdoor (offsite) playspace",
 		"3": "Indoor/Outdoor (onsite) playspace",
@@ -72,7 +73,7 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 		"8": "Outdoor (onsite) playspace/Outdoor (offsite) playspace",
 		"9": "Please contact site for more information"
 	},
-	MEALS = {
+	MEAL = {
 		"1": "Breakfast",
 		"2": "Breakfast/Lunch",
 		"3": "Breakfast/Lunch/Snack(s)",

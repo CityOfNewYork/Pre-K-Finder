@@ -176,7 +176,22 @@ span.noshow{
 	display:none;
 }
 .upkDetail{
-	margin:5px 0 0 0;
+	margin:5px 5px 0 0;
+	padding: 5px;
+	border-radius: 0.6em;
+	border: 1px solid rgba(1,51,100,0.5);
+	background-color: rgba(1,51,100,0.1);
+	font-size: 14px;
+}
+.oddRow .upkDetail{
+	background-color: white;
+}
+.upkDetail ul {
+	margin: 0 0 3px 0;
+	font-size: 12px;
+}
+.email, .web{
+	margin: 10px 0;
 }
 #callout .map, #callout .detail, .upkDetail, #upkTable .directions{
 	display:none;
@@ -200,6 +215,7 @@ span.noshow{
 .oddRow .upkAction a {
 	background-color: white !important;
 }
+
 #upkTypes .upkType{
 	margin: 0 60px 0 0;
 	float: right;
@@ -225,6 +241,7 @@ span.noshow{
 }
 #filters{
 	margin:3px 5px;
+	border-radius: 0.6em;
 }
 #filters .ui-collapsible-content {
 	padding: 1px 20px 0 20px;

@@ -23,7 +23,6 @@ nyc.App = (function(){
 		me.parseQueryStr();
 		me.upkList = upkList;
 		me.upkTable = upkTable;
-		me.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		me.initPages();
 
 		$(controls).on('search', function(e, input){
@@ -39,7 +38,7 @@ nyc.App = (function(){
 			controls.disambiguate(ambig.possible);
 		});
 		
-		if (me.ios) $("body").addClass("ios");		
+		if (window.ios) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
 				  me.toggle({target:$(".toggleToMap")[0]});
@@ -93,7 +92,7 @@ nyc.App = (function(){
 				});
 				me.upkLayer = new OpenLayers.Layer.Vector("", {
 					styleMap: UPK_STYLE_MAP,
-					maxResolution: RESOLUTIONS[3],
+					//maxResolution: RESOLUTIONS[3],
 					/* 
 					 * 
 					 * for some reason links inside of the identify popup do not  
@@ -326,6 +325,8 @@ nyc.App = (function(){
 }());
 
 $(document).ready(function(){
+	window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
+
 	var map = new OpenLayers.Map(
 		"map", 
 		{
