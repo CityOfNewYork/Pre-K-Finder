@@ -1,6 +1,7 @@
 window.nyc = window.nyc || {};
+nyc.upk = nyc.upk || {};
 
-window.nyc.UpkDecorator = {
+nyc.upk.FieldsDecorator = {
 	code: function(){
 		return this.attributes.SEMS_CODE;
 	},
@@ -51,6 +52,75 @@ window.nyc.UpkDecorator = {
 	}
 };
 
+nyc.upk.htmlDecorator = {
+	codeHtml: function(){
+		var codeHtml =  $("<div class='code'><span class='name'>Program Code: </span></div>");
+		return codeHtml.append(upk.code());
+	},
+	nameHtml: function(){
+		var nameHtml = $("<div class='name'></div>"),
+			iconHtml = $("<img class='upkType'>");		
+		iconHtml.attr("src", "img/" + upk.type() + "0.png");
+		nameHtml.append(iconHtml);
+		return nameHtml.append(this.name());
+	},
+	addrHtml: function(){
+		var addr1Html = $("<div' class='addr'></div>"),
+			addr2Html = $("<div' class='addr'></div>");		
+		addr1Html.append(this.address1());
+		addr2Html.append(this.address2());
+		return [addr1Html, addr2Html];
+	},
+	targetAttr: function(elem, ios){
+		if (ios) elem.attr("target", "_blank");
+	},
+	linkHtml: function(field, hrefPrefix, ios){
+		var linkHtml = $("<div'></div>"),
+			href= $("<a></a>");		
+		href.append(this.phone());
+		href.attr("href", hrefPrefix + encodeURI(this[field]()));
+		this.targetAttr(href, ios);
+		linkHtml.append(href);
+		return linkHtml.addClass(field);
+	},
+	phoneHtml: function(ios){
+		return this.linkHtml("phone", "tel:", ios);
+	},
+	emailHtml: function(ios){
+		return this.linkHtml("email", "mailto:", ios);
+	},
+	webHtml: function(ios){
+		return this.linkHtml("web", "http://", ios);
+	},
+	programFeatureHtml: function(field, msgMap){
+		var programFeatureHtml = $("<li></li>");
+		return programFeatureHtml.append(msgMap[this[field]()]);
+	},
+	programFeaturesHtml: function(){
+		var programFeaturesHtml = $("<div class='name'>Program Features:</div>"),
+			featureList = $("<ul class='feats'></ul>");
+		featureList.append(this.programFeatureHtml("meal", MEAL))
+			.append(this.programFeatureHtml("inout", IN_OUT))
+			.append(this.programFeatureHtml("extend", EXTEND));
+		return [programFeaturesHtml, featureList];
+	},
+	seatsDayHtml: function(){
+		var seatsDayHtml = $("<div class='seats'></div>"),
+			yrHtml = $("<span class='name'></span>");
+		yrHtml.append(SCHOOL_YEAR + " seats: ");
+		return seatsDayHtml.append(yrHtml)
+			.append(" " + DAY_LENGTH[upk.dayLength()]);
+	},
+	detailHtml: function(ios){
+		var detailHtml = $("<div class='upkDetail'></div>");
+		return detailHtml.append(this.codeHtml())
+			.append(this.emailHtml(ios))
+			.append(this.webHtml(ios))
+			.append(this.programFeaturesHtml())
+			.append(this.seatsDayHtml());
+	}
+};
+
 nyc.UpkList = (function(){
 	/*
 	 * nyc.UpkList extends a geoJSON FeatureCollection providing methods to sort by distance from a user's location
@@ -94,7 +164,7 @@ nyc.UpkList = (function(){
 			return this.sorted(p);
 		},
 		populate: function(features){
-			var me = this, decorator = window.nyc.UpkDecorator;
+			var me = this, decorator = nyc.upk.FieldsDecorator;
 			me.allFeatures = [];
 			me.filteredFeatures = {};
 			$.each(features, function(_, f){

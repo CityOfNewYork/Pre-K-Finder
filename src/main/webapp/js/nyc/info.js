@@ -19,7 +19,6 @@ nyc.UpkInfo = (function(){
 		},
 		render: function(idPrefix){
 			var upk = this.upk, id = idPrefix + upk.id, target = window.ios ? "' target='_blank'>" : "'>";
-
 			return "<div id='" + id + "' class='upkInfo'>" +
 				"<div class='name'><img class='upkType' src='img/" + upk.type() + "0.png'/>" + upk.name() + "</div>" +
 				(upk.note() ? ("<div class='note'>" + upk.note() + "</div>") : "") +
@@ -42,7 +41,6 @@ nyc.UpkInfo = (function(){
 		},
 		renderDetail: function(upk, target){
 			return "<div class='upkDetail'>" + 
-				"<div class='prg-code'><span class='name'>Program Code: </span>" + upk.code() + "</div>" +
 				"<div class='email'><a href='mailto:" + upk.email() + target + upk.email() + "</a></div>" +
 				"<div class='web'><a onclick=\"nyc.app.changePage('http://" + upk.web() + "');\">" + upk.web() + "</a></div>" +
 				"<div class='name'>Program Features:</div>" +
