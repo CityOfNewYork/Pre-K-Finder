@@ -47,11 +47,40 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 	NYC_EXT = new OpenLayers.Bounds(912090, 119053, 1068317, 273931),
 	EPSG_2263 = new OpenLayers.Projection("EPSG:2263"),
 	DAY_LENGTH = {
-		"0":"Day length not available",
-		"1":"Full day",
-		"2":"Both half day and full day",
-		"3":"Half day"
-		//TODO 5 hr day
+		"0": "Day length not available",
+		"1": "Full day",
+		"2": "Both half day and full day",
+		"3": "Half day",
+		"4": "5-Hour",
+		"5": "Both full day and 5-hour",
+		"6": "Both half day and 5-hour",
+		"7": "Full day, half day and 5-hour"			
+	},
+	EXTENDED_DAY = {
+		"1": "Yes",
+		"2": "No",
+		"3": "Please contact site for more information"
+	},
+	INDOOR_OUTDOOR = {
+		"1": "Indoor playspace",
+		"2": "Indoor/Outdoor (offsite) playspace",
+		"3": "Indoor/Outdoor (onsite) playspace",
+		"4": "Indoor/Outdoor (onsite) playspace/Outdoor (offsite) playspace",
+		"5": "Not offered",
+		"6": "Outdoor (offsite) playspace",
+		"7": "Outdoor (onsite) playspace",
+		"8": "Outdoor (onsite) playspace/Outdoor (offsite) playspace",
+		"9": "Please contact site for more information"
+	},
+	MEALS = {
+		"1": "Breakfast",
+		"2": "Breakfast/Lunch",
+		"3": "Breakfast/Lunch/Snack(s)",
+		"4": "Breakfast/Snack(s)",
+		"5": "Contact program directly for details",
+		"6": "Lunch",
+		"7": "Lunch/Snack(s)",
+		"8": "Snack(s)"
 	},
 	BOROUGH = {"M":"Manhattan", "X":"Bronx", "K":"Brooklyn", "Q":"Queens", "R":"Staten Island"},
 	LOCATE_ZOOM_LEVEL = 7,
