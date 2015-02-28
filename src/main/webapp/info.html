@@ -183,22 +183,24 @@
 			}catch(ignore){}
 			$("#applyNow").click(valid);
 			$("select").on("change",function(e){$(e.target).focus();});
-			
 			$("#school_yr").html(SCHOOL_YEAR);
 			$("#birth_yr").html(PRE_K_REQUIRED_DOB_YEAR);
+			$("#min_dob").html(getDoeDob(MIN_DOB));
+			$("#max_dob").html(getDoeDob(MAX_DOB));
 			$("#dob").attr("min", MIN_DOB);
 			$("#dob").attr("max", MAX_DOB);
 		});
 
 		function valid(){
 			var err = [];
-			$("label").removeClass("err");
+			$("label, span").removeClass("err");
 			$.each($("input, select"), function(_, n){
 				if ($(n).prop("required")){
 					var val = $(n).val(), pattern = $(n).attr("pattern") || $(n).data("pattern"), valid = val.length;
 					if (n.id == "dob"){
 						var dob = new Date(getIsoDob());
 						valid = dob >= new Date(MIN_DOB) && dob <= new Date(MAX_DOB);
+						if (!valid) $("#min_dob, #max_dob").addClass("err");												
 					}else{
 						if (valid && pattern){
 							var regex = new RegExp(pattern);
@@ -250,8 +252,8 @@
 			}
 		};
 		
-		function getDoeDob(){
-			var dob = $("#dob").val();
+		function getDoeDob(dob){
+			var dob = dob || $("#dob").val();
 			if (dob.indexOf("/") > -1){
 				return dob;
 			}else{
@@ -313,6 +315,7 @@
 					}
 					if (window.ios){
 						alert("Thank you for completing our Pre-K for All information form!  Your submission is being sent to the Pre-K for All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
+						document.history.back();
 					}else{
 						$("#result").html("<div id='thanks'>Thank you for completing our Pre-K for All information form!  Your submission is being sent to the Pre-K for All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
 						$("#review").fadeOut();
@@ -339,7 +342,8 @@
 					<h2>Student Information</h2>
 					<label for="dob">Date of birth:</label>
 					<input id="dob" name="dob" type="date" required maxlength="10" placeholder="mm/dd/yyyy">
-					(Note: To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.)
+					(<b>Note:</b> To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.
+					The date of birth may be between <span id="min_dob"></span> and <span id="max_dob"></span> to recieve information.)
 					<h3>Current address</h3>
 					<table class="fields">
 						<tbody>
@@ -451,9 +455,7 @@
 					<input type="button" onclick="apply();" value="Submit">
 				</div>
 			</div>
-			<div id="result">
-			
-			</div>
+			<div id="result"></div>
 		</div>
 	</div>
 	<script>
