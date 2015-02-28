@@ -151,7 +151,7 @@ span.noshow{
 	visibility:hidden;
 	z-index:-1;
 }
-#infoSizeChecker .map, #infoSizeChecker .detail{
+#infoSizeChecker .map, /*#infoSizeChecker .detail*/{
 	display:none;
 }
 .upkType{
@@ -204,12 +204,11 @@ span.noshow{
 .email, .web{
 	margin: 10px 0;
 }
-#callout .map, #callout .detail, .upkDetail, #upkTable .directions{
+#callout .map, /*#callout .detail,*/ .upkDetail, #upkTable .directions{
 	display:none;
 }
 .olFramedCloudPopupContent {
 	padding: 0;
-	overflow: visible!important;
 }
 .upkAction{
 	font-weight: bold;

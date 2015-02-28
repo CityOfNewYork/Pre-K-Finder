@@ -314,12 +314,20 @@ nyc.App = (function(){
 				
 			    me.pop = new OpenLayers.Popup.FramedCloud("callout", p, sz, html, null, true, function(){me.removeCallout();});
 				me.pop._f = f;
-				me.pop.autoSize = false;				
+				me.pop.autoSize = false;
+				me.pop.keepInMap = true;
 				me.map.addPopup(me.pop);
 		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
 		    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
 		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
 		    	$(nyc).trigger("app.identify");
+			},
+			updateCallout: function(){
+				var pop = this.pop;
+				if (pop){
+					pop.updateSize();
+					pop.panIntoView();
+				}
 			}
 		};
 		

@@ -130,10 +130,11 @@ nyc.UpkTable = (function(){
 nyc.showUpkDetail = function(fid, id){
 	var detail = $("#" + id +" .upkDetail"), show = detail.css("display") == "none";
 	detail.slideToggle(function(){
+		nyc.app.updateCallout();
 		if (show){
-			var upkCell = $("#" + id),
-				upkHeight = upkCell.height(),
-				upkBottom = upkCell.position().top + upkHeight,
+			var upkHtml = $("#" + id),
+				upkHeight = upkHtml.height(),
+				upkBottom = upkHtml.position().top + upkHeight,
 				content = $("#upkContent"),
 				contentHeight = content.height();
 			if (contentHeight > upkHeight && upkBottom > contentHeight){
