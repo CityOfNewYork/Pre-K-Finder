@@ -35,7 +35,8 @@ nyc.UpkInfo = (function(){
 				"');\">Directions</a></td>" +
 				"<td class='map'><a class='ui-btn' href='#' onclick=\"nyc.app.centerUpk('" + upk.id + "')\">Map</a></td>" +
 				this.renderFormBtn(upk) +
-				"<td class='detail'><a class='ui-btn' href='#' onclick=\"$('#" + id + " .upkDetail').slideToggle();\">Details</a></td>" +
+				"<td class='detail'>" +
+				"<a class='ui-btn' href='#' onclick=\"nyc.showUpkDetail('" + upk.id + "','" + id + "');\">Details</a></td>" +
 				"</tr></tbody></table>" +
 				"</div>";
 		},
@@ -43,7 +44,7 @@ nyc.UpkInfo = (function(){
 			return "<div class='upkDetail'>" + 
 				"<div class='prg-code'><span class='name'>Program Code: </span>" + upk.code() + "</div>" +
 				"<div class='email'><a href='mailto:" + upk.email() + target + upk.email() + "</a></div>" +
-				"<div class='web'><a href='http://" + upk.web() + target + upk.web() + "</a></div>" +
+				"<div class='web'><a onclick=\"nyc.app.changePage('http://" + upk.web() + "');\">" + upk.web() + "</a></div>" +
 				"<div class='name'>Program Features:</div>" +
 				"<ul class='feats'>" +
 				"<li class='meal'>" + MEAL[upk.meal()] + "</li>" +
@@ -125,3 +126,21 @@ nyc.UpkTable = (function(){
 	};
 	return upkTableClass;
 }());
+
+nyc.showUpkDetail = function(fid, id){
+	var detail = $("#" + id +" .upkDetail"), show = detail.css("display") == "none";
+	detail.slideToggle(function(){
+		if (show){
+			var upkCell = $("#" + id),
+				upkHeight = upkCell.height(),
+				upkBottom = upkCell.position().top + upkHeight,
+				content = $("#upkContent"),
+				contentHeight = content.height();
+			if (contentHeight > upkHeight && upkBottom > contentHeight){
+				content.animate({
+					scrollTop: content.scrollTop() + (upkBottom - contentHeight)
+				});
+			}
+		}
+	});
+};

@@ -171,7 +171,7 @@ span.noshow{
 }
 #callout_close:hover {
 	background-color: rgb(1,51,100);
-	}
+}
 #callout .upkType{
 	display:none;
 }
@@ -183,12 +183,23 @@ span.noshow{
 	background-color: rgba(1,51,100,0.1);
 	font-size: 14px;
 }
+.email, .web{
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.web a {
+	text-decoration: underline;
+	cursor: pointer;
+}
 .oddRow .upkDetail{
 	background-color: white;
 }
 .upkDetail ul {
 	margin: 0 0 3px 0;
 	font-size: 12px;
+}
+.upkDetail li {
+	margin-left: -25px;
 }
 .email, .web{
 	margin: 10px 0;
