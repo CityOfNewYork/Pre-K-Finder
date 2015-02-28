@@ -52,45 +52,49 @@ nyc.upk.FieldsDecorator = {
 	}
 };
 
-nyc.upk.htmlDecorator = {
+nyc.upk.HtmlDecorator = {
 	codeHtml: function(){
 		var codeHtml =  $("<div class='code'><span class='name'>Program Code: </span></div>");
-		return codeHtml.append(upk.code());
+		return codeHtml.append(this.code());
 	},
 	nameHtml: function(){
 		var nameHtml = $("<div class='name'></div>"),
 			iconHtml = $("<img class='upkType'>");		
-		iconHtml.attr("src", "img/" + upk.type() + "0.png");
+		iconHtml.attr("src", "img/" + this.type() + "0.png");
 		nameHtml.append(iconHtml);
 		return nameHtml.append(this.name());
 	},
+	noteHtml: function(){
+		var noteHtml = $("<div class='note'></div>");		
+		return noteHtml.html(this.note());
+	},
 	addrHtml: function(){
-		var addr1Html = $("<div' class='addr'></div>"),
-			addr2Html = $("<div' class='addr'></div>");		
+		var addr1Html = $("<div class='addr'></div>"),
+			addr2Html = $("<div class='addr'></div>");		
 		addr1Html.append(this.address1());
 		addr2Html.append(this.address2());
 		return [addr1Html, addr2Html];
 	},
-	targetAttr: function(elem, ios){
-		if (ios) elem.attr("target", "_blank");
+	targetAttr: function(elem){
+		if (IOS) elem.attr("target", "_blank");
 	},
-	linkHtml: function(field, hrefPrefix, ios){
-		var linkHtml = $("<div'></div>"),
+	linkHtml: function(field, hrefPrefix){
+		var linkHtml = $("<div></div>"),
 			href= $("<a></a>");		
 		href.append(this.phone());
 		href.attr("href", hrefPrefix + encodeURI(this[field]()));
-		this.targetAttr(href, ios);
+		this.targetAttr(href);
 		linkHtml.append(href);
 		return linkHtml.addClass(field);
 	},
-	phoneHtml: function(ios){
-		return this.linkHtml("phone", "tel:", ios);
+	phoneHtml: function(){
+		return this.linkHtml("phone", "tel:");
 	},
-	emailHtml: function(ios){
-		return this.linkHtml("email", "mailto:", ios);
+	emailHtml: function(){
+		return this.linkHtml("email", "mailto:");
 	},
-	webHtml: function(ios){
-		return this.linkHtml("web", "http://", ios);
+	webHtml: function(){
+		return this.linkHtml("web", "http://");
 	},
 	programFeatureHtml: function(field, msgMap){
 		var programFeatureHtml = $("<li></li>");
@@ -109,24 +113,76 @@ nyc.upk.htmlDecorator = {
 			yrHtml = $("<span class='name'></span>");
 		yrHtml.append(SCHOOL_YEAR + " seats: ");
 		return seatsDayHtml.append(yrHtml)
-			.append(" " + DAY_LENGTH[upk.dayLength()]);
+			.append(" " + DAY_LENGTH[this.dayLength()]);
 	},
-	detailHtml: function(ios){
+	detailHtml: function(){
 		var detailHtml = $("<div class='upkDetail'></div>");
 		return detailHtml.append(this.codeHtml())
-			.append(this.emailHtml(ios))
-			.append(this.webHtml(ios))
+			.append(this.emailHtml())
+			.append(this.webHtml())
 			.append(this.programFeaturesHtml())
 			.append(this.seatsDayHtml());
+	},
+	directionsBtnHtml: function(){
+		var directionsBtnHtml = $("<td class='directions'></td>"),
+			anchorHtml = $("<a class='ui-btn'>Directions</a>");
+		anchorHtml.attr("data-upk-addr", this.address());
+		anchorHtml.attr("data-upk-name", this.name());
+		anchorHtml.attr("onclick", "nyc.app.direct(this, nyc.app);");
+		return directionsBtnHtml.append(anchorHtml);
+	},
+	mapBtnHtml: function(){
+		var mapBtnHtml = $("<td class='map'></td>"),
+			anchorHtml = $("<a class='ui-btn'>Map</a>");
+		anchorHtml.attr("data-upk-fid", this.id);
+		anchorHtml.attr("onclick", "nyc.app.mapUpk(this, nyc.app);");
+		return mapBtnHtml.append(anchorHtml);
+	},
+	detailBtnHtml: function(infoId){
+		var detailBtnHtml = $("<td class='detail'></td>"),
+			anchorHtml = $("<a class='ui-btn'>Details</a>");
+		anchorHtml.attr("data-upk-info-id", infoId);
+		anchorHtml.attr("onclick", "nyc.app.showUpkDetail(this, nyc.app);");
+		return detailBtnHtml.append(anchorHtml);
+	},
+	infoApplyBtnHtml: function(){
+		var infoApplyBtnHtml = $("<td class='apply'></td>"),
+			anchorHtml = $("<a class='ui-btn'></a>"), 
+			url, title;
+		if (DO_APPLY && (this.type() == "DOE" || this.isFullDay())){
+			url = APPLY_URL;
+			title = APPLY_TITLE;
+		}else{
+			url = INFO_URL;
+			title = INFO_TITLE;
+		}
+		anchorHtml.html(title);
+		anchorHtml.attr("data-url", url);
+		anchorHtml.attr("onclick", "nyc.app.changePage(this, nyc.app);");
+		return infoApplyBtnHtml.append(anchorHtml);		
+	},
+	buttonsHtml: function(infoId){
+		var buttonsHtml = $("<table class='upkAction'><tbody><tr></tr></tbody></table>");
+		return buttonsHtml.append(this.directionsBtnHtml())
+			.append(this.mapBtnHtml())
+			.append(this.infoApplyBtnHtml())
+			.append(this.detailBtnHtml(infoId));
+	},
+	html: function(idPrefix){
+		var html = $("<div class='upkInfo'>"), infoId = idPrefix + this.id;
+		html.attr("id", infoId);
+		return html.append(this.nameHtml())
+			.append(this.noteHtml())
+			.append(this.addrHtml())
+			.append(this.phoneHtml())
+			.append(this.detailHtml())
+			.append(this.buttonsHtml(infoId));
 	}
 };
 
-nyc.UpkList = (function(){
-	/*
-	 * nyc.UpkList extends a geoJSON FeatureCollection providing methods to sort by distance from a user's location
-	 * @constructor
-	 * 
-	 */
+
+nyc.upk.List = (function(){
+	/**  @constructor */
 	var upkListClass = function(){
 		this.ready = false;
 		this.allFeatures = [];
@@ -144,43 +200,45 @@ nyc.UpkList = (function(){
 			});
 		},
 		sorted: function(p){
-			var me = this, result = [];
+			var me = this, sortedFeatures = [];
 			for (var id in this.filteredFeatures){
-				result.push(this.filteredFeatures[id]);
+				sortedFeatures.push(this.filteredFeatures[id]);
 			}
 			if (p){
-				$.each(result, function(_, f){
-					f.distance = me.distance(p, f.geometry);
+				$.each(sortedFeatures, function(_, feature){
+					feature.distance = me.distance(p, feature.geometry);
 				});
-				result.sort(function(a, b){
+				sortedFeatures.sort(function(a, b){
 					if (a.distance < b.distance) return -1;
 					if (a.distance > b.distance) return 1;
 					return 0;
 				});				
 			}
-			return result;
+			return sortedFeatures;
 		},
 		features: function(p){
 			return this.sorted(p);
 		},
 		populate: function(features){
-			var me = this, decorator = nyc.upk.FieldsDecorator;
+			var me = this, decorators = [nyc.upk.FieldsDecorator, nyc.upk.HtmlDecorator];
 			me.allFeatures = [];
 			me.filteredFeatures = {};
-			$.each(features, function(_, f){
-				for (var decoration in decorator){
-					f[decoration] = decorator[decoration];
-				}
-				me.allFeatures.push(f);
-				me.filteredFeatures[f.id] = f;
+			$.each(features, function(_, feature){
+				$.each(decorators, function(_, decorator){
+					for (var decoration in decorator){
+						feature[decoration] = decorator[decoration];
+					}
+					me.allFeatures.push(feature);
+					me.filteredFeatures[feature.id] = feature;
+				});
 			});
 			this.ready = true;
 		},
 		upk: function(id){
 			var upk = null;
-			$.each(this.filteredFeatures, function(_, f){
-				if (f.id == id){
-					upk = f;
+			$.each(this.filteredFeatures, function(_, feature){
+				if (feature.id == id){
+					upk = feature;
 					return;
 				}
 			});
@@ -193,4 +251,60 @@ nyc.UpkList = (function(){
 		}
 	};
 	return upkListClass;
+}());
+
+nyc.upk.ListRenderer = (function(){
+	/** @constructor */
+	var upkTableClass = function(){
+		$(window).resize(this.fixJqCss);
+		this.upkList = null;
+		this.currentLocation = {geometry: null, attributes: {}};
+	};
+	upkTableClass.prototype = {
+		render: function(upkList, currentLocation){
+			var tbl = $("#upkTable");
+			this.upkList = upkList;
+			this.currentLocation = currentLocation || this.currentLocation;
+			tbl.html("<tbody></tbody>");
+			$("#more").data("current-pg", "0");
+			this.rows(tbl[0], 0);
+		},
+		rows: function(tbl, pg){
+			var start = pg * 10, end = start + 10, upks = this.upkList.features(this.currentLocation.geometry);
+			if (end >= upks.length){
+				end = upks.length;
+				$("#pgCtrl").hide();
+			}else{
+				$("#pgCtrl").show();
+			}
+			for (var i = start; i < end; i++){
+				var upk = upks[i], 
+					tr0 = tbl.insertRow(i), 
+					td0 = tr0.insertCell(0), 
+					td1 = tr0.insertCell(1);
+				tr0.id = "table" + upk.id;
+				tr0.className = upk.type();
+				if (i % 2 == 0) $(tr0).addClass("oddRow");
+				td0.className = "distCell";
+				td1.className = "upkCell";
+				td1.id = upk.id;
+				if (upk.distance != null){
+					$(td0).html(upk.distance.toFixed(2) + " mi");
+				}
+				$(td1).html(upk.html("table"));
+			}
+			$.each($(".phone"), function(_, n){
+				if (!$(n).html()) $(n).parent().hide();
+			});
+			$("#more").data("current-pg", pg + 1);
+			this.fixJqCss();
+		},
+		more: function(){
+			this.rows($("#upkTable")[0], $("#more").data("current-pg") * 1);
+		},
+		fixJqCss: function(){
+			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height() + 15);
+		}
+	};
+	return upkTableClass;
 }());

@@ -1,10 +1,7 @@
 window.nyc = window.nyc || {};
 
-OpenLayers.Util.DOTS_PER_INCH = 96.0;
-OpenLayers.Util.onImageLoadErrorColor = "transparent";		
-
 nyc.App = (function(){	
-	/*
+	/**
 	 * nyc.App 
 	 * @constructor
 	 * 
@@ -38,7 +35,7 @@ nyc.App = (function(){
 			controls.disambiguate(ambig.possible);
 		});
 		
-		if (window.ios) $("body").addClass("ios");		
+		if (IOS) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
 				  me.toggle({target:$(".toggleToMap")[0]});
@@ -92,7 +89,7 @@ nyc.App = (function(){
 				});
 				me.upkLayer = new OpenLayers.Layer.Vector("", {
 					styleMap: UPK_STYLE_MAP,
-					//maxResolution: RESOLUTIONS[3],
+					maxResolution: RESOLUTIONS[2],
 					/* 
 					 * 
 					 * for some reason links inside of the identify popup do not  
@@ -101,7 +98,7 @@ nyc.App = (function(){
 					 * 
 					 */
 					renderers: (function(){
-						if (me.ios) return ["Canvas", "SVG", "VML"];
+						if (IOS) return ["Canvas", "SVG", "VML"];
 						return ["SVG", "VML", "Canvas"];
 					})(),
 					eventListeners:{
@@ -134,7 +131,27 @@ nyc.App = (function(){
 		};
 
 		appClass.prototype = {
-			 goToLocation: function(data){
+			showUpkDetail: function(btn, me){
+				var id = $(btn).data("upk-info-id"), 
+					detail = $("#" + id +" .upkDetail"), 
+					show = detail.css("display") == "none";
+				detail.slideToggle(function(){
+					me.updateCallout();
+					if (show){
+						var upkHtml = $("#" + id),
+							upkHeight = upkHtml.height(),
+							upkBottom = upkHtml.position().top + upkHeight,
+							content = $("#upkContent"),
+							contentHeight = content.height();
+						if (contentHeight > upkHeight && upkBottom > contentHeight){
+							content.animate({
+								scrollTop: content.scrollTop() + (upkBottom - contentHeight)
+							});
+						}
+					}
+				});
+			},
+			goToLocation: function(data){
 				 var fid = data.fid;
 				 if (fid){
 					 this.centerUpk(fid);
@@ -144,7 +161,7 @@ nyc.App = (function(){
 					 this.map.setCenter(new OpenLayers.LonLat(data.coordinates[0], data.coordinates[1]), 8);
 				 }
 			},
-			 parseQueryStr: function(){
+			parseQueryStr: function(){
 				var searching = false;
 				try{//parse query string and geocode
 					var params = document.location.search.substr(1).split("&");
@@ -171,7 +188,7 @@ nyc.App = (function(){
 			},
 			initPages: function(){
 				var me = this, change = function(e, ui){
-						if (this.ios){
+						if (IOS){
 							$('html').css({
 								height: ui.toPage.attr('id') == 'external-page' ? '10000000px' : '100%',
 								'overflow-y': 'scroll'
@@ -188,8 +205,10 @@ nyc.App = (function(){
 			isPanelOpen: function(){
 				return $('#toggleToList').hasClass('ui-btn-active');
 			},
-			direct: function(from, to, name){
-				var me = this;
+			direct: function(btn, me){
+				var to = escape($(btn).data("upk-addr")),
+					name = escape($(btn).data("upk-name")),
+					from = escape(me.currentLocation ? me.currentLocation.attributes.title : "")
 				me.openPanel = me.isPanelOpen();
 				$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
 				if (me.lastDir != from + '|' + to){
@@ -204,10 +223,10 @@ nyc.App = (function(){
 					}
 				}
 			},
-			changePage: function(url){
-				this.openPanel = this.isPanelOpen();
-				$('#external-page iframe').attr('src', url);
-				$('body').pagecontainer('change', $('#external-page'), {transition: 'slideup'});
+			changePage: function(btn, me){
+				me.openPanel = me.isPanelOpen();
+				$("#external-page iframe").attr("src", $(btn).data("url"));
+				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
 			},
 			more: function(){
 				this.upkTable.more();
@@ -235,6 +254,9 @@ nyc.App = (function(){
 				if (input.trim().length){
 					this.locate.search(input);
 				}
+			},
+			mapUpk: function(btn, me){
+				me.centerUpk($(btn).data("upk-fid"));
 			},
 			centerUpk: function(id){
 				var me = this, upk = me.upkList.upk(id), g = upk.geometry;
@@ -290,7 +312,7 @@ nyc.App = (function(){
 				me.upkLayer.redraw();
 			},
 			removeCallout: function(){
-				var f = this.upkList.upk(this.pop._f.id);
+				var f = this.upkList.upk(this.pop.fid);
 				$("#callout").remove();
 				f.renderIntent = "default";
 			    this.pop = null;
@@ -299,21 +321,23 @@ nyc.App = (function(){
 				this.upkLayer.addFeatures([f]);
 				$(this.upkLayer.div).trigger("click");
 			},
-			identify:function(f){
+			identify:function(upk){
 				var me = this,
-					g = f.geometry, 
-					p = new OpenLayers.LonLat(g.x, g.y), 
-					upk = me.upkList.upk(f.id),
-					loc = me.currentLocation,
-					html = new nyc.UpkInfo(upk, loc).render("callout"),
-					sz;
+					upk = me.upkList.upk(upk.id),
+					checker = $("#infoSizeChecker");
+					div = $("<div></div>").append(upk.html("callout"));
 			    if (me.pop) me.removeCallout();
-				
-				$("#infoSizeChecker").html(html);	
-			    sz = new OpenLayers.Size($("#infoSizeChecker").width(), $("#infoSizeChecker").height());				
-				
-			    me.pop = new OpenLayers.Popup.FramedCloud("callout", p, sz, html, null, true, function(){me.removeCallout();});
-				me.pop._f = f;
+				checker.html(div.html());	
+			    me.pop = new OpenLayers.Popup.FramedCloud(
+		    		"callout", 
+		    		new OpenLayers.LonLat(upk.geometry.x, upk.geometry.y), 
+		    		new OpenLayers.Size(checker.width(), checker.height()), 
+		    		div.html(), 
+		    		null, 
+		    		true, 
+		    		function(){me.removeCallout();}
+	    		);
+				me.pop.fid = upk.id;
 				me.pop.autoSize = false;
 				me.pop.keepInMap = true;
 				me.map.addPopup(me.pop);
@@ -335,7 +359,6 @@ nyc.App = (function(){
 }());
 
 $(document).ready(function(){
-	window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 
 	var map = new OpenLayers.Map(
 		"map", 
@@ -367,8 +390,8 @@ $(document).ready(function(){
 	nyc.app = new nyc.App(
 		map, 
 		new nyc.Locate(map), 
-		new nyc.UpkList(), 
-		new nyc.UpkTable(), 
+		new nyc.upk.List(), 
+		new nyc.upk.ListRenderer(), 
 		new nyc.ZoomSearch('#main', map),
 		new nyc.Share('#main')
 	); 
@@ -379,12 +402,12 @@ $(document).ready(function(){
 	};
 	if (DO_APPLY){
 		$("#splash .info").html(MORE_INFO_TITLE);
-		$("#splash .apply").click(function(){changePage(APPLY_URL);});
+		$("#splash .apply").data("url", APPLY_URL);
 	}else{
 		$("#splash .apply").hide();
 		$("#splash .info").html(INFO_TITLE);
 	}
-	$("#splash .info").click(function(){changePage(INFO_URL);});
+	$("#splash .info").data("url", INFO_URL);
 	$("#main").append($("#splash"));
 	$("#splash").fadeIn();
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");

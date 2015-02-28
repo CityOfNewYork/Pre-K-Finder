@@ -46,6 +46,7 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 	MAX_EXT = new OpenLayers.Bounds(700000.0, -4444.444444444671, 1366666.666666667, 440000.0),
 	NYC_EXT = new OpenLayers.Bounds(912090, 119053, 1068317, 273931),
 	EPSG_2263 = new OpenLayers.Projection("EPSG:2263"),
+	IOS = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false,
 	FULL_DAY = [1, 2, 5, 7],
 	DAY_LENGTH = {
 		"0": "Day length not available",
