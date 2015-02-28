@@ -1,5 +1,4 @@
-
-
+maybe sort list when click upk icon - not sure its even a good idea
 
 <script type="text/javascript" src="date_rules.js"></script> <!-- TODO get from path to DOE svr -->
 
