@@ -1,5 +1,9 @@
 maybe sort list when click upk icon - not sure its even a good idea
 
-<script type="text/javascript" src="date_rules.js"></script> <!-- TODO get from path to DOE svr -->
+css cleanup/refactor
+
+review js for more cleanup/refactor
+
+
 
 /geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
