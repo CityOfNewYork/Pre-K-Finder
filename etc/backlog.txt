@@ -5,6 +5,11 @@ review js for more cleanup/refactor/anno - probly did all i will do here for now
 
 add project management history and docs
 
-use our google clientid in nyc.Directions
-
 /geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
+
+new oracle table to match new data
+
+extend oracle table to incl constraints and triggers, etc so that DOE can use access/odbc to
+update dev db and data integrity is maintained
+
+move date_rules.js to oracle if we accomplish above
