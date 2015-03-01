@@ -38,6 +38,31 @@ nyc.Locate = (function(){
 	};
 	
 	locateClass.prototype = {
+		/** @export */
+		locate: function(){
+			this.locationLyr.removeAllFeatures();
+		    this.geolocate.deactivate();
+		    this.geolocate.watch = false;
+		    this.geolocate.activate();
+		},
+		/**
+		 * @export
+		 * @param {OpenLayers.Feature.Vector} feature
+		 */
+		mapLocation: function(feature){
+			var map = this.map, 
+				lyr = this.locationLyr, 
+				point = feature.geometry, 
+				add = function(){
+					lyr.removeAllFeatures();
+					lyr.addFeatures([feature]);
+					this.events.unregister("moveend", this, add);
+				};
+			this.map.events.register("moveend", map, add);
+			this.map.setCenter(new OpenLayers.LonLat(point.x, point.y), LOCATE_ZOOM_LEVEL);				
+			this.map.setLayerIndex(lyr, LOCATION_LAYER_IDX);
+		},
+		/** @private */
 		parseGeoClientResp: function(result, disambiguating){
 			var typ = result.request.split(" ")[0], resp = result.response, ln1, point; 
 			if (typ == "intersection"){
@@ -60,6 +85,7 @@ nyc.Locate = (function(){
 			}
 			return feature;
 		},
+		/** @private */
 		capitalize: function(s){
 			var words = s.split(" "), result = "";
 			$.each(words, function(i, w){
@@ -69,19 +95,6 @@ nyc.Locate = (function(){
 				result += " ";
 			});
 			return result.trim();
-		},
-		mapLocation: function(feature){
-			var map = this.map, 
-				lyr = this.locationLyr, 
-				point = feature.geometry, 
-				add = function(){
-					lyr.removeAllFeatures();
-					lyr.addFeatures([feature]);
-					this.events.unregister("moveend", this, add);
-				};
-			this.map.events.register("moveend", map, add);
-			this.map.setCenter(new OpenLayers.LonLat(point.x, point.y), LOCATE_ZOOM_LEVEL);				
-			this.map.setLayerIndex(lyr, LOCATION_LAYER_IDX);
 		},
 		search: function(input){
 			var me = this;
@@ -98,6 +111,7 @@ nyc.Locate = (function(){
 				});
 			}
 		},
+		/** @private */
 		mapZip: function(point, name){
 			if (point){
 				var feature = new OpenLayers.Feature.Vector(
@@ -110,6 +124,7 @@ nyc.Locate = (function(){
 				$(this).trigger("fail", "The location you entered was not understood.");
 			}			
 		},
+		/** @private */
 		geoClientFound: function(response){
 			var me = this, results = response.results, lyr = me.locationLyr;
 		    this.geolocate.deactivate();
@@ -138,6 +153,7 @@ nyc.Locate = (function(){
 				$(this).trigger("fail", "The location you entered was not understood.");
 			}
 		},
+		/** @private */
 		ambiguous: function(results){
 			var me = this, possible = [];
 			$.each(results, function(i, res){
@@ -147,12 +163,7 @@ nyc.Locate = (function(){
 			});
 			this.controls.disambiguate(possible);			
 		},
-		locate: function(){
-			this.locationLyr.removeAllFeatures();
-		    this.geolocate.deactivate();
-		    this.geolocate.watch = false;
-		    this.geolocate.activate();
-		},
+		/** @private */
 		updated: function(e) {
 			var epsg2263 = new Proj4js.Point(e.point.x, e.point.y), 
 				epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263),

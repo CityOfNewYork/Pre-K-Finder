@@ -1,11 +1,15 @@
-nyc.Share = function(elem, options){
-	options = options || {};
-
+/**
+ * Class for providing a set of buttons to zoom and search.
+ * @export
+ * @constructor
+ * @param {string|Element} target
+ */
+nyc.Share = function(target){
 	var me = this, html = nyc.Share.HTML, title = $('meta[property="og:title"]').attr('content');
 	html = html.replace(/\${url}/g, $('meta[property="og:url"]').attr('content'));
 	html = html.replace(/\${title}/g, title);
 	html = html.replace(/\${description}/g, $('meta[property="og:description"]').attr('content'));
-	$(elem).append(html).trigger('create');
+	$(target).append(html).trigger('create');
 
 	$('#feedback-btn').click(function(){
 		$(me).trigger('feedback');

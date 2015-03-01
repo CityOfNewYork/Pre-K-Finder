@@ -1,6 +1,7 @@
 window.nyc = window.nyc || {};
 nyc.upk = nyc.upk || {};
 
+/** @export */
 nyc.upk.FieldsDecorator = {
 	code: function(){
 		return this.attributes.SEMS_CODE;
@@ -52,6 +53,7 @@ nyc.upk.FieldsDecorator = {
 	}
 };
 
+/** @export */
 nyc.upk.HtmlDecorator = {
 	codeHtml: function(){
 		var codeHtml =  $("<div class='code'><span class='name'>Program Code: </span></div>");
@@ -189,6 +191,10 @@ nyc.upk.List = (function(){
 		this.filteredFeatures = {};
 	};
 	upkListClass.prototype = {
+		/**
+		 * @export
+		 * @param {Object} filters
+		 */
 		filter: function(filters){
 			var me = this;
 			me.filteredFeatures = {};
@@ -199,26 +205,38 @@ nyc.upk.List = (function(){
 					me.filteredFeatures[upk.id] = upk;
 			});
 		},
-		sorted: function(p){
+		/**
+		 * @export
+		 * @param {OpenLayers.Geometry.Point} point
+		 */
+		sorted: function(point){
 			var me = this, sortedFeatures = [];
 			for (var id in this.filteredFeatures){
 				sortedFeatures.push(this.filteredFeatures[id]);
 			}
-			if (p){
+			if (point){
 				$.each(sortedFeatures, function(_, feature){
-					feature.distance = me.distance(p, feature.geometry);
+					feature.distance = me.distance(point, feature.geometry);
 				});
-				sortedFeatures.sort(function(a, b){
-					if (a.distance < b.distance) return -1;
-					if (a.distance > b.distance) return 1;
+				sortedFeatures.sort(function(feature1, feature2){
+					if (feature1.distance < feature2.distance) return -1;
+					if (feature1.distance > feature2.distance) return 1;
 					return 0;
 				});				
 			}
 			return sortedFeatures;
 		},
-		features: function(p){
-			return this.sorted(p);
+		/**
+		 * @export
+		 * @param {OpenLayers.Geometry.Point} point
+		 */
+		features: function(point){
+			return this.sorted(point);
 		},
+		/**
+		 * @export
+		 * @param {OpenLayers.Geometry.Point} point
+		 */
 		populate: function(features){
 			var me = this, decorators = [nyc.upk.FieldsDecorator, nyc.upk.HtmlDecorator];
 			me.allFeatures = [];
@@ -234,7 +252,11 @@ nyc.upk.List = (function(){
 			});
 			this.ready = true;
 		},
-		upk: function(id){
+		/**
+		 * @export
+		 * @param {string} id
+		 */
+		feature: function(id){
 			var upk = null;
 			$.each(this.filteredFeatures, function(_, feature){
 				if (feature.id == id){
@@ -244,9 +266,9 @@ nyc.upk.List = (function(){
 			});
 			return upk;
 		},
-		distance: function(a, b){
-			var dx = a.x - b.x, 
-				dy = a.y - b.y;
+		distance: function(point1, point2){
+			var dx = point1.x - point2.x, 
+				dy = point1.y - point2.y;
 			return Math.sqrt(dx*dx + dy*dy)/5280;
 		}
 	};
@@ -256,11 +278,16 @@ nyc.upk.List = (function(){
 nyc.upk.ListRenderer = (function(){
 	/** @constructor */
 	var upkTableClass = function(){
-		$(window).resize(this.fixJqCss);
+		$(window).resize(this.adjContainerHeight);
 		this.upkList = null;
 		this.currentLocation = {geometry: null, attributes: {}};
+		$("#more").click($.proxy(this.more, this));
 	};
 	upkTableClass.prototype = {
+		/**
+		 * @export
+		 * @param {OpenLayers.Feature.Vector} feature
+		 */
 		render: function(upkList, currentLocation){
 			var tbl = $("#upkTable");
 			this.upkList = upkList;
@@ -269,6 +296,7 @@ nyc.upk.ListRenderer = (function(){
 			$("#more").data("current-pg", "0");
 			this.rows(tbl[0], 0);
 		},
+		/** @private */
 		rows: function(tbl, pg){
 			var start = pg * 10, end = start + 10, upks = this.upkList.features(this.currentLocation.geometry);
 			if (end >= upks.length){
@@ -297,13 +325,15 @@ nyc.upk.ListRenderer = (function(){
 				if (!$(n).html()) $(n).parent().hide();
 			});
 			$("#more").data("current-pg", pg + 1);
-			this.fixJqCss();
+			this.adjContainerHeight();
 		},
+		/** @private */
+		adjContainerHeight: function(){
+			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height() + 15);
+		},
+		/** @private */
 		more: function(){
 			this.rows($("#upkTable")[0], $("#more").data("current-pg") * 1);
-		},
-		fixJqCss: function(){
-			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height() + 15);
 		}
 	};
 	return upkTableClass;

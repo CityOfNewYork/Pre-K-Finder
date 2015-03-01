@@ -1,8 +1,10 @@
 
 css cleanup/refactor - might not have time or energy for this
 
-review js for more cleanup/refactor/anno
+review js for more cleanup/refactor/anno - probly did all i will do here for now
 
 add project management history and docs
+
+use our google clientid in nyc.Directions
 
 /geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv

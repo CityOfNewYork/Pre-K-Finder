@@ -1,4 +1,7 @@
-/* Set all global date strings and date-like strings */
+/* 
+ * Set all global date strings and date-like strings 
+ * set by DOE in date_rules.js
+ */
 (function(){
 	
 	var DEFAULT_DATES = {
