@@ -93,19 +93,19 @@
 				Pre-K Finder
 			</h1>
 			<div id="toggle" data-role="controlgroup" data-type="horizontal">
-				<a class="toggleToMap" data-role="button" data-transition="fade" href="#map">Map</a>
-				<a id="toggleToList" class="ui-btn ui-btn-active" data-role="button" data-transition="fade">List</a>
+				<a class="toggle-map" data-role="button" data-transition="fade" href="#map">Map</a>
+				<a id="toggle-list" class="ui-btn ui-btn-active" data-role="button" data-transition="fade">List</a>
 			</div>
 		</div>
 		<div id="main" data-role="main" class="ui-content">
 			<div id="map"></div>
-			<a id="btnSplash" class="ctl ctl-btn" data-role="button" data-icon="info" data-iconpos="notext" title="Get in Touch" onclick="$('#splash').fadeIn();">
+			<a id="btn-splash" class="ctl ctl-btn" data-role="button" data-icon="info" data-iconpos="notext" title="Get in Touch" onclick="$('#splash').fadeIn();">
 				<span>Get in Touch</span>
 	        </a>
 			<div id="copyright" class="ctl"></div>
 		</div>
 		<div id="alert">
-			<div id="msg"></div>
+			<div class="alert-msg"></div>
 			<input data-role="button" title="OK" type="button" value="OK"/>
 		</div>
 	</div>
@@ -150,7 +150,7 @@
 				<div id="dir-map"></div>
 			</div>
 			<div id="dir-toggle" data-role="controlgroup" data-type="horizontal">
-				<a class="toggleToMap" data-role="button">Map</a>
+				<a class="toggle-map" data-role="button">Map</a>
 				<a class="ui-btn-active" data-role="button">Directions</a>
 			</div>
 		</div>
@@ -168,7 +168,7 @@
 		</div>
 		<div id="external-content" data-role="content"><iframe frameborder="0"></iframe></div>
 	</div>
-	<div id="infoSizeChecker"></div>
+	<div id="callout-size-check"></div>
 	<script src="js/nyc/constants.js"></script>
 	<script src="js/nyc/upk.js"></script>
 	<script src="js/nyc/locate.js"></script>
@@ -186,6 +186,6 @@
 		ga('create', 'UA-41281554-9', 'auto');
 		ga('send', 'pageview');
 	</script>	
-	<img id="popPreload" src="js/OpenLayers-2.13.1/img/cloud-popup-relative.png" alt="">
+	<img id="ol-popup-preload" src="js/OpenLayers-2.13.1/img/cloud-popup-relative.png" alt="">
 </body>
 </html>

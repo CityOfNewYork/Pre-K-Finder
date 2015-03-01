@@ -66,7 +66,7 @@ body.firstLoad, #iframeContainer.firstLoad{
 .note{
 	color:red;
 }
-#popPreload{
+#ol-popup-preload{
 	position:absolute;
 	left:-5000px;
 	top:-5000px;
@@ -135,11 +135,11 @@ span.noshow{
 	height: calc(100% - 45px);
 	top: 45px;
 }
-#btnSplash{
+#btn-splash{
 	left:3px;
 	top: 127px;
 }
-#infoSizeChecker{
+#callout-size-check{
 	position:absolute;
 	left:-2000px;
 	top:-2000px;
@@ -147,7 +147,7 @@ span.noshow{
 	visibility:hidden;
 	z-index:-1;
 }
-#infoSizeChecker .map, /*#infoSizeChecker .detail*/{
+#callout-size-check .map {
 	display:none;
 }
 .type-icon{
@@ -331,7 +331,7 @@ span.noshow{
 	z-index: 1000;
 	min-height: 74px;
 }
-#msg{
+.alert-msg{
 	text-align:center;	
 	margin:0 0 5px 0;
 }
@@ -367,6 +367,13 @@ span.noshow{
 	.banner-school-yr{
 		font-size: 10px;
 		top: 24px;
+	}
+	#external-page .banner h1 {
+		font-size: 16px !important;
+		top: 12px;
+	}
+	#external-page .banner-school-yr{
+		display: none;
 	}
 	#toggle a {
 		padding: 9px 12.5px;

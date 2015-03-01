@@ -30,7 +30,7 @@ nyc.App = (function(){
 		if (IOS) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
-				  me.toggle({target:$(".toggleToMap")[0]});
+				  me.toggle({target:$(".toggle-map")[0]});
 			  }
 		});
 		
@@ -187,13 +187,13 @@ nyc.App = (function(){
 							$('#external-page iframe').height($(window).height() - $('.banner').height());
 						}
 						if (ui.toPage.attr('id') == 'map-page' && me.openPanel){
-							$('#toggleToList').trigger('click');
+							$('#toggle-list').trigger('click');
 						}
 					};
 				$('body').pagecontainer({change: change});
 			},
 			isPanelOpen: function(){
-				return $('#toggleToList').hasClass('ui-btn-active');
+				return $('#toggle-list').hasClass('ui-btn-active');
 			},
 			/** @private */
 			parseQueryStr: function(){
@@ -272,7 +272,7 @@ nyc.App = (function(){
 			},
 			/** @private */
 			alert: function(e, msg){
-				$("#msg").html(msg);
+				$("#alert .alert-msg").html(msg);
 				$("body").append($("#alert"));
 				$("#alert").fadeIn(400, function(){
 					$("#alert input").focus();				
@@ -283,7 +283,7 @@ nyc.App = (function(){
 				var me = this, upk = me.upkList.feature(id), g = upk.geometry;
 				me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
 				upk.renderIntent = "select";
-				$($(".toggleToMap")[0]).trigger("click");
+				$($(".toggle-map")[0]).trigger("click");
 				me.upkLayer.redraw();
 		    	if ($(window).height() < 550){
 		    		var id = function(){
@@ -333,7 +333,7 @@ nyc.App = (function(){
 			/** @private */
 			identify: function(feature){				
 				var me = this,
-					checker = $("#infoSizeChecker"),
+					checker = $("#callout-size-check"),
 					div = $("<div></div>").append(feature.html("callout"));
 			    if (me.pop) me.removeCallout();
 				checker.html(div.html());	
