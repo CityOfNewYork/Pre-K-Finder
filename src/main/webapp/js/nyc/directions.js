@@ -13,7 +13,7 @@ nyc.Directions = (function(){
 		me.args = args;
 		nyc.directions = me;
 		//TODO use our google clientid
-		$.getScript('https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization&callback=nyc.directions.init');
+		$.getScript('https://maps.googleapis.com/maps/api/js?client=gme-newyorkcitydepartment&channel=upksensor=false&libraries=visualization&callback=nyc.directions.init');
 		$('.dir-mode-btn').click($.proxy(this.mode, this));
 		$(window).resize(me.height);
 		$('#fld-from input').keypress(function(e){
