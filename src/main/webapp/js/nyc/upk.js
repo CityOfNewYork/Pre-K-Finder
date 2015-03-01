@@ -61,7 +61,7 @@ nyc.upk.HtmlDecorator = {
 	},
 	nameHtml: function(){
 		var nameHtml = $("<div class='name'></div>"),
-			iconHtml = $("<img class='upkType'>");		
+			iconHtml = $("<img class='type-icon'>");		
 		iconHtml.attr("src", "img/" + this.type() + "0.png");
 		nameHtml.append(iconHtml);
 		return nameHtml.append(this.name());

@@ -15,7 +15,7 @@ html, body, div, span, a, input, input[data-type="search"], li {
 	position: absolute;
 	z-index:2000;
 }
-div#splashContent{
+div#splash-cont{
 	padding: 10px;
 	background-color: white;
 	border: 2px solid #013364;
@@ -61,10 +61,6 @@ body.firstLoad, #iframeContainer.firstLoad{
 	background-repeat:no-repeat;
 	background-position:center;
 	background-color:#E8E8E8;
-}
-/* comment out below this rule to show apply buttons */
-td.apply {
-	/* display: none; */
 }
 /* comment out above this rule to show apply buttons */
 .note{
@@ -154,7 +150,7 @@ span.noshow{
 #infoSizeChecker .map, /*#infoSizeChecker .detail*/{
 	display:none;
 }
-.upkType{
+.type-icon{
 	width: 20px;
 	height: 20px;
 	margin:2px 12px -2px -32px;
@@ -172,7 +168,7 @@ span.noshow{
 #callout_close:hover {
 	background-color: rgb(1,51,100);
 }
-#callout .upkType{
+#callout .type-icon{
 	display:none;
 }
 .upkDetail{
@@ -226,7 +222,7 @@ span.noshow{
 	background-color: white !important;
 }
 
-#upkTypes .upkType{
+#filter-type .type-icon{
 	margin: 0 60px 0 0;
 	float: right;
 }
@@ -249,35 +245,35 @@ span.noshow{
 .ui-panel-dismiss{
 	z-index:999;
 }
-#filters{
+#filter{
 	margin:3px 5px;
 	border-radius: 0.6em;
 }
-#filters .ui-collapsible-content {
+#filter .ui-collapsible-content {
 	padding: 1px 20px 0 20px;
 }
-#filters h3 a{
+#filter h3 a{
 	text-align: center;
 }
-#filters h3 a:after{
+#filter h3 a:after{
 	background-image: url(../img/filter.png);
 	background-size: 12px;
 	background-color:#f8993a;
 }
 
-#filters label.ui-checkbox-on:after{
+#filter label.ui-checkbox-on:after{
 	background-color: #80b34e;
 }
-#upkTypes .ui-controlgroup-controls, #dayLengths .ui-controlgroup-controls{
+#filter-type .ui-controlgroup-controls, #filter-day .ui-controlgroup-controls{
 	width:100%;	
 }
-#upkTypes a, #dayLengths a{
+#filter-type a, #filter-day a{
     font-size: 13px;
     height:30px;
     width: 32%;
     padding:5px 0 8px 0;
 }
-#allTypes,  #dayLengths a{
+#allTypes,  #filter-day a{
 	padding:13px 0 0 0 !important;
 }
 .ui-btn{
@@ -389,7 +385,7 @@ span.noshow{
 	}
 }
 @media only screen and (max-height : 360px) {
-	div#splashContent{
+	div#splash-cont{
 		width: 450px;
 		margin: -1px auto;
 	}

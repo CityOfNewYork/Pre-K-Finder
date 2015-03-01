@@ -35,11 +35,11 @@ nyc.App = (function(){
 		});
 		
 		$("#panel").panel("open");
-		$("#filters").collapsible({
+		$("#filter").collapsible({
 			expand: me.upkTable.adjContainerHeight,
 			collapse: me.upkTable.adjContainerHeight
 		});
-		$("#filters input[type=checkbox]").change($.proxy(me.filter, me));
+		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
 		$("#toggles").click(me.toggle);
 		$(share).on('feedback', function(){me.changePage(FEEDBACK_URL);});
 		
@@ -257,7 +257,7 @@ nyc.App = (function(){
 			filter: function(e){
 				var me = this;
 				var filters = {type:[], dayLength:[]};
-				$.each($("#filters input[type=checkbox]:checked"), function(_, n){
+				$.each($("#filter input[type=checkbox]:checked"), function(_, n){
 					var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
 					values = filters[name].concat(values.split(","));
 					filters[name] = values;
