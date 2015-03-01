@@ -40,7 +40,7 @@ nyc.App = (function(){
 			collapse: me.upkTable.adjContainerHeight
 		});
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
-		$("#toggles").click(me.toggle);
+		$("#toggle").click(me.toggle);
 		$(share).on('feedback', function(){me.changePage(FEEDBACK_URL);});
 		
 		me.map.zoomToExtent(NYC_EXT);			
@@ -132,7 +132,7 @@ nyc.App = (function(){
 						var upkHtml = $("#" + id),
 							upkHeight = upkHtml.height(),
 							upkBottom = upkHtml.position().top + upkHeight,
-							content = $("#upkContent"),
+							content = $("#list-container"),
 							contentHeight = content.height();
 						if (contentHeight > upkHeight && upkBottom > contentHeight){
 							content.animate({
@@ -315,7 +315,7 @@ nyc.App = (function(){
 			/** @private */
 			toggle: function(e){
 				var target = $(e.target);
-				$("#toggles .ui-btn").removeClass("ui-btn-active");
+				$("#toggle .ui-btn").removeClass("ui-btn-active");
 				$("#panel").panel(target.html() == "Map" ? "close" : "open");
 				setTimeout(function(){target.addClass("ui-btn-active");}, 100);
 			},
@@ -422,6 +422,6 @@ $(document).ready(function(){
 	$("#main").append($("#splash"));
 	$("#splash").fadeIn();
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
-	$(".schoolYr").html("for School Year " + SCHOOL_YEAR);
+	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);
 	
 });

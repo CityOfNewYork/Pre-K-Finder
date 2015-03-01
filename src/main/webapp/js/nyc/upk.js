@@ -281,7 +281,7 @@ nyc.upk.ListRenderer = (function(){
 		$(window).resize(this.adjContainerHeight);
 		this.upkList = null;
 		this.currentLocation = {geometry: null, attributes: {}};
-		$("#more").click($.proxy(this.more, this));
+		$("#list-more").click($.proxy(this.more, this));
 	};
 	upkTableClass.prototype = {
 		/**
@@ -289,11 +289,11 @@ nyc.upk.ListRenderer = (function(){
 		 * @param {OpenLayers.Feature.Vector} feature
 		 */
 		render: function(upkList, currentLocation){
-			var tbl = $("#upkTable");
+			var tbl = $("#list-table");
 			this.upkList = upkList;
 			this.currentLocation = currentLocation || this.currentLocation;
 			tbl.html("<tbody></tbody>");
-			$("#more").data("current-pg", "0");
+			$("#list-more").data("current-pg", "0");
 			this.rows(tbl[0], 0);
 		},
 		/** @private */
@@ -301,9 +301,9 @@ nyc.upk.ListRenderer = (function(){
 			var start = pg * 10, end = start + 10, upks = this.upkList.features(this.currentLocation.geometry);
 			if (end >= upks.length){
 				end = upks.length;
-				$("#pgCtrl").hide();
+				$("#list-pager").hide();
 			}else{
-				$("#pgCtrl").show();
+				$("#list-pager").show();
 			}
 			for (var i = start; i < end; i++){
 				var upk = upks[i], 
@@ -324,16 +324,16 @@ nyc.upk.ListRenderer = (function(){
 			$.each($(".phone"), function(_, n){
 				if (!$(n).html()) $(n).parent().hide();
 			});
-			$("#more").data("current-pg", pg + 1);
+			$("#list-more").data("current-pg", pg + 1);
 			this.adjContainerHeight();
 		},
 		/** @private */
 		adjContainerHeight: function(){
-			$("#upkContent").height($("body").height() - $(".banner").height() - $("#filters").height() - $("#pgCtrl .ui-btn").height() + 15);
+			$("#list-container").height($("body").height() - $(".banner").height() - $("#filter").height() - $("#list-pager .ui-btn").height() + 15);
 		},
 		/** @private */
 		more: function(){
-			this.rows($("#upkTable")[0], $("#more").data("current-pg") * 1);
+			this.rows($("#list-table")[0], $("#list-more").data("current-pg") * 1);
 		}
 	};
 	return upkTableClass;
