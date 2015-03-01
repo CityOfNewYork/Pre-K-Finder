@@ -3,29 +3,22 @@ window.nyc = window.nyc || {};
 
 
 nyc.Locate = (function(){
-	/*
-	 * nyc.Locate an object for geocoding and geolocating
+	/**
 	 * @constructor
-	 * 
 	 * @param {OpenLayers.Map} map
-	 * 
 	 */
-	var locateClass = function(map){	
+	var locateClass = function(map, controls){	
 		var me = this;
 		
 		me.EPSG_2263 = new Proj4js.Proj("EPSG:2263");
 		me.EPSG_4326 = new Proj4js.Proj("EPSG:4326");
 		me.map = map;
-		me.currentLocation = {};
-		me.locFail = false;
-		me.searchOpen = false;
-		me.showInfo = false;
-		me.resizeInterval = null;
+		me.controls = controls;
 		
 		me.geolocate = new OpenLayers.Control.Geolocate({
 		    bind: false,
 		    geolocationOptions: {
-		        enableHighAccuracy: false,
+		        enableHighAccuracy: true,
 		        maximumAge: 0,
 		        timeout: 7000
 		    }
@@ -35,22 +28,14 @@ nyc.Locate = (function(){
 		map.addControl(me.geolocate);
 		map.addLayer(me.locationLyr);
 		me.geolocate.events.register("locationupdated", me, me.updated);
-		me.geolocate.events.register("locationfailed", me, function(e) {
-			if (e.error.PERMISSION_DENIED){
-				if (!me.locFail) 
-					$(nyc).trigger("locate.fail", "You have disabled your GPS for the site");
-			}else{
-				if (!me.locFail) 
-					$(nyc).trigger("locate.fail", "Location detection failed");
-				me.locFail = true;				
-			}
+
+		$(controls).on("search", function(e, input){
+			me.search(input);
 		});
-		me.geolocate.events.register("locationuncapable", me, function() {
-			if (!me.locFail) 
-				$(nyc).trigger("locate.fail", "GPS is not supported by your device");
-			me.locFail = true;
+		$(controls).on("disambiguated", function(e, feature){
+			me.mapLocation(feature);
+			$(me).trigger("found", {type: "feature", feature: feature});				
 		});
-		
 	};
 	
 	locateClass.prototype = {
@@ -61,30 +46,29 @@ nyc.Locate = (function(){
 			    f.layer.drawFeature(f);
 			}
 		},
-		parseGeoClientResp: function(result){
-			var typ = result.request.split(" ")[0], r = result.response, ln1, p; 
+		parseGeoClientResp: function(result, disambiguating){
+			var typ = result.request.split(" ")[0], resp = result.response, ln1, point; 
 			if (typ == "intersection"){
-				ln1 = r.streetName1 + " " + r.streetName2;
-				p = new OpenLayers.Geometry.Point(r.xCoordinate, r.yCoordinate); 
+				ln1 = resp.streetName1 + " " + resp.streetName2;
+				point = new OpenLayers.Geometry.Point(resp.xCoordinate, resp.yCoordinate); 
 			}else if (typ == "blockface"){
-				ln1 = r.firstStreetNameNormalized + " btwn " + r.secondStreetNameNormalized + " & " + r.thirdStreetNameNormalized;
-				p = new OpenLayers.Geometry.Point(((r.fromXCoordinate * 1) + (r.toXCoordinate * 1)) / 2, ((r.fromYCoordinate * 1) + (r.toYCoordinate * 1)) / 2); 
+				ln1 = resp.firstStreetNameNormalized + " btwn " + resp.secondStreetNameNormalized + " & " + resp.thirdStreetNameNormalized;
+				point = new OpenLayers.Geometry.Point(((resp.fromXCoordinate * 1) + (resp.toXCoordinate * 1)) / 2, ((resp.fromYCoordinate * 1) + (resp.toYCoordinate * 1)) / 2); 
 			}else{//address, bbl, bin, place
-				var x = r.internalLabelXCoordinate, y = r.internalLabelYCoordinate;
-				ln1 = (r.houseNumber ? (r.houseNumber + " ") : "") + r.firstStreetNameNormalized;
-				p = new OpenLayers.Geometry.Point(x && y ? x : r.xCoordinate, x && y ? y : r.yCoordinate); 
+				var x = resp.internalLabelXCoordinate, y = resp.internalLabelYCoordinate;
+				ln1 = (resp.houseNumber ? (resp.houseNumber + " ") : "") + resp.firstStreetNameNormalized;
+				point = new OpenLayers.Geometry.Point(x && y ? x : resp.xCoordinate, x && y ? y : resp.yCoordinate); 
 			}
-			return{
-				type:typ,
-				point:p,
-				attributes: {
-					title: this.capitalize(ln1 + ", " + r.firstBoroughName) + ", NY " + (r.zipCode || r.leftSegmentZipCode),
-					houseNumber: r.houseNumber || "",
-					streetName:  r.firstStreetNameNormalized || "",
-					borough: r.firstBoroughName || "",
-					zip: r.zipCode || r.leftSegmentZipCode || ""
-				}
-			};
+			var feature = new OpenLayers.Feature.Vector(
+				point, 
+				{name: this.capitalize(ln1 + ", " + resp.firstBoroughName) + ", NY " + (resp.zipCode || resp.leftSegmentZipCode)}
+			);
+			if (!disambiguating){
+				this.mapLocation(feature);
+				this.controls.val(feature.attributes.name);
+				$(this).trigger("found", {type: "geoclient", feature: feature});				
+			}
+			return feature;
 		},
 		capitalize: function(s){
 			var words = s.split(" "), result = "";
@@ -96,32 +80,18 @@ nyc.Locate = (function(){
 			});
 			return result.trim();
 		},
-		mapLocation: function(location, zoom){
-			var map = this.map, lyr = this.locationLyr, p = location.point, attrs = location.attributes, feats;
-			if (!attrs.title){
-				var epsg2263 = new Proj4js.Point(p.x, p.y), epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263);
-				location.attributes.title = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6);
-				$(this).trigger("found", "");
-			}else{
-				$(this).trigger("found", attrs.title.replace(/\s+/g, " "));
-			}
-			
-			feats = [new OpenLayers.Feature.Vector(p, location.attributes)];
-		    this.currentLocation = location;
-			if (zoom){
-				var add = function(){
+		mapLocation: function(feature){
+			var map = this.map, 
+				lyr = this.locationLyr, 
+				point = feature.geometry, 
+				add = function(){
 					lyr.removeAllFeatures();
-					lyr.addFeatures(feats);
+					lyr.addFeatures([feature]);
 					this.events.unregister("moveend", this, add);
 				};
-				this.map.events.register("moveend", map, add);
-				this.map.setCenter(new OpenLayers.LonLat(p.x, p.y), LOCATE_ZOOM_LEVEL);				
-			}else{
-				lyr.removeAllFeatures();
-				lyr.addFeatures(feats);
-			}
+			this.map.events.register("moveend", map, add);
+			this.map.setCenter(new OpenLayers.LonLat(point.x, point.y), LOCATE_ZOOM_LEVEL);				
 			this.map.setLayerIndex(lyr, LOCATION_LAYER_IDX);
-			$(nyc).trigger("locate.found", feats[0]);
 		},
 		search: function(input){
 			if (input.length == 5 && !isNaN(input)){
@@ -138,11 +108,16 @@ nyc.Locate = (function(){
 				});
 			}
 		},
-		mapZip: function(p, title){
-			if (p){
-				this.mapLocation({point:new OpenLayers.Geometry.Point(p[0], p[1]), title:title}, true);
+		mapZip: function(point, name){
+			if (point){
+				var feature = new OpenLayers.Feature.Vector(
+					new OpenLayers.Geometry.Point(point[0], point[1]), 
+					{name: name}
+				);
+				this.mapLocation(feature);
+				$(this).trigger("found", {type: "zip", feature: feature});
 			}else{
-				$(nyc).trigger("locate.fail", "The location you entered was not understood.");
+				$(this).trigger("fail", "The location you entered was not understood.");
 			}			
 		},
 		geoClientFound: function(response){
@@ -152,7 +127,7 @@ nyc.Locate = (function(){
 				var exact = false;
 				$.each(results, function(_, result){
 					if (result.status == "EXACT_MATCH"){
-						me.mapGeoClientResp(result);
+						me.parseGeoClientResp(result);
 						exact = true;
 						return;
 					}
@@ -162,32 +137,25 @@ nyc.Locate = (function(){
 						var result = results[0];
 						if (result.status = "POSSIBLE_MATCH"){
 							lyr.removeAllFeatures();
-							me.mapGeoClientResp(result);
+							me.parseGeoClientResp(result);
 						}
 					}else{
-						me.showPossible(results);
+						me.ambiguous(results);
 					}
 				}
 				$("#address").blur();
 			}else{
-				$(nyc).trigger("locate.fail", "The location you entered was not understood.");
+				$(this).trigger("fail", "The location you entered was not understood.");
 			}
 		},
-		showPossible: function(results){
+		ambiguous: function(results){
 			var me = this, possible = [];
-			$.each(results, function(i, r){
-				if (r.status = "POSSIBLE_MATCH"){
-					var poss = me.parseGeoClientResp(r);
-					poss.name = poss.attributes.title;
-					poss.coordinates = [poss.point.x, poss.point.y];
-					possible.push(poss);
+			$.each(results, function(i, res){
+				if (res.status = "POSSIBLE_MATCH"){
+					possible.push(me.parseGeoClientResp(res, true));
 				}
 			});
-			$(this).trigger("ambiguous", {possible:possible});			
-		},
-		mapGeoClientResp: function(result){
-			var location = this.parseGeoClientResp(result);
-			this.mapLocation(location, true);
+			this.controls.disambiguate(possible);			
 		},
 		locate: function(){
 			this.locationLyr.removeAllFeatures();
@@ -196,12 +164,13 @@ nyc.Locate = (function(){
 		    this.geolocate.activate();
 		},
 		updated: function(e) {
-			var me = this, p = new OpenLayers.Geometry.Point(e.point.x, e.point.y);
-		    if (!NYC_EXT.contains(p.x, p.y)){
-		    	$(nyc).trigger("locate.fail", "Your location is not in the vicinity of NYC");
-		    	me.locFail = true;    	
-		    }else{
-			    me.mapLocation({point:p, attributes:{}}, true);
+			var epsg2263 = new Proj4js.Point(e.point.x, e.point.y), 
+				epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263),
+				name = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6),
+				feature = new OpenLayers.Feature.Vector(e.point, {name: name});
+		    if (NYC_EXT.contains(e.point.x, e.point.y)){
+			    this.mapLocation(feature);
+				$(this).trigger("found", {type: "geoclocation", feature: feature});
 		    }
 		}
 	};

@@ -11,10 +11,10 @@ nyc.App = (function(){
 	 * @param {nyc.UpkTable} upkTable
 	 * 
 	 */
-	var appClass = function(map, locate, upkList, upkTable, controls, share){
+	var appClass = function(map, locate, upkList, upkTable, share){
 		var me = this;
 		me.po = null;
-		me.currentLocation = {geometry:null, attributes:{title:""}};
+		me.currentLocation = {geometry: null, attributes:{name: ""}};
 		me.map = map;
 		me.locate = locate;
 		me.parseQueryStr();
@@ -22,18 +22,8 @@ nyc.App = (function(){
 		me.upkTable = upkTable;
 		me.initPages();
 
-		$(controls).on('search', function(e, input){
-			me.search(input);
-		});
-		$(controls).on('disambiguated', function(e, data){
-			me.goToLocation(data);
-		});
-		$(locate).on('found', function(e, name){
-			controls.val(name);
-		});
-		$(locate).on('ambiguous', function(e, ambig){
-			controls.disambiguate(ambig.possible);
-		});
+		$(locate).on("found", $.proxy(me.found, me));
+		$(locate).on("fail", $.proxy(me.alert, me));
 		
 		if (IOS) $("body").addClass("ios");		
 		$("#panel").panel({
@@ -48,7 +38,6 @@ nyc.App = (function(){
 		});
 		$("#filters input[type=checkbox]").change($.proxy(me.filter, me));
 		$("#toggles").click(me.toggle);
-		$(nyc).on("locate.fail", function(_, msg){me.alert(msg);});
 		$(share).on('feedback', function(){me.changePage(FEEDBACK_URL);});
 		
 		me.map.zoomToExtent(NYC_EXT);			
@@ -62,21 +51,7 @@ nyc.App = (function(){
 		$('#alert').click(function(){
 			$('#alert').fadeOut();
 		});
-					
-		$(nyc).on("locate.found", function(_, f){
-			me.currentLocation = f;
-			var i = setInterval(function(){
-				if (me.upkList.ready){
-					me.upkTable.render(me.upkList, f);		
-					me.upkInView();
-					clearInterval(i);
-				}
-			}, 200);
-			$("#callout").remove();
-			$("#alert").fadeOut();
-			me.pop = null;
-		});
-		
+							
 		$.ajax({
 			url:"upk.csv",
 			dataType: "text",
@@ -121,16 +96,31 @@ nyc.App = (function(){
 				me.setSchoolSearch(me.upkList.features());
 				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);
-				controls.addSources([{name: UPK_SEARCH_BY_CHOICE, source: me.upkList}]);
+				locate.controls.addSources([{name: UPK_SEARCH_BY_CHOICE, source: me.upkList}]);
 			},
 			error: function(){
 				$("body").removeClass("firstLoad");
-				me.alert("There was an error loading the Pre-K sites.  Please Try again."); 
+				me.alert(null, "There was an error loading the Pre-K sites.  Please Try again."); 
 				}
 			});	
 		};
 
 		appClass.prototype = {
+			found: function(_, location){
+				//TODO popup if type=feature
+				var me = this;
+				me.currentLocation = location.feature;
+				var i = setInterval(function(){
+					if (me.upkList.ready){
+						me.upkTable.render(me.upkList, location.feature);		
+						me.upkInView();
+						clearInterval(i);
+					}
+				}, 200);
+				$("#callout").remove();
+				$("#alert").fadeOut();
+				me.pop = null;
+			},
 			showUpkDetail: function(btn, me){
 				var id = $(btn).data("upk-info-id"), 
 					detail = $("#" + id +" .upkDetail"), 
@@ -208,7 +198,7 @@ nyc.App = (function(){
 			direct: function(btn, me){
 				var to = escape($(btn).data("upk-addr")),
 					name = escape($(btn).data("upk-name")),
-					from = escape(me.currentLocation ? me.currentLocation.attributes.title : "")
+					from = escape(me.currentLocation ? me.currentLocation.attributes.name : "");
 				me.openPanel = me.isPanelOpen();
 				$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
 				if (me.lastDir != from + '|' + to){
@@ -243,7 +233,7 @@ nyc.App = (function(){
 					}
 				}
 			},
-			alert: function(msg){
+			alert: function(e, msg){
 				$("#msg").html(msg);
 				$("body").append($("#alert"));
 				$("#alert").fadeIn(400, function(){
@@ -389,10 +379,9 @@ $(document).ready(function(){
 
 	nyc.app = new nyc.App(
 		map, 
-		new nyc.Locate(map), 
+		new nyc.Locate(map, new nyc.ZoomSearch('#main', map)), 
 		new nyc.upk.List(), 
 		new nyc.upk.ListRenderer(), 
-		new nyc.ZoomSearch('#main', map),
 		new nyc.Share('#main')
 	); 
 		

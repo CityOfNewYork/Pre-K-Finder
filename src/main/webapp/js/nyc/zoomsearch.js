@@ -84,22 +84,23 @@ nyc.ZoomSearch.prototype = {
 		if (!noChoose) this.chooseSource();
 	},
 	/** @private */
+	clone: function(feature){
+		return new OpenLayers.Feature.Vector(
+			new OpenLayers.Geometry.Point(feature.geometry.x, feature.geometry.y), 
+			feature.attributes
+		); 
+	},
+	/** @private */
 	addFeatures: function(namedSource){
 		var me = this, src = namedSource.source;
 		$.each(src.features(), function(_, feature){
-			var name = feature.name(),
-				type = feature.type(),
-				p = feature.geometry.getCentroid(),
-				li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' + me.cssClass(namedSource) + '">' +
-					'<img src="img/' + feature.type() + '0.png">' + name + '</li>');
+			var li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' + me.cssClass(namedSource) + '">' +
+					'<img src="img/' + feature.type() + '0.png">' + feature.name() + '</li>');
+
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
-				me.val(name);
-				$(me).trigger('disambiguated', {
-					fid: feature.id,
-					name: name,
-					coordinates: [p.x, p.y]
-				});
+				me.val(feature.name());
+				$(me).trigger('disambiguated', me.clone(feature));
 				li.parent().slideUp();
 			});
 		});
@@ -145,17 +146,17 @@ nyc.ZoomSearch.prototype.val = function(val){
 nyc.ZoomSearch.prototype.disambiguate = function(possibleValues){
 	var me = this;
 	if (possibleValues.length){
-		$.each(possibleValues, function(i, p){
-			var coords = p.coordinates,
-				li = $('<li class="ui-li-static ui-body-inherit srch-type-addr">' + p.name + '</li>'),
-				cls = me.cssClass({name: p.name + coords[0] + coords[1]});
+		$.each(possibleValues, function(i, feature){
+			var point = feature.geometry,
+				name = feature.attributes.name,
+				li = $('<li class="ui-li-static ui-body-inherit srch-type-addr">' + name + '</li>'),
+				cls = me.cssClass({name: name + point.x + point.y});
 			$('li.' + cls).remove();
 			li.addClass(cls);
-			li.possible = p; //TODO: hack for now - more lipstick on the pig
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
-				me.val(p.name);
-				$(me).trigger('disambiguated', li.possible);
+				me.val(name);
+				$(me).trigger('disambiguated', feature);
 				li.parent().slideUp();
 			});
 		});
