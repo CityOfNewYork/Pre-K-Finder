@@ -2,8 +2,8 @@ maybe sort list when click upk icon - not sure its even a good idea
 
 css cleanup/refactor
 
-review js for more cleanup/refactor
+review js for more cleanup/refactor/anno
 
-geolocate doesnt zoom - why?
+add project management history and docs
 
 /geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv

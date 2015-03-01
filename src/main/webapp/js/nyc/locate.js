@@ -1,11 +1,10 @@
 window.nyc = window.nyc || {};
 
-
-
 nyc.Locate = (function(){
 	/**
 	 * @constructor
 	 * @param {OpenLayers.Map} map
+	 * @param {nyc.ZoomSearch} controls
 	 */
 	var locateClass = function(map, controls){	
 		var me = this;
@@ -39,17 +38,10 @@ nyc.Locate = (function(){
 	};
 	
 	locateClass.prototype = {
-		highlight: function(on){
-			if (this.locationLyr.features){
-				var f = this.locationLyr.features[0];
-				f.renderIntent = on ? "select" : "default";
-			    f.layer.drawFeature(f);
-			}
-		},
 		parseGeoClientResp: function(result, disambiguating){
 			var typ = result.request.split(" ")[0], resp = result.response, ln1, point; 
 			if (typ == "intersection"){
-				ln1 = resp.streetName1 + " " + resp.streetName2;
+				ln1 = resp.streetName1 + " and " + resp.streetName2;
 				point = new OpenLayers.Geometry.Point(resp.xCoordinate, resp.yCoordinate); 
 			}else if (typ == "blockface"){
 				ln1 = resp.firstStreetNameNormalized + " btwn " + resp.secondStreetNameNormalized + " & " + resp.thirdStreetNameNormalized;
@@ -59,10 +51,8 @@ nyc.Locate = (function(){
 				ln1 = (resp.houseNumber ? (resp.houseNumber + " ") : "") + resp.firstStreetNameNormalized;
 				point = new OpenLayers.Geometry.Point(x && y ? x : resp.xCoordinate, x && y ? y : resp.yCoordinate); 
 			}
-			var feature = new OpenLayers.Feature.Vector(
-				point, 
-				{name: this.capitalize(ln1 + ", " + resp.firstBoroughName) + ", NY " + (resp.zipCode || resp.leftSegmentZipCode)}
-			);
+			var name = this.capitalize(ln1 + ", " + resp.firstBoroughName) + ", NY " + (resp.zipCode || resp.leftSegmentZipCode),
+				feature = new OpenLayers.Feature.Vector(point, {name: name.replace(/\s{2,}/g, " ")});
 			if (!disambiguating){
 				this.mapLocation(feature);
 				this.controls.val(feature.attributes.name);
@@ -94,10 +84,10 @@ nyc.Locate = (function(){
 			this.map.setLayerIndex(lyr, LOCATION_LAYER_IDX);
 		},
 		search: function(input){
+			var me = this;
 			if (input.length == 5 && !isNaN(input)){
 				me.mapZip(ZIP_CODES[input], "ZIP Code: " + input);
 			}else if (input.length){
-				var me = this;
 				input = input.replace(/"/g, "").replace(/'/g, "").replace(/&/g, " and ");
 				$.ajax({
 					url: GEOCLIENT_URL + input,

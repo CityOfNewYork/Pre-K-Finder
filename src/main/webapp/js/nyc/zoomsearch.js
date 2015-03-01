@@ -1,3 +1,10 @@
+/**
+ * Class for providing a set of buttons to zoom and search.
+ * @export
+ * @constructor
+ * @param {string} target
+ * @param {OpenLayers.Map} map
+ */
 nyc.ZoomSearch = function(target, map){
 	var me = this;
 	me.map = map;

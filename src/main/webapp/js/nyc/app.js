@@ -9,6 +9,7 @@ nyc.App = (function(){
 	 * @param {nyc.Locate} locate
 	 * @param {nyc.UpkList} upkList
 	 * @param {nyc.UpkTable} upkTable
+	 * @param {nyc.Share} share
 	 * 
 	 */
 	var appClass = function(map, locate, upkList, upkTable, share){
@@ -311,30 +312,29 @@ nyc.App = (function(){
 				this.upkLayer.addFeatures([f]);
 				$(this.upkLayer.div).trigger("click");
 			},
-			identify:function(upk){
+			identify: function(feature){
 				var me = this,
-					upk = me.upkList.upk(upk.id),
 					checker = $("#infoSizeChecker");
-					div = $("<div></div>").append(upk.html("callout"));
+					div = $("<div></div>").append(feature.html("callout"));
 			    if (me.pop) me.removeCallout();
 				checker.html(div.html());	
 			    me.pop = new OpenLayers.Popup.FramedCloud(
 		    		"callout", 
-		    		new OpenLayers.LonLat(upk.geometry.x, upk.geometry.y), 
+		    		new OpenLayers.LonLat(feature.geometry.x, feature.geometry.y), 
 		    		new OpenLayers.Size(checker.width(), checker.height()), 
 		    		div.html(), 
 		    		null, 
 		    		true, 
 		    		function(){me.removeCallout();}
 	    		);
-				me.pop.fid = upk.id;
+				me.upkTable.render(me.upkList, feature);		
+				me.pop.fid = feature.id;
 				me.pop.autoSize = false;
 				me.pop.keepInMap = true;
 				me.map.addPopup(me.pop);
 		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
 		    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
 		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
-		    	$(nyc).trigger("app.identify");
 			},
 			updateCallout: function(){
 				var pop = this.pop;
@@ -384,7 +384,7 @@ $(document).ready(function(){
 		new nyc.upk.ListRenderer(), 
 		new nyc.Share('#main')
 	); 
-		
+
 	var changePage = function(url){
 		nyc.app.changePage(url);
 		$("#splash").fadeOut();
