@@ -83,7 +83,7 @@ nyc.upk.HtmlDecorator = {
 	linkHtml: function(field, hrefPrefix){
 		var linkHtml = $("<div></div>"),
 			href= $("<a></a>");		
-		href.append(this.phone());
+		href.append(this[field]());
 		href.attr("href", hrefPrefix + encodeURI(this[field]()));
 		this.targetAttr(href);
 		linkHtml.append(href);
