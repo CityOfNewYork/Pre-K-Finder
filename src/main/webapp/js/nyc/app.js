@@ -108,7 +108,6 @@ nyc.App = (function(){
 
 		appClass.prototype = {
 			found: function(_, location){
-				//TODO popup if type=feature
 				var me = this;
 				me.currentLocation = location.feature;
 				var i = setInterval(function(){
@@ -121,6 +120,9 @@ nyc.App = (function(){
 				$("#callout").remove();
 				$("#alert").fadeOut();
 				me.pop = null;
+				if (location.type = "feature"){
+					me.identify(me.upkList.upk(location.feature.origId));
+				}
 			},
 			showUpkDetail: function(btn, me){
 				var id = $(btn).data("upk-info-id"), 
@@ -312,9 +314,9 @@ nyc.App = (function(){
 				this.upkLayer.addFeatures([f]);
 				$(this.upkLayer.div).trigger("click");
 			},
-			identify: function(feature){
+			identify: function(feature){				
 				var me = this,
-					checker = $("#infoSizeChecker");
+					checker = $("#infoSizeChecker"),
 					div = $("<div></div>").append(feature.html("callout"));
 			    if (me.pop) me.removeCallout();
 				checker.html(div.html());	

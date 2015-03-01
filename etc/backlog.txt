@@ -1,6 +1,6 @@
 maybe sort list when click upk icon - not sure its even a good idea
 
-css cleanup/refactor
+css cleanup/refactor - might not have time or energy for this
 
 review js for more cleanup/refactor/anno
 

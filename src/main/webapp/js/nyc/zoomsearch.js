@@ -92,10 +92,12 @@ nyc.ZoomSearch.prototype = {
 	},
 	/** @private */
 	clone: function(feature){
-		return new OpenLayers.Feature.Vector(
+		var clone = new OpenLayers.Feature.Vector(
 			new OpenLayers.Geometry.Point(feature.geometry.x, feature.geometry.y), 
 			feature.attributes
-		); 
+		);
+		clone.origId = feature.id;
+		return clone;
 	},
 	/** @private */
 	addFeatures: function(namedSource){
