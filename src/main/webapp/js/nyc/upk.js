@@ -77,15 +77,15 @@ nyc.upk.HtmlDecorator = {
 		addr2Html.append(this.address2());
 		return [addr1Html, addr2Html];
 	},
-	targetAttr: function(elem){
-		if (IOS) elem.attr("target", "_blank");
+	targetAttr: function(field, elem){
+		if (IOS || (field == "web")) elem.attr("target", "_blank");
 	},
 	linkHtml: function(field, hrefPrefix){
 		var linkHtml = $("<div></div>"),
 			href= $("<a></a>");		
 		href.append(this[field]());
 		href.attr("href", hrefPrefix + encodeURI(this[field]()));
-		this.targetAttr(href);
+		this.targetAttr(field, href);
 		linkHtml.append(href);
 		return linkHtml.addClass(field);
 	},
