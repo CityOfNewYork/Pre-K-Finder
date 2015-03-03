@@ -15,7 +15,7 @@ nyc.App = (function(){
 	var appClass = function(map, locate, upkList, upkTable, share){
 		var me = this;
 		me.pop = null;
-		me.currentLocation = {geometry: null, attributes:{name: ""}};
+		me.currentLocation = {geometry: null, name: function(){return "";}};
 		me.map = map;
 		me.locate = locate;
 		me.parseQueryStr();
@@ -41,7 +41,7 @@ nyc.App = (function(){
 		});
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
 		$("#toggle").click(me.toggle);
-		$(share).on('feedback', function(){me.changePage(FEEDBACK_URL);});
+		$(share).on('feedback', function(e){me.changePage(FEEDBACK_URL, me);});
 		
 		me.map.zoomToExtent(NYC_EXT);			
 		me.map.events.register("featureover", map, me.hover);
@@ -150,7 +150,7 @@ nyc.App = (function(){
 			direct: function(btn, me){
 				var to = escape($(btn).data("upk-addr")),
 					name = escape($(btn).data("upk-name")),
-					from = escape(me.currentLocation ? me.currentLocation.attributes.name : "");
+					from = escape(me.currentLocation && me.currentLocation.name ? me.currentLocation.name() : "");
 				me.openPanel = me.isPanelOpen();
 				$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
 				if (me.lastDir != from + '|' + to){
@@ -167,12 +167,13 @@ nyc.App = (function(){
 			},
 			/**
 			 * @export
-			 * @param {Element} btn
+			 * @param {Element|string} btnUrl
 			 * @param {nyc.App} me
 			 */
-			changePage: function(btn, me){
+			changePage: function(btnUrl, me){
+				var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
 				me.openPanel = me.isPanelOpen();
-				$("#external-page iframe").attr("src", $(btn).data("url"));
+				$("#external-page iframe").attr("src", url);
 				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
 			},
 			/** @private */

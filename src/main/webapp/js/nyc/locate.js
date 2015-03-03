@@ -78,12 +78,16 @@ nyc.Locate = (function(){
 			}
 			var name = this.capitalize(ln1 + ", " + resp.firstBoroughName) + ", NY " + (resp.zipCode || resp.leftSegmentZipCode),
 				feature = new OpenLayers.Feature.Vector(point, {name: name.replace(/\s{2,}/g, " ")});
+			this.decorate(feature);
 			if (!disambiguating){
 				this.mapLocation(feature);
 				this.controls.val(feature.attributes.name);
 				$(this).trigger("found", {type: "geoclient", feature: feature});				
 			}
 			return feature;
+		},
+		decorate: function(feature){
+			feature.name = function(){return this.attributes.name;};
 		},
 		/** @private */
 		capitalize: function(s){
@@ -118,6 +122,7 @@ nyc.Locate = (function(){
 					new OpenLayers.Geometry.Point(point[0], point[1]), 
 					{name: name}
 				);
+				this.decorate(feature);
 				this.mapLocation(feature);
 				$(this).trigger("found", {type: "zip", feature: feature});
 			}else{
@@ -169,6 +174,7 @@ nyc.Locate = (function(){
 				epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263),
 				name = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6),
 				feature = new OpenLayers.Feature.Vector(e.point, {name: name});
+			this.decorate(feature);
 		    if (NYC_EXT.contains(e.point.x, e.point.y)){
 			    this.mapLocation(feature);
 				$(this).trigger("found", {type: "geoclocation", feature: feature});
