@@ -238,7 +238,7 @@
 					"Date of birth: " + data.dob + "\n" +
 					"Student address: " + "\n" +
 					data.house_number + " " + data.street_name + " " + data.apt + "\n" +
-					data.borough + ", NY " +  data.zip + "\n" +
+					data.borough + ", NY " +  data.zip_code + "\n" +
 					"Parent/Guardian name: " + data.parent_first_name + " " + data.parent_last_name + "\n" +
 					"Day Telephone: " + data.day_telephone + "\n" +
 					"Evening Telephone: " + data.evening_telephone + "\n" +
@@ -286,7 +286,7 @@
 			result.street_name = $("#street_name").val();
 			result.apt = $("#apt").val();
 			result.borough = $("#borough").val();
-			result.zip = $("#zip").val();
+			result.zip_code = $("#zip_code").val();
 			result.parent_first_name = $("#parent_first_name").val();
 			result.parent_last_name = $("#parent_last_name").val();
 			result.relationship = $("#relationship").val();
@@ -377,8 +377,8 @@
 									</select>
 								</td>
 								<td id="zip_cell">		
-									<label for="zip">ZIP Code:</label>
-									<input id="zip" name="zip" type="text" maxlength="5" required pattern="^\d{5}$" placeholder="12345">
+									<label for="zip_code">ZIP Code:</label>
+									<input id="zip_code" name="zip_code" type="text" maxlength="5" required pattern="^\d{5}$" placeholder="12345">
 								</td>
 							</tr>
 						</tbody>
@@ -448,7 +448,7 @@
 				</div>
 				<div>
 					<span class="name">Current address:</span><br><span id="review_house_number"></span> <span id="review_street_name"></span> <span id="review_apt"></span><br>
-					<span id="review_borough"></span>, NY <span id="review_zip"></span>
+					<span id="review_borough"></span>, NY <span id="review_zip_code"></span>
 				</div>
 				<div><span class="name">Parent/Guardian name:</span><br><span id="review_parent_first_name"></span> <span id="review_parent_last_name"></span></div>
 				<div><span class="name">Relationship:</span> <span id="review_relationship"></span></div>

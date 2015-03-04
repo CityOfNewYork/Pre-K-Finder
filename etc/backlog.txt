@@ -1,8 +1,15 @@
-"Please contact site for more information" is not a valid URL for the WEB_SITE column of the upk data... use a default doe url or null
+one chareter school in bx doesnt size its 
+popup correctly "Academic Leadership Charter School"
+
+"Please contact site for more information" is not a 
+valid URL for the WEB_SITE column of the upk data... 
+use a default doe url or null
 
 /geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
 
-new oracle table to match new data
+new oracle table to match new data - 
+or maybe just leave oracle and geoserver out of the equation and deploy csv since DOE
+is just using excel anyway
 
 extend oracle table to incl constraints and triggers, etc so that DOE can use access/odbc to
 update dev db and data integrity is maintained
