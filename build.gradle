@@ -23,11 +23,13 @@ ext{
 	dev_basemap_urls = '["//csgis-dev-web.csc.nycnet/gis/data/tiles/basic/"]'
 	dev_date_rules = 'date_rules.js'
 
-	stg_info_url = 'http://schoolsstg.nycenet.edu/schoolsearch/info.html'
+	// stg_info_url = '//nycenetstg.nycenet.edu/schoolsearch/info.html' //TODO make the switch from apply to info for clarity
+	stg_info_url = '//nycenetstg.nycenet.edu/schoolsearch/apply.html'
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
-	stg_geoclient_url = 'http://csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
+	stg_geoclient_url = '//csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	stg_basemap_urls = '["//csgis-stg-prx.csc.nycnet/gis/data/tiles/basic/"]'
-	stg_date_rules = 'http://schoolsstg.nycenet.edu/schoolsearch/date_rules.js'
+	//stg_date_rules = '//schoolsstg.nycenet.edu/schoolsearch/date_rules.js' //TODO make the switch to get rules from DOE
+	stg_date_rules = 'date_rules.js'
 	
 	prd_info_url = '//www.nycenet.edu/schoolsearch/info.html'
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
