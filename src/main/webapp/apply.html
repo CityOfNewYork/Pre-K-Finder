@@ -183,14 +183,6 @@
 		}());
 		
 		$("document").ready(function(){		
-			try{ /parse query string and prepopulate form */
-				var params = document.location.search.substr(1).split("&");
-				for (var i = 0; i < params.length; i++){
-					var p = params[i].split("=");
-					if (p[1]) $("#" + p[0]).val(decodeURIComponent(p[1]));			
-				}
-				$("#borough").selectmenu("refresh");
-			}catch(ignore){}
 			$("#applyNow").click(valid);
 			$("select").on("change",function(e){$(e.target).focus();});
 			$("#school_yr").html(SCHOOL_YEAR);
