@@ -128,8 +128,15 @@
 	<script>
 		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		
-		/* Set all global date strings and date-like strings */
+		/* 
+		 * Set all global date strings and date-like strings from date_rules.js
+		 * Replace invalid date rules with defauls
+		 * date_rules.js is maintained by DOE
+		 */
 		(function(){
+			
+			window.MONTHS = ["January", "February", "March", "April", "May", "June", "July",
+			                 "August", "September", "October", "November", "December"];
 			
 			var pad = function(number){
 				return number < 10 ? "0" + number : number + "";
@@ -146,7 +153,9 @@
 				}()),
 				DEFAULT_DOB_ENTRY: "2011-01-01",
 				PRE_K_REQUIRED_DOB_YEAR: "2011",
-				SCHOOL_YEAR: "2015-16"
+				SCHOOL_YEAR: "2015-16",
+				APPLY_START_DATE: "2015-03-16",
+				APPLY_END_DATE: "2015-04-25"
 			};
 							
 			var validDateString = function(dateVarName){
@@ -168,6 +177,8 @@
 			window.DEFAULT_DOB_ENTRY = validDateString("DEFAULT_DOB_ENTRY");
 			window.PRE_K_REQUIRED_DOB_YEAR = window.PRE_K_REQUIRED_DOB_YEAR || DEFAULT_DATES.PRE_K_REQUIRED_DOB_YEAR;
 			window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
+			window.APPLY_START_DATE = validDateString("APPLY_START_DATE");
+			window.APPLY_END_DATE = validDateString("APPLY_END_DATE");
 
 		}());
 		
@@ -184,10 +195,10 @@
 			$("select").on("change",function(e){$(e.target).focus();});
 			$("#school_yr").html(SCHOOL_YEAR);
 			$("#birth_yr").html(PRE_K_REQUIRED_DOB_YEAR);
-			$("#min_dob").html(getDoeDob(MIN_DOB));
-			$("#max_dob").html(getDoeDob(MAX_DOB));
-			$("#dob").attr("min", MIN_DOB);
-			$("#dob").attr("max", MAX_DOB);
+			$("#application-interval").html(getApplicationInterval());
+			$("#dob").attr("min", MIN_DOB)
+				.attr("max", MAX_DOB)
+				.val(DEFAULT_DOB_ENTRY);
 		});
 
 		function valid(){
@@ -199,7 +210,6 @@
 					if (n.id == "dob"){
 						var dob = new Date(getIsoDob());
 						valid = dob >= new Date(MIN_DOB) && dob <= new Date(MAX_DOB);
-						if (!valid) $("#min_dob, #max_dob").addClass("err");												
 					}else{
 						if (valid && pattern){
 							var regex = new RegExp(pattern);
@@ -250,6 +260,15 @@
 				$("form").fadeIn();
 			}
 		};
+		
+		function getApplicationInterval(){
+			var start = new Date(APPLY_START_DATE), end = new Date(APPLY_END_DATE);
+			return MONTHS[start.getMonth()] + " " +
+				start.getDate() + " to " +
+				MONTHS[end.getMonth()] + " " +
+				end.getDate() + ", " +
+				end.getFullYear();
+		}
 		
 		function getDoeDob(dob){
 			var dob = dob || $("#dob").val();
@@ -341,15 +360,14 @@
 					<h2>Student Information</h2>
 					<label for="dob">Date of birth:</label>
 					<input id="dob" name="dob" type="date" required maxlength="10" placeholder="mm/dd/yyyy">
-					(<b>Note:</b> To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.
-					The date of birth may be between <span id="min_dob"></span> and <span id="max_dob"></span> to recieve information.)
+					(<b>Note:</b> To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.)
 					<h3>Current address</h3>
 					<table class="fields">
 						<tbody>
 							<tr>
 								<td id="house_cell">
 									<label for="house_number">House no:</label>
-									<input id="house_number" name="house_number" type="text" required placeholder="52">
+									<input id="house_number" name="house_number" type="text" maxlength="10" required placeholder="52">
 								</td>
 								<td id="street_cell">
 									<label for="street_name">Street name:</label>
@@ -437,7 +455,7 @@
 					Please note:  This form is only a statement of interest and not an application.
 					An Enrollment Specialist will contact you to assist you with your application shortly.
 					To apply directly please visit <a href="http://nyc.gov/prek" target="_blank">nyc.gov/prek</a> 
-					from March 16 to April 24, 2015.
+					from <span id="application-interval"></span>.
 				</div>
 				<input id="applyNow" type="button" value="Submit Info">
 			</form>
