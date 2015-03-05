@@ -43,8 +43,8 @@ ext{
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	prd_date_rules = '//www.nycenet.edu/schoolsearch/date_rules.js'
 
-	csvIn = 'csv/example.csv'
-	csvOutCols = ['X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
+	csvFileIn = 'etc/upk_test.csv'
+	csvOutColumns = ['X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
 			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE']
 	csvSchoolReplace = 'etc/school_replace.csv'
 	csvAddressReplace = 'etc/address_replace.csv'
@@ -101,34 +101,45 @@ task wrapper(type: Wrapper) {
     gradleVersion '2.3'
 }
 
-task parseCsv << {
-	println "\nparsing ${csv} file...\n"
-	CSVParser parser = CSVParser.parse(new File(csv).getText(), CSVFormat.EXCEL);		
+task cleanCsv << {
+	println "\nparsing ${csvFileIn} file...\n"
+	CSVParser parser = CSVParser.parse(new File(csvFileIn).getText(), CSVFormat.EXCEL);		
+	def build = new File('build/webapp')
+	def schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
+	build.mkdirs()
+	def csvFileOut = file('build/webapp/upk.csv')
 	def first = true
-	def columns
+	def inColumns
 	def id = 0
-	for(rec in parser.getRecords()) {
+	csvFileOut.append(csvOutColumns.join(',') + '\n')
+	for(inRecord in parser.getRecords()) {
 		if (first){
 			first = false
-			columns = rec
+			inColumns = inRecord
 		}else{
 			def i = 0
-			for (c in columns){
-				if (idColumn == c){
-					feature.id = rec.get(i)
-				}else if (xColumn == c){
-				 	feature.geometry.coordinates[0] = new Integer(rec.get(i))
-				}else if (yColumn == c){
-				 	feature.geometry.coordinates[1] = new Integer(rec.get(i))
-				}else{
-					feature.properties.put(c, rec.get(i))
+			def newRecord = new ArrayList(csvOutColumns.size());
+			for (def inColIndex = 0; inColIndex < inColumns.size(); inColIndex++){
+				def outCol = inColumns[inColIndex]
+				def outColIndex = csvOutColumns.indexOf(outCol)
+				if (outColIndex > -1){
+					def newValue = inRecord[inColIndex]
+					if (!newValue.isNumber()){
+						if (outCol == "ADDRESS"){
+							newValue = Address.format(newValue, []);
+						}else if (outCol == "NAME"){
+							newValue = School.format(newValue, schoolReplace);
+						}else if (outCol == "PHONE"){
+							newValue = Phone.format(newValue);
+						}
+						newValue = '"' + newValue + '"'					
+					}
+					newRecord[outColIndex] = newValue 
 				}
-				i++
 			}
-			if (idColumn == null) feature.id = id
-			featureList.add(feature)
+			csvFileOut.append(newRecord.join(',') + '\n')
 		}
-		fid++
+		id++
 	}
 }
 
@@ -137,7 +148,7 @@ task testMe << { //TODO proper testing as part of plugin
 	//def addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()	
 	
 	println '' 
-	println 'before format = 1 (718) 123-4567 x123' 
+	println 'before format = 1 (718) 123.4567.x123' 
 	println 'after format = ' + Phone.format('1 (718) 123-4567 x123')
 	println Phone.format('1 (718) 123-4567 x123') == '718-123-4567 x123' ? 'SUCCESS' : 'FAIL'
 	println '' 	
@@ -154,12 +165,14 @@ task testMe << { //TODO proper testing as part of plugin
 
 //TODO create a plugin for cleaning up the CSV
 
-class Phone {
+class Phone { //TOD0 parse input with no spearators 
 	static String format(String phone) {
+		if (phone == null || phone.trim() == '') return ''
 		phone = phone.replaceAll('\\(', ' ')
 		phone = phone.replaceAll('\\)', ' ')
 		phone = phone.replaceAll('\\-', ' ')
 		phone = phone.replaceAll('  ', ' ')
+		phone = phone.replaceAll('\\.', ' ')
 		def parts = phone.split(' ')
 		def formatted = ''
 		for (part in parts) {
@@ -194,10 +207,14 @@ class Capitalize {
 }
 
 class Address extends Capitalize {
-	static String format(String address, List addressReplace) {
-		for (replacement in addressReplace) {
-			println replacement[0] + ' ' + replacement[1]
+	static String format(String address, List addressReplace) { 
+		address = this.capitalize(address.replace('.', '').trim())
+		for (replacementPair in addressReplace) {
+			String search = replacementPair[0]
+			String replace = replacementPair[1] != null ? replacementPair[1] : ''
+			address = address.replaceAll(search, replace)
 		}
+		return address
 	}
 }
 

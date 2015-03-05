@@ -61,7 +61,7 @@ nyc.App = (function(){
 			success: function(csvData){
 				var csvFeatures = $.csv.toObjects(csvData), features = [], wkt = new OpenLayers.Format.WKT();
 				$.each(csvFeatures, function(_, f){
-					var feature = wkt.read(f.SHAPE);
+					var feature = wkt.read("POINT (" + f.X + " " + f.Y + ")");
 					feature.attributes = f;
 					features.push(feature);
 				});
