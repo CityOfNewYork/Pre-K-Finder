@@ -1,8 +1,14 @@
+import org.apache.commons.csv.CSVParser
+import org.apache.commons.csv.CSVFormat
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {}
+    dependencies {
+		classpath group: 'org.apache.commons', name: 'commons-csv', version: '1.0'
+    }
 }
 
 apply plugin: 'base'
@@ -36,6 +42,13 @@ ext{
 	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	prd_date_rules = '//www.nycenet.edu/schoolsearch/date_rules.js'
+
+	csvIn = 'csv/example.csv'
+	csvOutCols = ['X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
+			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE']
+	csvSchoolReplace = 'etc/school_replace.csv'
+	csvAddressReplace = 'etc/address_replace.csv'
+		
 }
 
 task copyFiles << {
@@ -87,4 +100,118 @@ jettyStop {
 task wrapper(type: Wrapper) {
     gradleVersion '2.3'
 }
+
+task parseCsv << {
+	println "\nparsing ${csv} file...\n"
+	CSVParser parser = CSVParser.parse(new File(csv).getText(), CSVFormat.EXCEL);		
+	def first = true
+	def columns
+	def id = 0
+	for(rec in parser.getRecords()) {
+		if (first){
+			first = false
+			columns = rec
+		}else{
+			def i = 0
+			for (c in columns){
+				if (idColumn == c){
+					feature.id = rec.get(i)
+				}else if (xColumn == c){
+				 	feature.geometry.coordinates[0] = new Integer(rec.get(i))
+				}else if (yColumn == c){
+				 	feature.geometry.coordinates[1] = new Integer(rec.get(i))
+				}else{
+					feature.properties.put(c, rec.get(i))
+				}
+				i++
+			}
+			if (idColumn == null) feature.id = id
+			featureList.add(feature)
+		}
+		fid++
+	}
+}
+
+task testMe << { //TODO proper testing as part of plugin
+	def schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
+	//def addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()	
+	
+	println '' 
+	println 'before format = 1 (718) 123-4567 x123' 
+	println 'after format = ' + Phone.format('1 (718) 123-4567 x123')
+	println Phone.format('1 (718) 123-4567 x123') == '718-123-4567 x123' ? 'SUCCESS' : 'FAIL'
+	println '' 	
+	println Phone.format('(718)123-4567 x123')
+	println 'before format = (718)123-4567 x123' 
+	println 'after format = ' + Phone.format('1 (718) 123-4567 x123')
+	println Phone.format('(718)123-4567 x123') == '718-123-4567 x123' ? 'SUCCESS' : 'FAIL'
+	println '' 	
+	println 'before format = PS./MS Bedford STUYVESANT EARLY CHILDHOOD development Center'
+	println School.format('PS./MS Bedford STUYVESANT EARLY CHILDHOOD development Center', schoolReplace)
+	println 'after format = ' + Phone.format('1 (718) 123-4567 x123')
+	println School.format('PS./MS Bedford STUYVESANT EARLY CHILDHOOD development Center', schoolReplace) == 'P.S. / M.S. Bedford Stuyvesant ECDC' ? 'SUCCESS' : 'FAIL'
+}
+
+//TODO create a plugin for cleaning up the CSV
+
+class Phone {
+	static String format(String phone) {
+		phone = phone.replaceAll('\\(', ' ')
+		phone = phone.replaceAll('\\)', ' ')
+		phone = phone.replaceAll('\\-', ' ')
+		phone = phone.replaceAll('  ', ' ')
+		def parts = phone.split(' ')
+		def formatted = ''
+		for (part in parts) {
+			part = part.trim()
+			if (part.length() > 0 && part != '1'){
+				def sep = formatted.split('-').length < 4 ? '-' : ' '
+				formatted = formatted + sep + part
+			}
+		}
+		return formatted.substring(1)
+	}
+}
+
+class Capitalize {
+	static String capitalize(String s) {
+		def capitalize = ''
+		def words = s.split(' ')
+		for (word in words){
+			def letter1 = ''
+			def theRest = ''
+			def len = word.length()
+			if (len > 0){
+				letter1 = word.substring(0, 1).toUpperCase()
+				if (len > 1){
+					theRest = word.substring(1).toLowerCase()
+				}
+			}
+			capitalize = capitalize + ' ' + letter1 + theRest 
+		}
+		return capitalize.trim()
+	}
+}
+
+class Address extends Capitalize {
+	static String format(String address, List addressReplace) {
+		for (replacement in addressReplace) {
+			println replacement[0] + ' ' + replacement[1]
+		}
+	}
+}
+
+class School extends Capitalize {
+	static String format(String school, List schoolReplace) {
+		school = school.replace('/', ' / ')
+		school = this.capitalize(school.replace('.', '').trim())
+		for (replacementPair in schoolReplace) {
+			String search = replacementPair[0]
+			String replace = replacementPair[1] != null ? replacementPair[1] : ''
+			school = school.replaceAll(search, replace)
+		}
+		return school
+	}
+}
+
 
