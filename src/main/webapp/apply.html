@@ -147,9 +147,9 @@
 				MIN_DOB: "2010-01-01",
 				MAX_DOB: (function(){
 					var today = new Date();
-					return today.getFullYear() + "-" +
-						pad(today.getMonth() + 1) + "-" +
-						pad(today.getDate());
+					return today.getUTCFullYear() + "-" +
+						pad(today.getUTCMonth() + 1) + "-" +
+						pad(today.getUTCDate());
 				}()),
 				DEFAULT_DOB_ENTRY: "2011-01-01",
 				PRE_K_REQUIRED_DOB_YEAR: "2011",
@@ -197,7 +197,7 @@
 			var err = [];
 			$("label, span").removeClass("err");
 			$.each($("input, select"), function(_, n){
-				if ($(n).prop("required")){
+				if ($(n).prop("required") || $(n).attr("required")){
 					var val = $(n).val(), pattern = $(n).attr("pattern") || $(n).data("pattern"), valid = val.length;
 					if (n.id == "dob"){
 						var dob = new Date(getIsoDob());
@@ -255,11 +255,11 @@
 		
 		function getApplicationInterval(){
 			var start = new Date(APPLY_START_DATE), end = new Date(APPLY_END_DATE);
-			return MONTHS[start.getMonth()] + " " +
-				start.getDate() + " to " +
-				MONTHS[end.getMonth()] + " " +
-				end.getDate() + ", " +
-				end.getFullYear();
+			return MONTHS[start.getUTCMonth()] + " " +
+				start.getUTCDate() + " to " +
+				MONTHS[end.getUTCMonth()] + " " +
+				end.getUTCDate() + ", " +
+				end.getUTCFullYear();
 		}
 		
 		function getDoeDob(dob){
@@ -351,7 +351,7 @@
 				<div class="sect">
 					<h2>Student Information</h2>
 					<label for="dob">Date of birth:</label>
-					<input id="dob" name="dob" type="date" required maxlength="10" placeholder="mm/dd/yyyy">
+					<input id="dob" name="dob" type="date" required="true" maxlength="10" placeholder="mm/dd/yyyy">
 					(<b>Note:</b> To be eligible for pre-K for the <span id="school_yr"></span> school year, your child must have been born in the year <span id="birth_yr"></span>.)
 					<h3>Current address</h3>
 					<table class="fields">
@@ -359,11 +359,11 @@
 							<tr>
 								<td id="house_cell">
 									<label for="house_number">House no:</label>
-									<input id="house_number" name="house_number" type="text" maxlength="10" required placeholder="52">
+									<input id="house_number" name="house_number" type="text" maxlength="10" required="true" placeholder="52">
 								</td>
 								<td id="street_cell">
 									<label for="street_name">Street name:</label>
-									<input id="street_name" name="street_name" type="text" required placeholder="Chambers St">
+									<input id="street_name" name="street_name" type="text" required="true" placeholder="Chambers St">
 								</td>
 								<td id="apt_cell">
 									<label for="apt">Apt:</label>
@@ -377,7 +377,7 @@
 							<tr>
 								<td id="borough_cell">
 									<label for="borough">Borough:</label>
-									<select id="borough" name="borough" required data-pattern="^((?!Choose).)*$">
+									<select id="borough" name="borough" required="true" data-pattern="^((?!Choose).)*$">
 										<option>Choose...</option>
 										<option>Bronx</option>
 										<option>Brooklyn</option>
@@ -388,7 +388,7 @@
 								</td>
 								<td id="zip_cell">		
 									<label for="zip_code">ZIP Code:</label>
-									<input id="zip_code" name="zip_code" type="text" maxlength="5" required pattern="^\d{5}$" placeholder="12345">
+									<input id="zip_code" name="zip_code" type="text" maxlength="5" required="true" pattern="^\d{5}$" placeholder="12345">
 								</td>
 							</tr>
 						</tbody>
@@ -411,7 +411,7 @@
 						</tbody>
 					</table>
 					<label for="relationship">Relationship:</label>
-					<select id="relationship" name="relationship" required data-pattern="^((?!Choose).)*$">
+					<select id="relationship" name="relationship" required="true" data-pattern="^((?!Choose).)*$">
 						<option>Choose...</option>
 						<option>Mother</option>
 						<option>Father</option>
@@ -431,17 +431,17 @@
 							<tr>
 								<td>
 									<label for="day_telephone">Day phone:</label>
-									<input id="day_telephone" name="day_telephone" type="text" maxlength="10" required pattern="[0-9]{10}" placeholder="2125555555">
+									<input id="day_telephone" name="day_telephone" type="text" maxlength="10" required="true" pattern="[0-9]{10}" placeholder="2125555555">
 								</td>
 								<td>	
 									<label for="evening_telephone">Evening phone:</label>
-									<input id="evening_telephone" name="evening_telephone" maxlength="10" type="text" required pattern="[0-9]{10}" placeholder="2125555555">
+									<input id="evening_telephone" name="evening_telephone" maxlength="10" type="text" required="true" pattern="[0-9]{10}" placeholder="2125555555">
 								</td>
 							</tr>
 						</tbody>
 					</table>
 					<label for="email">Email address:</label>
-					<input id="email" name="email" type="text" required pattern="[\w-]+@([\w-]+\.)+[\w-]+">
+					<input id="email" name="email" type="text" required="true" pattern="[\w-]+@([\w-]+\.)+[\w-]+">
 				</div>
 				<div>
 					Please note:  This form is only a statement of interest and not an application.
@@ -474,7 +474,7 @@
 		</div>
 	</div>
 	<script>
-		/google analytics */
+		/* google analytics */
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
