@@ -139,11 +139,14 @@ span.noshow{
 	left:3px;
 	top: 127px;
 }
+#callout .upkInfo, #callout-size-check {
+	max-width:290px;
+	min-height: 170px;	
+}
 #callout-size-check{
 	position:absolute;
 	left:-2000px;
 	top:-2000px;
-	max-width:290px;
 	visibility:hidden;
 	z-index:-1;
 }
