@@ -145,7 +145,7 @@ nyc.Locate = (function(){
 				if (!exact){
 					if (results.length == 1){
 						var result = results[0];
-						if (result.status = "POSSIBLE_MATCH"){
+						if (result.status == "POSSIBLE_MATCH"){
 							lyr.removeAllFeatures();
 							me.parseGeoClientResp(result);
 						}
@@ -162,7 +162,7 @@ nyc.Locate = (function(){
 		ambiguous: function(results){
 			var me = this, possible = [];
 			$.each(results, function(i, res){
-				if (res.status = "POSSIBLE_MATCH"){
+				if (res.status == "POSSIBLE_MATCH"){
 					possible.push(me.parseGeoClientResp(res, true));
 				}
 			});
