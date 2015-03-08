@@ -144,7 +144,8 @@ task cleanCsv(dependsOn: clean) << {
 					newRecord[outColIndex] = newValue 
 				}
 			}
-			csvFileOut.append("${id},${newRecord.join(',')}\n")
+			if (newRecord[0] != '""')
+				csvFileOut.append("${id},${newRecord.join(',')}\n")
 		}
 		id++
 	}
