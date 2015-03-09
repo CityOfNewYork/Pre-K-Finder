@@ -191,7 +191,7 @@ nyc.ZoomSearch.HTML =
 	'<div id="fld-srch-container" class="ctl">' +
 		'<ul id="mnu-srch-typ" class="ctl ui-corner-all" data-role="listview">' + 
 		'<li id="srch-by">Search by...</li>' +
-		'<li id="srch-type-addr">Address, intersetion, ZIP Code, etc.</li>' +
+		'<li id="srch-type-addr">Address, intersection, ZIP Code, etc.</li>' +
 		'</ul>' +
 		'<ul id="fld-srch" class="ui-corner-all" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search for an address..."></ul>' +
 		'<a id="btn-srch-typ" class="ui-btn ui-icon-carat-d ui-btn-icon-notext" title="Search Type">Search Type</a>' +
