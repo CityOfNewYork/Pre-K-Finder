@@ -9,6 +9,9 @@ html, body, div, span, a, input, input[data-type="search"], li {
 	text-shadow: none !important;
 	color: rgb(1,51,100);
 }	
+#map-page, #toggle {
+	position: fixed;
+}
 /* ======================== splash ========================= */
 #splash{
 	display:none;
@@ -21,8 +24,10 @@ div#splash-cont{
 	border: 2px solid #013364;
 	border-radius: 0.6em;
 	width: 280px;
-	margin: 5px auto;
+	margin: 50px auto;
 	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
+	max-height: calc(100% - 70px);
+ 	overflow-y: auto;
 }
 .ui-btn:after{
 	background-color: rgba(1,51,100,0.5);
@@ -34,6 +39,7 @@ div#splash-cont{
 	background-color: rgba(1,51,100,0.5);
 	float: left;
 	margin: -5px 5px 3px -3px;
+	border-color: #ddd;
 }
 #splash .ui-btn{
 	background-color: #f8993a;
@@ -396,9 +402,9 @@ span.noshow{
 	}
 }
 @media only screen and (max-height : 360px) {
-	div#splash-cont{
+	div#splash-cont {
 		width: 450px;
-		margin: -1px auto;
+		margin: 45px auto;
 	}
 	#filter .ui-collapsible-content {
 		height: 220px;

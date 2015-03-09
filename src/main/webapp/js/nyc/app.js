@@ -424,7 +424,7 @@ $(document).ready(function(){
 	}
 	
 	$("#splash .splash-info").data("url", INFO_URL);
-	$("#main").append($("#splash"));
+	$("body").append($("#splash"));
 	$("#splash").fadeIn();
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
 	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);
