@@ -3,11 +3,14 @@
  * set by DOE in date_rules.js
  */
 (function(){
+	window.MONTHS = ["January", "February", "March", "April", "May", "June", "July",
+	                 "August", "September", "October", "November", "December"];
 	
 	var DEFAULT_DATES = {
 		TODAY: new Date(),
 		APPLY_START_DATE: "2015-03-16",
 		APPLY_END_DATE: "2015-04-25",
+		DEFAULT_DOB_ENTRY: "2011-01-01",
 		SCHOOL_YEAR: "2015-16"
 	};
 					
@@ -27,6 +30,7 @@
 	window.TODAY = DEFAULT_DATES.TODAY;
 	window.APPLY_START_DATE = validDateString("APPLY_START_DATE");
 	window.APPLY_END_DATE = validDateString("APPLY_END_DATE");
+	window.DEFAULT_DOB_ENTRY = validDateString("DEFAULT_DOB_ENTRY");
 	window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
 
 }());
@@ -37,9 +41,9 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 	DO_APPLY = TODAY >= new Date(APPLY_START_DATE) && TODAY < new Date(APPLY_END_DATE),
 	APPLY_TITLE = "Apply Now",
 	INFO_TITLE = "Get in Touch", 
-	MORE_INFO_TITLE = "I would like more info about Pre-K",
-	INFO_URL = 'info.html',
-	APPLY_URL = '//www.semsnycdoe.com/parentsite',
+	MORE_INFO_TITLE = "I would like a call about Pre-K",
+	INFO_URL = "info.html",
+	APPLY_URL = "//www.semsnycdoe.com/parentsite",
 	GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input=',
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],
 	FEEDBACK_URL = '//www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml',

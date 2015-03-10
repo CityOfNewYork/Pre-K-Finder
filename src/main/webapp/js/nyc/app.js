@@ -415,13 +415,30 @@ $(document).ready(function(){
 		$("#splash").fadeOut();
 	};
 	
+	(function(){
+		var dob = new Date(DEFAULT_DOB_ENTRY),
+			start = new Date(APPLY_START_DATE),
+			end = new Date(APPLY_END_DATE);
+		end.setDate(end.getDate() - 1);
+		$(".splash-message").html(
+			"The Pre-K for All application for the " +
+			SCHOOL_YEAR + " school year is open from " +
+			MONTHS[start.getUTCMonth()] + " " +
+			start.getUTCDate() + " to " +
+			MONTHS[end.getUTCMonth()] + " " +
+			end.getUTCDate() +
+			". All New York City children born in " +
+			dob.getUTCFullYear() + " are eligible."
+		);
+	}());
+	
 	if (DO_APPLY){
 		$("#splash .splash-info").html(MORE_INFO_TITLE);
-		$("#splash .splash-apply").attr("href", APPLY_URL);
 	}else{
-		$("#splash .splash-apply").hide();
+		$("#splash .splash-apply, #splash .splash-directory").hide();
 		$("#splash .splash-info").html(INFO_TITLE);
 	}	
+	
 	$("#splash .splash-info").data("url", INFO_URL);
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();
