@@ -417,15 +417,15 @@ $(document).ready(function(){
 	
 	if (DO_APPLY){
 		$("#splash .splash-info").html(MORE_INFO_TITLE);
-		$("#splash .splash-apply").data("url", APPLY_URL);
+		$("#splash .splash-apply").attr("href", APPLY_URL);
 	}else{
 		$("#splash .splash-apply").hide();
 		$("#splash .splash-info").html(INFO_TITLE);
-	}
-	
+	}	
 	$("#splash .splash-info").data("url", INFO_URL);
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();
+	
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
 	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);
 	

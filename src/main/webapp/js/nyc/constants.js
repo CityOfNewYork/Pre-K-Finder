@@ -54,12 +54,12 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 	DAY_LENGTH = {
 		"0": "Day length not available",
 		"1": "Full day",
-		"2": "Both half day and full day",
-		"3": "Half day",
+		"2": "Full day and Half Day",
+		"3": "Half Day",
 		"4": "5-Hour",
-		"5": "Both full day and 5-hour",
-		"6": "Both half day and 5-hour",
-		"7": "Full day, half day and 5-hour"			
+		"5": "Full Day and 5-Hour",
+		"6": "Half Day and 5-hour",
+		"7": "Full Day, Half Day and 5-hour"			
 	},
 	EXTEND = {
 		"1": "Extended day offered",

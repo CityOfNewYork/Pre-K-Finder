@@ -113,9 +113,9 @@ nyc.upk.HtmlDecorator = {
 	seatsDayHtml: function(){
 		var seatsDayHtml = $("<div class='seats'></div>"),
 			yrHtml = $("<span class='name'></span>");
-		yrHtml.append(SCHOOL_YEAR + " seats: ");
+		yrHtml.append(SCHOOL_YEAR + " Seats: ");
 		return seatsDayHtml.append(yrHtml)
-			.append(" " + DAY_LENGTH[this.dayLength()]);
+			.append(this.seats() + " " + DAY_LENGTH[this.dayLength()]);
 	},
 	detailHtml: function(){
 		var detailHtml = $("<div class='upkDetail'></div>");
@@ -159,13 +159,15 @@ nyc.upk.HtmlDecorator = {
 		if (this.showApply()){
 			url = APPLY_URL;
 			title = APPLY_TITLE;
+			anchorHtml.attr("href", url)
+				.attr("target", "_blank");
 		}else{
 			url = INFO_URL;
 			title = INFO_TITLE;
+			anchorHtml.attr("data-url", url)
+				.attr("onclick", "nyc.app.changePage(this, nyc.app);");
 		}
 		anchorHtml.html(title);
-		anchorHtml.attr("data-url", url);
-		anchorHtml.attr("onclick", "nyc.app.changePage(this, nyc.app);");
 		return infoApplyBtnHtml.append(anchorHtml);		
 	},
 	buttonsHtml: function(infoId){
