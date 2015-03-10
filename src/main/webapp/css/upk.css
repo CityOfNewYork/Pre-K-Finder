@@ -19,11 +19,11 @@ html, body, div, span, a, input, input[data-type="search"], li {
 	z-index:2000;
 }
 div#splash-cont{
-	padding: 10px;
+	padding: 10px 6px 5px 6px;
 	background-color: white;
 	border: 2px solid #013364;
 	border-radius: 0.6em;
-	width: 280px;
+	width: 288px;
 	margin: 50px auto;
 	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
 	max-height: calc(100% - 70px);
@@ -389,9 +389,12 @@ span.noshow{
 		padding: 9px 12.5px;
 	}
 }
-@media only screen and (max-width : 485px) {
+@media only screen and (max-width : 495px) {
 	#panel{
 		width:100%;
+	}
+	.ui-panel-dismiss{
+		display: none;
 	}
 	.upkAction a:hover{
 		background-color:#f6f6f6 !important;
@@ -399,6 +402,9 @@ span.noshow{
 	}
 	.oddRow .upkAction a:hover{
 		background-color:white !important;
+	}
+	#callout-size-check .detail, #callout .detail {
+		display: none;
 	}
 }
 @media only screen and (max-height : 360px) {
