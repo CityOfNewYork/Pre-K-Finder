@@ -1,5 +1,6 @@
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVRecord
 import java.util.regex.Pattern
 
 buildscript {
@@ -52,6 +53,8 @@ ext{
 			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE']
 	csvSchoolReplace = 'etc/school_replace.csv'
 	csvAddressReplace = 'etc/address_replace.csv'
+	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
+	addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
 }
 
 task copyFiles << {
@@ -127,19 +130,7 @@ task cleanCsv(dependsOn: clean) << {
 			first = false
 			inColumns = inRecord
 		}else{
-			def requiredColumnsWithoutValues = []
-			for (def inColIndex = 0; inColIndex < inColumns.size(); inColIndex++){
-				def outCol = inColumns[inColIndex]
-				def requiredColIndex = csvOutRequiredColumns.indexOf(outCol)
-				def value = inRecord[inColIndex]
-				if (value == '' && requiredColIndex > -1){
-					requiredColumnsWithoutValues.add(outCol)
-				}
-			}
-			if (requiredColumnsWithoutValues.size() > 0){
-				def error = "MISSING VALUE(S) FOR ${requiredColumnsWithoutValues} ${inRecord}"
-				println error
-				log.append("${error}\n")
+			if (!ValidateRequired.validate(csvOutRequiredColumns, inColumns, inRecord, log)){
 				//continue
 			}
 			def i = 0
@@ -149,26 +140,15 @@ task cleanCsv(dependsOn: clean) << {
 				def outColIndex = csvOutColumns.indexOf(outCol)
 				if (outColIndex > -1){
 					def badFormatResult = false 
-					def newValue = inRecord[inColIndex]
-					if (!newValue.isNumber()){
-						/*
-						if (outCol == "NAME" || outCol == "ADDRESS"){
-							newValue = Format.format(newValue, outCol == "NAME" ? schoolReplace : addressReplace);
-							badFormatResult = newValue == ''
-						}else if (outCol == "PHONE"){
-							newValue = Phone.format(newValue);
-							badFormatResult = newValue == ''
+					def value = inRecord[inColIndex]
+					if (!value.isNumber()){
+						def formatted = FormatAndValidate.formatAndValidate(project, outCol, value, inRecord, log)
+						if (!formatted[0]){
+							//continue
 						}
-						if (badFormatResult){
-							def error = "FORMAT ERROR ${outCol}='${inRecord[inColIndex]}' ${inRecord}"
-							println error
-							log.append("${error}\n")
-							continue
-						}
-						*/
-						newValue = "\"${newValue}\""					
+						value = "\"${formatted[1]}\""					
 					}
-					newRecord[outColIndex] = newValue 
+					newRecord[outColIndex] = value 
 				}
 			}
 			csvFileOut.append("${id},${newRecord.join(',')}\n")
@@ -207,7 +187,61 @@ task testMe << { //TODO proper testing as part of plugin
 	println Format.format('PS./MS Bedford STUYVESANT EARLY CHILDHOOD development Center', schoolReplace) == 'P.S. / M.S. Bedford Stuyvesant ECDC' ? 'SUCCESS' : 'FAIL'
 }
 
+task testFormatAndValidate << {
+	def build = new File('build/webapp')
+	build.mkdirs()
+	def log = file('build/csv.log')
+	String value = 'PS./MS Bedford STUYVESANT EARLY CHILDHOOD development Center'
+	println value
+	println FormatAndValidate.formatAndValidate(project, 'NAME', value, null, log)
+
+	value = 'nonSensE'
+	println value
+	println FormatAndValidate.formatAndValidate(project, 'OTHER', value, null, log)
+	
+}
+
 //TODO create a plugin for cleaning up the CSV
+
+class FormatAndValidate {
+	static List formatAndValidate(Project prj, String columnName, String value, CSVRecord inRecord, File log) {
+		def valid = true 
+		if (columnName == "NAME" || columnName == "ADDRESS"){
+			value = Format.format(value, columnName == "NAME" ? prj.property('schoolReplace') : prj.property('addressReplace'));
+			valid = value != ''
+		}else if (columnName == "PHONE"){
+			value = Phone.format(value);
+			valid = value != ''
+		}
+		if (!valid){
+			def error = "FORMAT ERROR ${columnName}='${value}' ${inRecord}"
+			println error
+			log.append("${error}\n")
+		}
+		return [valid, value]
+	}
+}
+
+class ValidateRequired {
+	static boolean validate(List reuiredColumns, CSVRecord inColumns, CSVRecord inRecord, File log) {
+		def requiredColumnsWithoutValues = []
+		for (def inColIndex = 0; inColIndex < inColumns.size(); inColIndex++){
+			def outCol = inColumns[inColIndex]
+			def requiredColIndex = reuiredColumns.indexOf(outCol)
+			def value = inRecord[inColIndex]
+			if (value == '' && requiredColIndex > -1){
+				requiredColumnsWithoutValues.add(outCol)
+			}
+		}
+		if (requiredColumnsWithoutValues.size() > 0){
+			def error = "MISSING VALUE(S) FOR ${requiredColumnsWithoutValues} ${inRecord}"
+			println error
+			log.append("${error}\n")
+			//continue
+		}
+		return requiredColumnsWithoutValues.size() == 0
+	}
+}
 
 class Phone {
 	static String format(String phone) {
