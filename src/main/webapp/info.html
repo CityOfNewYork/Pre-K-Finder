@@ -53,12 +53,13 @@
 			color:red !important;
 			font-weight:bold !important;
 		}
-		#review{
+		#review, #result{
+			position: fixed;
 			margin: 12px calc(50% - 135px);
 			width: 270px;
 			border-radius: 0.6em;
 			border: 1px solid lightgrey;
-			box-shadow: 0 1px 3px rgba(1,51,100,0.5);
+			box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
 			background-color: white;
 			padding: 5px;
 			display:none;
@@ -77,8 +78,7 @@
 			margin:20px 29px;
 		}
 		#thanks{
-			margin: 20px auto;
-			width: 270px;
+			padding: 5px;
 		}
 		#req_note{
 			text-align: center;
@@ -126,7 +126,6 @@
 	<script src="date_rules.js"></script>
 	
 	<script>
-		window.ios = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false;
 		
 		/* 
 		 * Set all global date strings and date-like strings from date_rules.js
@@ -221,36 +220,18 @@
 			}
 		};	
 	
-		function review(){
-			if (window.ios){
-				iosReview();
-			}else{
-				var data = formData();
-				for (var d in data){
-					$("#review_" + d).html(data[d].toString());
-				}
-				$("form").fadeOut();
-				$("#review").fadeIn();
+		function review(){				
+			var data = formData();
+			for (var d in data){
+				$("#review_" + d).html(data[d].toString());
 			}
-		};
-		
-		function iosReview(){
-			var data = formData(),
-				msg = "Please review your submission:\n\n" +
-					"Date of birth: " + data.dob + "\n" +
-					"Student address: " + "\n" +
-					data.house_number + " " + data.street_name + " " + data.apt + "\n" +
-					data.borough + ", NY " +  data.zip_code + "\n" +
-					"Parent/Guardian name: " + data.parent_first_name + " " + data.parent_last_name + "\n" +
-					"Day Telephone: " + data.day_telephone + "\n" +
-					"Evening Telephone: " + data.evening_telephone + "\n" +
-					"Email address: " + data.email + "\n";
-			$("form").hide();
-			if (confirm(msg)){
-				apply();
-			}else{
-				$("form").fadeIn();
-			}
+			$("#review").css({visibility: "hidden", display:"block"});
+			var bottom = $(window).height() / 2 - $("#review").height() / 2;
+			$("#review").css({visibility: "visible", display:"none"});
+			$("#review").css("bottom", bottom + "px");
+			$("#review").fadeIn(function(){
+				$("#result").css("top", $("#review").position().top + "px");
+			});
 		};
 		
 		function getApplicationInterval(){
@@ -310,7 +291,6 @@
 		
 		function apply(){
 			var data = {id:0, method:"apply", jsonrpc:"2.0", params:{action:"apply", formfields:formData()}};
-			$("body").addClass("loading");
 			$.ajax({
 				url:"./services/SchoolRpc.ashx?rpc",
 				beforeSend: function(request){
@@ -324,21 +304,14 @@
 						this.error();
 						return;
 					}
-					if (window.ios){
-						alert("Thank you for completing our Pre-K for All information form!  Your submission is being sent to the Pre-K for All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.");
-						document.location.reload();
-					}else{
-						$("#result").html("<div id='thanks'>Thank you for completing our Pre-K for All information form!  Your submission is being sent to the Pre-K for All Outreach team, who will contact you soon.   You will also receive an email shortly confirming your submission.</div>");
-						$("#review").fadeOut();
-						$("#result").fadeIn();
-					}
-					$("body").removeClass("loading");
+					$("form")[0].reset();					
+					$("#review").fadeOut(function(){
+						$("#result").fadeIn();					
+					});
 				},
 				error: function(){
-					$("body").removeClass("loading");
 					alert("There was an error processing your submission data.  Please try again.");
 					$("#review").fadeOut();
-					$("form").fadeIn();
 				}
 			});
 			return false;
@@ -467,11 +440,19 @@
 				<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
 				<div><span class="name">Email address:</span> <span id="review_email"></span></div>
 				<div id="reviewBtns">
-					<input type="button" onclick="$('#review').fadeOut();$('form').fadeIn();" value="Cancel">
+					<input type="button" onclick="$('#review').fadeOut();" value="Cancel">
 					<input type="button" onclick="apply();" value="Submit">
 				</div>
 			</div>
-			<div id="result"></div>
+			<div id="result">
+				<div id="thanks">
+					Thank you for completing our Pre-K for All information form!  
+					Your submission is being sent to the Pre-K for All Outreach team, 
+					who will contact you soon.   You will also receive an email shortly 
+					confirming your submission.
+				</div>				
+				<input type="button" onclick="$('#result').fadeOut();" value="OK">			
+			</div>
 		</div>
 	</div>
 	<script>

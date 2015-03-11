@@ -8,7 +8,7 @@ html, body, .ui-mobile .ui-page-active, #main, #splash {
 html, body, div, span, a, input, input[data-type="search"], li {
 	text-shadow: none !important;
 	color: rgb(1,51,100);
-}	
+}
 #map-page, #toggle {
 	position: fixed;
 }
@@ -58,7 +58,7 @@ div#splash-cont{
 	overflow: hidden;
 }
 .ios #external-page, .ios #external-content, .ios #external-content iframe {
-	height: 10000000px;
+	height: 2000px;
 	overflow: hidden !important;
 }
 /* ======================== external ========================= */
@@ -389,7 +389,7 @@ span.noshow{
 		padding: 9px 12.5px;
 	}
 }
-@media only screen and (max-width : 495px) {
+@media only screen and (max-width : 495px), screen and (max-height: 350px) {
 	#panel{
 		width:100%;
 	}

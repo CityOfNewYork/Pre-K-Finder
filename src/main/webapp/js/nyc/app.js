@@ -180,10 +180,7 @@ nyc.App = (function(){
 			initPages: function(){
 				var me = this, change = function(e, ui){
 						if (IOS){
-							$('html').css({
-								height: ui.toPage.attr('id') == 'external-page' ? '10000000px' : '100%',
-								'overflow-y': 'scroll'
-							});
+							$('html').css('overflow-y', 'scroll');
 						}else{
 							var frameSize = function(){						
 								$('#external-page iframe').height($(window).height() - $('.banner').height());
