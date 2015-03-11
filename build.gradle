@@ -115,8 +115,6 @@ task wrapper(type: Wrapper) {
 task cleanCsv(dependsOn: clean) << {
 	println "\nparsing ${csvFileIn} file...\n"
 	CSVParser parser = CSVParser.parse(new File(csvFileIn).getText(), CSVFormat.EXCEL);		
-	def schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
-	def addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
 	def build = new File('build/webapp')
 	build.mkdirs()
 	def csvFileOut = file('build/webapp/upk.csv')
@@ -142,11 +140,14 @@ task cleanCsv(dependsOn: clean) << {
 					def badFormatResult = false 
 					def value = inRecord[inColIndex]
 					if (!value.isNumber()){
+						/*
 						def formatted = FormatAndValidate.formatAndValidate(project, outCol, value, inRecord, log)
 						if (!formatted[0]){
 							//continue
 						}
 						value = "\"${formatted[1]}\""					
+						*/
+						value = "\"${value}\""					
 					}
 					newRecord[outColIndex] = value 
 				}
