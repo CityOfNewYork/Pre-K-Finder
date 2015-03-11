@@ -45,8 +45,10 @@ ext{
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	prd_date_rules = '//www.nycenet.edu/schoolsearch/date_rules.js'
 
-	csvFileIn = 'etc/upk_doe_sample.csv'
+	csvFileIn = 'etc/pm/data/NYCEEC_Report_2015_03_10.csv'
 	csvOutColumns = ['X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
+			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE']
+	csvOutRequiredColumns = ['X', 'Y', 'PREK_TYPE', 'NAME', 'ADDRESS', 'BOROUGH', 'ZIP', 
 			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE']
 	csvSchoolReplace = 'etc/school_replace.csv'
 	csvAddressReplace = 'etc/address_replace.csv'
@@ -125,34 +127,51 @@ task cleanCsv(dependsOn: clean) << {
 			first = false
 			inColumns = inRecord
 		}else{
+			def requiredColumnsWithoutValues = []
+			for (def inColIndex = 0; inColIndex < inColumns.size(); inColIndex++){
+				def outCol = inColumns[inColIndex]
+				def requiredColIndex = csvOutRequiredColumns.indexOf(outCol)
+				def value = inRecord[inColIndex]
+				if (value == '' && requiredColIndex > -1){
+					requiredColumnsWithoutValues.add(outCol)
+				}
+			}
+			if (requiredColumnsWithoutValues.size() > 0){
+				def error = "MISSING VALUE(S) FOR ${requiredColumnsWithoutValues} ${inRecord}"
+				println error
+				log.append("${error}\n")
+				//continue
+			}
 			def i = 0
 			def newRecord = new ArrayList(csvOutColumns.size());
 			for (def inColIndex = 0; inColIndex < inColumns.size(); inColIndex++){
 				def outCol = inColumns[inColIndex]
 				def outColIndex = csvOutColumns.indexOf(outCol)
 				if (outColIndex > -1){
-					def badValue = false 
+					def badFormatResult = false 
 					def newValue = inRecord[inColIndex]
 					if (!newValue.isNumber()){
+						/*
 						if (outCol == "NAME" || outCol == "ADDRESS"){
 							newValue = Format.format(newValue, outCol == "NAME" ? schoolReplace : addressReplace);
-							badValue = newValue == ''
+							badFormatResult = newValue == ''
 						}else if (outCol == "PHONE"){
 							newValue = Phone.format(newValue);
-							badValue = newValue == ''
+							badFormatResult = newValue == ''
 						}
-						if (badValue){
-							def error = "ERROR: ${outCol}='${inRecord[inColIndex]}' ${inRecord}"
+						if (badFormatResult){
+							def error = "FORMAT ERROR ${outCol}='${inRecord[inColIndex]}' ${inRecord}"
 							println error
 							log.append("${error}\n")
+							continue
 						}
+						*/
 						newValue = "\"${newValue}\""					
 					}
 					newRecord[outColIndex] = newValue 
 				}
 			}
-			if (newRecord[0] != '""')
-				csvFileOut.append("${id},${newRecord.join(',')}\n")
+			csvFileOut.append("${id},${newRecord.join(',')}\n")
 		}
 		id++
 	}
