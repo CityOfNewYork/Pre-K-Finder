@@ -289,8 +289,10 @@
 			return result;
 		};
 		
+		window.submitting = false;
 		function apply(){
 			var data = {id:0, method:"apply", jsonrpc:"2.0", params:{action:"apply", formfields:formData()}};
+			window.submitting = true;
 			$.ajax({
 				url:"./services/SchoolRpc.ashx?rpc",
 				beforeSend: function(request){
@@ -306,13 +308,14 @@
 					}
 					$("form")[0].reset();					
 					$("#review").fadeOut(function(){
-						$("#result").fadeIn();					
+						$("#result").fadeIn();
+						window.submitting = false;						
 					});
 				},
 				error: function(){
 					alert("There was an error processing your submission data.  Please try again.");
 					$("#review").fadeOut();
-				}
+					window.submitting = false;				}
 			});
 			return false;
 		};
