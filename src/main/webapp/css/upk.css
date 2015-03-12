@@ -191,7 +191,7 @@ span.noshow{
 .email, .web{
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: 255px;
+	max-width: 242px;
 }
 .web a {
 	text-decoration: underline;
