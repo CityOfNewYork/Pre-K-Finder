@@ -81,12 +81,16 @@ nyc.upk.HtmlDecorator = {
 		if (IOS || (field == "web")) elem.attr("target", "_blank");
 	},
 	linkHtml: function(field, hrefPrefix){
-		var linkHtml = $("<div></div>"),
-			href= $("<a></a>"), 
-			value = this[field]().trim();
+		var value = this[field]().trim();
 		if (value){
-			href.append(value);
-			href.attr("href", hrefPrefix + encodeURI(this[field]()));
+			var linkHtml = $("<div></div>"),
+				href= $("<a></a>"),
+				text = value;
+			if (field == "web"){
+				text = text.substr(text.indexOf(":") + 3);
+			}
+			href.append(text);
+			href.attr("href", hrefPrefix + encodeURI(value));
 			this.targetAttr(field, href);
 			linkHtml.append(href);
 			return linkHtml.addClass(field);
