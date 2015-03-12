@@ -55,7 +55,70 @@ ext{
 	csvAddressReplace = 'etc/address_replace.csv'
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
 	addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
+
+	closureArgs = [
+		"--warning_level VERBOSE",
+		/*
+		"--source_map_location_mapping 'src/main/webapp/js/nyc/|js/nyc/'",
+		"--generate_exports",
+		"--only_closure_dependencies",
+		"--closure_entry_point 'nyc.App'", 
+		"--closure_entry_point 'nyc.Directions'", 
+		"--closure_entry_point 'nyc.Locate'", 
+		"--closure_entry_point 'nyc.Share'", 
+		"--closure_entry_point 'nyc.upk.FieldsDecorator'", 
+		"--closure_entry_point 'nyc.upk.HtmlDecorator'", 
+		"--closure_entry_point 'nyc.upk.List'", 
+		"--closure_entry_point 'nyc.ZoomSearch'",
+		*/
+		"--js_output_file 'build/js-min.js'",
+		"src/main/webapp/js/nyc/constants.js",
+		"src/main/webapp/js/nyc/app.js",
+		"src/main/webapp/js/nyc/app.js",
+		"src/main/webapp/js/nyc/directions.js",
+		"src/main/webapp/js/nyc/locate.js",
+		"src/main/webapp/js/nyc/share.js",
+		"src/main/webapp/js/nyc/upk.js",
+		"src/main/webapp/js/nyc/zoomsearch.js"
+	]
+	closureComiler = "etc/compiler.jar"
+	comilerArgs = ''
 }
+
+task makeArgs << {
+	closureArgs.each{ arg ->
+		comilerArgs += (' ' + arg)
+	}
+}
+
+task makeScriptAndExec << {
+	println "\nwriting script...\n\njava -jar ${closureComiler} ${comilerArgs}\n"
+	println projectDir
+	println closureComiler
+	
+	def dist = new File("dist/js-min")
+	def tmp = new File('build/tmp')
+	dist.mkdirs()
+	tmp.mkdirs()
+	def script = new File('build/tmp/compile.bat') //TODO make available as shell script too
+	script.text = "java -jar ${closureComiler} ${comilerArgs}"
+    copy {
+	    from 'build/tmp'
+	    include 'compile.bat'
+	    into projectDir 
+		//fileMode 0755
+	}
+	println "\nexecuting script...\n\n./build/compile.bat\n"
+	exec {commandLine = ['compile.bat']}
+	/*
+	copy {
+	    from 'examples/js'
+	    into "dist/dist/js-min" 
+	}
+	*/
+}
+
+task minifyScript(dependsOn: ['clean', 'makeArgs', 'makeScriptAndExec'])
 
 task copyFiles << {
 	def build = new File('build/webapp')
