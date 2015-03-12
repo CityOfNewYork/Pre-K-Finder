@@ -58,6 +58,8 @@ ext{
 
 	closureArgs = [
 		"--warning_level VERBOSE",
+		//"--compilation_level WHITESPACE_ONLY",
+		"--compilation_level SIMPLE_OPTIMIZATIONS",
 		/*
 		"--source_map_location_mapping 'src/main/webapp/js/nyc/|js/nyc/'",
 		"--generate_exports",
@@ -71,17 +73,13 @@ ext{
 		"--closure_entry_point 'nyc.upk.List'", 
 		"--closure_entry_point 'nyc.ZoomSearch'",
 		*/
-		"--js_output_file 'build/js-min.js'",
-		"src/main/webapp/js/nyc/constants.js",
-		"src/main/webapp/js/nyc/app.js",
-		"src/main/webapp/js/nyc/app.js",
-		"src/main/webapp/js/nyc/directions.js",
-		"src/main/webapp/js/nyc/locate.js",
-		"src/main/webapp/js/nyc/share.js",
-		"src/main/webapp/js/nyc/upk.js",
-		"src/main/webapp/js/nyc/zoomsearch.js"
+		"--js_output_file ${projectDir}/build/js-min.js'",
+		"src/main/webapp/js/proj4js/**.js",
+		"src/main/webapp/js/nyc/*.js",
+		"--externs '/Users/tkeane/git/Pre-K-Finder/etc/closure/openlayers2.js'"
+
 	]
-	closureComiler = "etc/compiler.jar"
+	closureComiler = "etc/closure/compiler.jar"
 	comilerArgs = ''
 }
 
@@ -93,29 +91,12 @@ task makeArgs << {
 
 task makeScriptAndExec << {
 	println "\nwriting script...\n\njava -jar ${closureComiler} ${comilerArgs}\n"
-	println projectDir
-	println closureComiler
-	
-	def dist = new File("dist/js-min")
-	def tmp = new File('build/tmp')
-	dist.mkdirs()
-	tmp.mkdirs()
-	def script = new File('build/tmp/compile.bat') //TODO make available as shell script too
-	script.text = "java -jar ${closureComiler} ${comilerArgs}"
-    copy {
-	    from 'build/tmp'
-	    include 'compile.bat'
-	    into projectDir 
-		//fileMode 0755
-	}
-	println "\nexecuting script...\n\n./build/compile.bat\n"
+	def script = new File('compile.bat') //TODO make available as shell script too
+	def bld = new File('./build/')
+	bld.mkdirs()	
+	script.text = "java -jar ${closureComiler} ${comilerArgs}"	
+	println "\nexecuting script...\n\ncompile.bat\n"
 	exec {commandLine = ['compile.bat']}
-	/*
-	copy {
-	    from 'examples/js'
-	    into "dist/dist/js-min" 
-	}
-	*/
 }
 
 task minifyScript(dependsOn: ['clean', 'makeArgs', 'makeScriptAndExec'])
