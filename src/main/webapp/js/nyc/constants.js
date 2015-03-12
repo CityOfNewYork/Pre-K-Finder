@@ -66,31 +66,31 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 		"7": "Full Day, Half Day and 5-hour"			
 	},
 	EXTEND = {
-		"1": "Extended day offered",
-		"2": "Extended day not offered",
-		"3": "Please contact site for extended day information"
-	},
-	IN_OUT = {
-		"1": "Indoor playspace",
-		"2": "Indoor/Outdoor (offsite) playspace",
-		"3": "Indoor/Outdoor (onsite) playspace",
-		"4": "Indoor/Outdoor (onsite) playspace/Outdoor (offsite) playspace",
-		"5": "Not offered",
-		"6": "Outdoor (offsite) playspace",
-		"7": "Outdoor (onsite) playspace",
-		"8": "Outdoor (onsite) playspace/Outdoor (offsite) playspace",
-		"9": "Please contact site for more information"
-	},
-	MEAL = {
-		"1": "Breakfast",
-		"2": "Breakfast/Lunch",
-		"3": "Breakfast/Lunch/Snack(s)",
-		"4": "Breakfast/Snack(s)",
-		"5": "Contact program directly for details",
-		"6": "Lunch",
-		"7": "Lunch/Snack(s)",
-		"8": "Snack(s)"
-	},
+	        "1": "Extended day offered",
+	        "2": "Extended day not offered",
+	        "3": " Please contact site directly for information about extended day "
+    },
+    IN_OUT = {
+        "1": "Indoor playspace",
+        "2": "Indoor/Outdoor (offsite) playspace",
+        "3": "Indoor/Outdoor (onsite) playspace",
+        "4": "Indoor/Outdoor (onsite) playspace/Outdoor (offsite) playspace",
+        "5": "Not offered",
+        "6": "Outdoor (offsite) playspace",
+        "7": "Outdoor (onsite) playspace",
+        "8": "Outdoor (onsite) playspace/Outdoor (offsite) playspace",
+        "9": "Please contact site directly for information about playspace"
+    },
+    MEAL = {
+        "1": "Breakfast",
+        "2": "Breakfast/Lunch",
+        "3": "Breakfast/Lunch/Snack(s)",
+        "4": "Breakfast/Snack(s)",
+        "5": "Please contact site directly for information about meals",
+        "6": "Lunch",
+        "7": "Lunch/Snack(s)",
+        "8": "Snack(s)"
+    },
 	BOROUGH = {"M":"Manhattan", "X":"Bronx", "K":"Brooklyn", "Q":"Queens", "R":"Staten Island"},
 	LOCATE_ZOOM_LEVEL = 7,
 	LOCATION_STYLE_MAP = new OpenLayers.StyleMap({
