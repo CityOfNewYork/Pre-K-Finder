@@ -82,12 +82,16 @@ nyc.upk.HtmlDecorator = {
 	},
 	linkHtml: function(field, hrefPrefix){
 		var linkHtml = $("<div></div>"),
-			href= $("<a></a>");		
-		href.append(this[field]());
-		href.attr("href", hrefPrefix + encodeURI(this[field]()));
-		this.targetAttr(field, href);
-		linkHtml.append(href);
-		return linkHtml.addClass(field);
+			href= $("<a></a>"), 
+			value = this[field]().trim();
+		if (value){
+			href.append(value);
+			href.attr("href", hrefPrefix + encodeURI(this[field]()));
+			this.targetAttr(field, href);
+			linkHtml.append(href);
+			return linkHtml.addClass(field);
+		}
+		return "";
 	},
 	phoneHtml: function(){
 		return this.linkHtml("phone", "tel:");
@@ -96,7 +100,7 @@ nyc.upk.HtmlDecorator = {
 		return this.linkHtml("email", "mailto:");
 	},
 	webHtml: function(){
-		return this.linkHtml("web", "http://");
+		return this.linkHtml("web", "");
 	},
 	programFeatureHtml: function(field, msgMap){
 		var programFeatureHtml = $("<li></li>");

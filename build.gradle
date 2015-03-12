@@ -140,14 +140,12 @@ task cleanCsv(dependsOn: clean) << {
 					def badFormatResult = false 
 					def value = inRecord[inColIndex]
 					if (!value.isNumber()){
-						/*
 						def formatted = FormatAndValidate.formatAndValidate(project, outCol, value, inRecord, log)
 						if (!formatted[0]){
 							//continue
 						}
 						value = "\"${formatted[1]}\""					
-						*/
-						value = "\"${value}\""					
+						//value = "\"${value}\""					
 					}
 					newRecord[outColIndex] = value 
 				}
@@ -208,11 +206,13 @@ class FormatAndValidate {
 	static List formatAndValidate(Project prj, String columnName, String value, CSVRecord inRecord, File log) {
 		def valid = true 
 		if (columnName == "NAME" || columnName == "ADDRESS"){
-			value = Format.format(value, columnName == "NAME" ? prj.property('schoolReplace') : prj.property('addressReplace'));
+			value = Format.format(value, columnName == "NAME" ? prj.property('schoolReplace') : prj.property('addressReplace'))
 			valid = value != ''
 		}else if (columnName == "PHONE"){
-			value = Phone.format(value);
+			value = Phone.format(value)
 			valid = value != ''
+		}else if (columnName == "WEBSITE"){
+			value = Website.format(value);
 		}
 		if (!valid){
 			def error = "FORMAT ERROR ${columnName}='${value}' ${inRecord}"
@@ -241,6 +241,18 @@ class ValidateRequired {
 			//continue
 		}
 		return requiredColumnsWithoutValues.size() == 0
+	}
+}
+
+class Website {
+	static String format(String url) {
+		url = url.toLowerCase().trim()
+		if (url != '' && (url.indexOf('http://') != 0 || url.indexOf('https://') != 0)){
+			url = url.replace('http://', '')
+			url = url.replace('https://', '')
+			url = "http://${url}"
+		}
+		return url
 	}
 }
 
