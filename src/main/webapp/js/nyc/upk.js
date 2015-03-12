@@ -1,4 +1,6 @@
+/** @export */
 window.nyc = window.nyc || {};
+/** @export */
 nyc.upk = nyc.upk || {};
 
 /** @export */
@@ -197,7 +199,7 @@ nyc.upk.HtmlDecorator = {
 	}
 };
 
-
+/** @export */
 nyc.upk.List = (function(){
 	/**  @constructor */
 	var upkListClass = function(){

@@ -1,5 +1,7 @@
+/** @export */
 window.nyc = window.nyc || {};
 
+/** @export */
 nyc.Locate = (function(){
 	/**
 	 * @constructor
