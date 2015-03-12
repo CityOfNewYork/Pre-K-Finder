@@ -58,26 +58,14 @@ ext{
 
 	closureArgs = [
 		"--warning_level VERBOSE",
-		//"--compilation_level WHITESPACE_ONLY",
-		"--compilation_level SIMPLE_OPTIMIZATIONS",
-		/*
-		"--source_map_location_mapping 'src/main/webapp/js/nyc/|js/nyc/'",
-		"--generate_exports",
-		"--only_closure_dependencies",
-		"--closure_entry_point 'nyc.App'", 
-		"--closure_entry_point 'nyc.Directions'", 
-		"--closure_entry_point 'nyc.Locate'", 
-		"--closure_entry_point 'nyc.Share'", 
-		"--closure_entry_point 'nyc.upk.FieldsDecorator'", 
-		"--closure_entry_point 'nyc.upk.HtmlDecorator'", 
-		"--closure_entry_point 'nyc.upk.List'", 
-		"--closure_entry_point 'nyc.ZoomSearch'",
-		*/
-		"--js_output_file ${projectDir}/build/js-min.js'",
-		"src/main/webapp/js/proj4js/**.js",
-		"src/main/webapp/js/nyc/*.js",
-		"--externs '/Users/tkeane/git/Pre-K-Finder/etc/closure/openlayers2.js'"
-
+		"--compilation_level WHITESPACE_ONLY",
+		//"--compilation_level SIMPLE_OPTIMIZATIONS",
+		"--externs etc/closure/openlayers2.js",
+		"--js_output_file build/webapp/js/nyc-min.js",
+		"build/webapp/tmp/js/nyc/*.js",
+		'--source_map_location_mapping "build/webapp/tmp/js/nyc/|nyc/"',
+		"--create_source_map build/webapp/js/nyc-min.js.map",
+		'--output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"'
 	]
 	closureComiler = "etc/closure/compiler.jar"
 	comilerArgs = ''
@@ -92,25 +80,23 @@ task makeArgs << {
 task makeScriptAndExec << {
 	println "\nwriting script...\n\njava -jar ${closureComiler} ${comilerArgs}\n"
 	def script = new File('compile.bat') //TODO make available as shell script too
-	def bld = new File('./build/')
+	def bld = new File('./build/webapp/js')
 	bld.mkdirs()	
 	script.text = "java -jar ${closureComiler} ${comilerArgs}"	
 	println "\nexecuting script...\n\ncompile.bat\n"
 	exec {commandLine = ['compile.bat']}
 }
 
-task minifyScript(dependsOn: ['clean', 'makeArgs', 'makeScriptAndExec'])
-
 task copyFiles << {
-	def build = new File('build/webapp')
+	def build = new File('build/webapp/tmp')
 	build.mkdirs()
 	copy {
 		from 'src/main/webapp'
-		into 'build/webapp' 
+		into 'build/webapp/tmp' 
 	}
 }
 
-task buildApp(dependsOn: [clean, copyFiles]) << {
+task replaceTokens << {
 	def env = project.hasProperty('env') ? env : default_env
 	def infoUrl = project.ext["${env}_info_url"];
 	def directoryUrl = project.ext["${env}_directory_url"];
@@ -128,13 +114,48 @@ task buildApp(dependsOn: [clean, copyFiles]) << {
  	println "BASEMAP_URLS=${baseUrls}\n"
 
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
-	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_info_url, value: infoUrl)
-	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
-	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
-	ant.replace(file: 'build/webapp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
-	ant.replace(file: 'build/webapp/index.html', token: local_directory_url, value: directoryUrl)
-	ant.replace(file: 'build/webapp/index.html', token: local_apply_url, value: applyUrl)
-	ant.replace(file: 'build/webapp/index.html', token: local_date_rules, value: dateRules)
+	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_info_url, value: infoUrl)
+	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
+	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
+	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
+	ant.replace(file: 'build/webapp/tmp/index.html', token: local_directory_url, value: directoryUrl)
+	ant.replace(file: 'build/webapp/tmp/index.html', token: local_apply_url, value: applyUrl)
+	ant.replace(file: 'build/webapp/tmp/index.html', token: local_date_rules, value: dateRules)
+}
+
+task minifyScript(dependsOn: [clean, copyFiles, replaceTokens, makeArgs, makeScriptAndExec])
+
+task buildApp(dependsOn: minifyScript) << {	
+	def env = project.hasProperty('env') ? env : default_env
+
+	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
+	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
+	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
+	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/locate.js"></script>', value: '')
+	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/directions.js"></script>', value: '')
+	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/share.js"></script>', value: '')
+	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
+	ant.replace(file: 'build/webapp/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
+
+	copy {
+		from 'build/webapp/tmp'
+		include 'index.html'
+		include 'upk.csv'
+		include 'css/**'
+		include 'img/**'
+		include 'js/**'
+		into 'build/webapp'
+	}
+	if (env == 'dev'){
+		copy {
+			from 'build/webapp/tmp'
+			include 'date_rules.js'
+			include 'info.html'
+			into 'build/webapp'
+		}
+	}
+	delete 'build/webapp/tmp'
+	delete 'compile.bat'
 }
 
 jettyRun {
