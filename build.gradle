@@ -1,3 +1,4 @@
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
@@ -56,6 +57,8 @@ ext{
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
 	addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
 
+	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'share.css', 'zoomsearch.css']
+
 	closureArgs = [
 		"--warning_level VERBOSE",
 		"--compilation_level WHITESPACE_ONLY",
@@ -65,10 +68,14 @@ ext{
 		"build/webapp/tmp/js/nyc/*.js",
 		'--source_map_location_mapping "build/webapp/tmp/js/nyc/|nyc/"',
 		"--create_source_map build/webapp/js/nyc-min.js.map",
-		'--output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"'
+		Os.isFamily(Os.FAMILY_WINDOWS) ? '--output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"' : '--output_wrapper "%output%//# sourceMappingURL=nyc-min.js.map"'
 	]
 	closureComiler = "etc/closure/compiler.jar"
 	comilerArgs = ''
+}
+
+task setEnv << {
+	if (!project.hasProperty('env')) project.ext.env = default_env
 }
 
 task makeArgs << {
@@ -77,17 +84,7 @@ task makeArgs << {
 	}
 }
 
-task makeScriptAndExec << {
-	println "\nwriting script...\n\njava -jar ${closureComiler} ${comilerArgs}\n"
-	def script = new File('compile.bat') //TODO make available as shell script too
-	def bld = new File('./build/webapp/js')
-	bld.mkdirs()	
-	script.text = "java -jar ${closureComiler} ${comilerArgs}"	
-	println "\nexecuting script...\n\ncompile.bat\n"
-	exec {commandLine = ['compile.bat']}
-}
-
-task copyFiles << {
+task copyFiles(dependsOn: clean) << {
 	def build = new File('build/webapp/tmp')
 	build.mkdirs()
 	copy {
@@ -96,14 +93,13 @@ task copyFiles << {
 	}
 }
 
-task replaceTokens << {
-	def env = project.hasProperty('env') ? env : default_env
-	def infoUrl = project.ext["${env}_info_url"];
-	def directoryUrl = project.ext["${env}_directory_url"];
-	def applyUrl = project.ext["${env}_apply_url"];
-	def geoUrl = project.ext["${env}_geoclient_url"];
-	def baseUrls = project.ext["${env}_basemap_urls"];
-	def dateRules = project.ext["${env}_date_rules"];
+task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
+	def infoUrl = project.ext["${env}_info_url"]
+	def directoryUrl = project.ext["${env}_directory_url"]
+	def applyUrl = project.ext["${env}_apply_url"]
+	def geoUrl = project.ext["${env}_geoclient_url"]
+	def baseUrls = project.ext["${env}_basemap_urls"]
+	def dateRules = project.ext["${env}_date_rules"]
 
  	println "\nbuilding for env=${env}...\n"
  	println "INFO_URL=${infoUrl}"
@@ -123,11 +119,47 @@ task replaceTokens << {
 	ant.replace(file: 'build/webapp/tmp/index.html', token: local_date_rules, value: dateRules)
 }
 
-task minifyScript(dependsOn: [clean, copyFiles, replaceTokens, makeArgs, makeScriptAndExec])
+task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
+	println "\nwriting script...\n\njava -jar ${closureComiler} ${comilerArgs}\n"
+	def scriptFileName = Os.isFamily(Os.FAMILY_WINDOWS) ? 'compile.bat' : 'compile.sh'
+	def scriptFilePath = Os.isFamily(Os.FAMILY_WINDOWS) ? scriptFileName : "build/tmp/${scriptFileName}"
+	def tmp = new File('./build/tmp')
+	def bld = new File('./build/webapp/js')
+	tmp.mkdirs()	
+	bld.mkdirs()	
+	def scriptFile = new File(scriptFilePath) //TODO make available as shell script too
+	scriptFile.text = "java -jar ${closureComiler} ${comilerArgs}"	
+	println "\nexecuting script...\n${scriptFileName}\n"
+    if (!Os.isFamily(Os.FAMILY_WINDOWS)){
+	    copy {
+		    from 'build/tmp'
+		    include scriptFileName
+		    into './' 
+			fileMode 0755
+		}
+	}
+	exec {commandLine = [(!Os.isFamily(Os.FAMILY_WINDOWS) ? './' : '') + scriptFileName]}
+}
 
-task buildApp(dependsOn: minifyScript) << {	
-	def env = project.hasProperty('env') ? env : default_env
+task minifyScript(dependsOn: makeScriptAndExec)
 
+task minifyCss(dependsOn: [setEnv, clean, copyFiles]) << {
+	if (env != 'dev'){
+	def cssOut = new File('build/webapp/tmp/css/upk-min.css')
+		orderedCssFiles.each{ cssFile ->
+			def css = file("build/webapp/tmp/css/${cssFile}").getText('UTF-8')
+			css = css.replaceAll(/[\n\r]+\s*/, '')
+			css = css.replaceAll(/\s+/, ' ')
+			css = css.replaceAll(/\s?([:,;{}])\s?/, '$1')
+			css = css.replaceAll(/([\s:]0)(px|pt|%|em)/, '$1')
+			css = css.replaceAll(/\/\*[\d\D]*?\*\//, '')
+			cssOut.append(css)
+		}
+	}
+}
+
+
+task buildApp(dependsOn: [setEnv, minifyScript, minifyCss]) << {	
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
 	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
 	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
@@ -137,11 +169,18 @@ task buildApp(dependsOn: minifyScript) << {
 	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
 	ant.replace(file: 'build/webapp/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
 
+	if (env != 'dev'){
+		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/directions.css" type="text/css">', value: '')
+		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/control-common.css" type="text/css">', value: '')
+		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/share.css" type="text/css">', value: '')
+		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
+		ant.replace(file: 'build/webapp/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
+	}
 	copy {
 		from 'build/webapp/tmp'
 		include 'index.html'
 		include 'upk.csv'
-		include 'css/**'
+		include 'css/upk-min.css'
 		include 'img/**'
 		include 'js/**'
 		into 'build/webapp'
@@ -151,11 +190,13 @@ task buildApp(dependsOn: minifyScript) << {
 			from 'build/webapp/tmp'
 			include 'date_rules.js'
 			include 'info.html'
+			include 'css/**'
 			into 'build/webapp'
 		}
 	}
 	delete 'build/webapp/tmp'
 	delete 'compile.bat'
+	delete 'compile.sh'
 }
 
 jettyRun {
@@ -179,7 +220,7 @@ task wrapper(type: Wrapper) {
 
 task cleanCsv(dependsOn: clean) << {
 	println "\nparsing ${csvFileIn} file...\n"
-	CSVParser parser = CSVParser.parse(new File(csvFileIn).getText(), CSVFormat.EXCEL);		
+	CSVParser parser = CSVParser.parse(new File(csvFileIn).getText(), CSVFormat.EXCEL)
 	def build = new File('build/webapp')
 	build.mkdirs()
 	def csvFileOut = file('build/webapp/upk.csv')
@@ -197,7 +238,7 @@ task cleanCsv(dependsOn: clean) << {
 				//continue
 			}
 			def i = 0
-			def newRecord = new ArrayList(csvOutColumns.size());
+			def newRecord = new ArrayList(csvOutColumns.size())
 			for (def inColIndex = 0; inColIndex < inColumns.size(); inColIndex++){
 				def outCol = inColumns[inColIndex]
 				def outColIndex = csvOutColumns.indexOf(outCol)
@@ -277,7 +318,7 @@ class FormatAndValidate {
 			value = Phone.format(value)
 			valid = value != ''
 		}else if (columnName == "WEBSITE"){
-			value = Website.format(value);
+			value = Website.format(value)
 		}
 		if (!valid){
 			def error = "FORMAT ERROR ${columnName}='${value}' ${inRecord}"
