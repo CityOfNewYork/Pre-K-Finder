@@ -18,6 +18,7 @@ apply plugin: 'jetty'
 
 ext{
 	default_env = 'dev'
+	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 	
 	local_info_url = 'info.html'
 	local_apply_url = '//www.semsnycdoe.com/parentsite?local'
@@ -68,7 +69,7 @@ ext{
 		"build/webapp/tmp/js/nyc/*.js",
 		'--source_map_location_mapping "build/webapp/tmp/js/nyc/|nyc/"',
 		"--create_source_map build/webapp/js/nyc-min.js.map",
-		Os.isFamily(Os.FAMILY_WINDOWS) ? '--output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"' : '--output_wrapper "%output%//# sourceMappingURL=nyc-min.js.map"'
+		isWindows ? '--output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"' : '--output_wrapper "%output%//# sourceMappingURL=nyc-min.js.map"'
 	]
 	closureComiler = "etc/closure/compiler.jar"
 	comilerArgs = ''
@@ -121,8 +122,8 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 
 task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
 	println "\nwriting script...\n\njava -jar ${closureComiler} ${comilerArgs}\n"
-	def scriptFileName = Os.isFamily(Os.FAMILY_WINDOWS) ? 'compile.bat' : 'compile.sh'
-	def scriptFilePath = Os.isFamily(Os.FAMILY_WINDOWS) ? scriptFileName : "build/tmp/${scriptFileName}"
+	def scriptFileName = isWindows ? 'compile.bat' : 'compile.sh'
+	def scriptFilePath = isWindows ? scriptFileName : "build/tmp/${scriptFileName}"
 	def tmp = new File('./build/tmp')
 	def bld = new File('./build/webapp/js')
 	tmp.mkdirs()	
@@ -130,7 +131,7 @@ task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
 	def scriptFile = new File(scriptFilePath) //TODO make available as shell script too
 	scriptFile.text = "java -jar ${closureComiler} ${comilerArgs}"	
 	println "\nexecuting script...\n${scriptFileName}\n"
-    if (!Os.isFamily(Os.FAMILY_WINDOWS)){
+    if (!isWindows){
 	    copy {
 		    from 'build/tmp'
 		    include scriptFileName
@@ -138,7 +139,7 @@ task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
 			fileMode 0755
 		}
 	}
-	exec {commandLine = [(!Os.isFamily(Os.FAMILY_WINDOWS) ? './' : '') + scriptFileName]}
+	exec {commandLine = [(!isWindows ? './' : '') + scriptFileName]}
 }
 
 task minifyScript(dependsOn: makeScriptAndExec)
