@@ -54,7 +54,7 @@
 			font-weight:bold !important;
 		}
 		#review, #result{
-			position: fixed;
+			position: absolute;
 			margin: 12px calc(50% - 135px);
 			width: 270px;
 			border-radius: 0.6em;
@@ -63,6 +63,7 @@
 			background-color: white;
 			padding: 5px;
 			display:none;
+			z-index: 100;
 		}
 		.ui-btn.ui-corner-all, .ui-corner-all{
 			border-radius: 0.6em;
@@ -226,9 +227,9 @@
 				$("#review_" + d).html(data[d].toString());
 			}
 			$("#review").css({visibility: "hidden", display:"block"});
-			var bottom = $(window).height() / 2 - $("#review").height() / 2;
+			var bottom = $("form").height();
 			$("#review").css({visibility: "visible", display:"none"});
-			$("#review").css("bottom", bottom + "px");
+			$("#review").css("top", bottom - $("#review").height() + "px");
 			$("#review").fadeIn(function(){
 				$("#result").css("top", $("#review").position().top + "px");
 			});

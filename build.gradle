@@ -195,7 +195,7 @@ task buildApp(dependsOn: [setEnv, minifyScript, minifyCss]) << {
 			into 'build/webapp'
 		}
 	}
-	delete 'build/tmp/'
+	delete 'build/tmp'
 	delete 'compile.bat'
 	delete 'compile.sh'
 }
