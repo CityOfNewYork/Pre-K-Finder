@@ -7,7 +7,7 @@
 	height: 36px;
 	border-radius: 0.6em !important;
 }
-.ctl-btn.ui-btn, .ctl-btn.ui-btn:visited {
+.ctl-btn.ui-btn, .ctl-btn.ui-btn: visited {
 	background-color: rgba(1,51,100,0.5);
 }
 .ctl-btn.ui-btn:hover {
