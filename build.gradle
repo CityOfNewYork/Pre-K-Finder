@@ -48,7 +48,7 @@ ext{
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	prd_date_rules = '//www.nycenet.edu/schoolsearch/date_rules.js'
 
-	csvFileIn = 'etc/pm/data/NYCEEC_Report_2015_03_10.csv'
+	csvFileIn = 'etc/pm/data/UPK_Report_2015_03_13_Send.csv'
 	csvOutColumns = ['X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
 			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE']
 	csvOutRequiredColumns = ['X', 'Y', 'PREK_TYPE', 'NAME', 'ADDRESS', 'BOROUGH', 'ZIP', 
@@ -419,16 +419,27 @@ class Capitalize {
 }
 
 class Format extends Capitalize {
-	static String format(String input, List addressReplace) { 
+	static String format(String input, List addressReplace) {
 		input = input.replace('.', '')
-		input = input.replace('/', ' / ')
+		input = input.replace('/', '  /  ')
+		input = input.replace('-', '  -  ')
+		input = input.replace('(', '  (  ')
+		input = input.replace(')', '  )  ')
+		input = input.replace(':', '  :  ')
+		input = input.replace(',', '  ,  ')
+		input = input.replace('&', '  &  ')
+		input = input.replace('@', '  @  ')
 		input = " ${this.capitalize(input.trim())} "
 		for (replacementPair in addressReplace) {
 			String search = " ${replacementPair[0]} "
 			String replace = replacementPair[1] != null ? " ${replacementPair[1]} " : ' '
 			input = input.replaceAll(search, replace)
 		}
-		return input.replace('  ', ' ').trim()
+		input = input.replace('  ', ' ')
+		input = input.replace('  ', ' ')
+		input = input.replace('  ', ' ')
+		input = input.replace(' ,', ',')
+		return input.trim()
 	}
 }
 
