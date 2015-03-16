@@ -1,0 +1,25 @@
+#map {
+	height: 100%;
+}
+#btn-srch-typ:after, #fld-srch-container .ui-input-clear:after {
+	background-color: rgb(1,51,100);
+}
+.ui-input-search:after {
+	color: rgb(1,51,100);
+}
+.ui-listview>.ui-li-static:hover {
+	background-color: rgb(1,51,100);
+	color: white;
+}
+.ctl-btn.ui-btn, #splash .ctl-btn.ui-btn {
+	background-color: rgb(1,51,100);
+}
+.oddRow {
+	background-color: #F8F8F8;
+}
+#share-btn {
+	display: none;
+}
+#filter h3 a:after {
+  background-image: url(../img/ie8-filter.png);
+}

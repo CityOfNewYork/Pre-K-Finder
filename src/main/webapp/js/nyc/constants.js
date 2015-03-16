@@ -15,11 +15,12 @@
 	};
 					
 	var validDateString = function(dateVarName){
+		if (window.IE8) return ie8Date(dateVarName);
 		var invalidDateProvided = true;
 		if (window[dateVarName]){
 			try{
 				var dateTyr = new Date(window[dateVarName]);
-				invalidDateProvided = !isNaN(dateTyr.getFullYear());
+				invalidDateProvided = isNaN(dateTyr.getFullYear());
 			}catch(ignore){
 				invalidDateProvided = true;
 			}

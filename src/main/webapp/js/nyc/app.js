@@ -69,7 +69,7 @@ nyc.App = (function(){
 				});
 				me.upkLayer = new OpenLayers.Layer.Vector("", {
 					styleMap: UPK_STYLE_MAP,
-					maxResolution: RESOLUTIONS[2],
+					maxResolution: window.IE8 ? RESOLUTIONS[5] : RESOLUTIONS[2],
 					/* 
 					 * 
 					 * for some reason links inside of the identify popup do not  
@@ -79,6 +79,7 @@ nyc.App = (function(){
 					 */
 					renderers: (function(){
 						if (IOS) return ["Canvas", "SVG", "VML"];
+						if (window.IE8) return ["VML"];
 						return ["SVG", "VML", "Canvas"];
 					})(),
 					eventListeners:{

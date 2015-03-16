@@ -5,14 +5,17 @@
 .ctl-btn {
 	width: 36px;
 	height: 36px;
-	border-radius: .6em !important;
+	border-radius: 0.6em !important;
+}
+.ctl-btn.ui-btn:hover {
+	background-color: rgba(1,51,100,1);
 }
 .ctl-btn:after {
 	background-color: transparent;
 	background-size: 19px;
 }
 .ctl-btn.ui-btn, .ctl-btn.ui-btn:visited {
-	background-color: rgba(0,0,0,0.5);
+	background-color: rgba(1,51,100,0.5);
 	cursor: pointer;
 }
 .noshow{

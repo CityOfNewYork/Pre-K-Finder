@@ -1,18 +1,3 @@
-.ctl {
-	position: fixed;
-	z-index: 100;
-} 
-.ctl-btn {
-	width: 36px;
-	height: 36px;
-	border-radius: 0.6em !important;
-}
-.ctl-btn.ui-btn, .ctl-btn.ui-btn: visited {
-	background-color: rgba(1,51,100,0.5);
-}
-.ctl-btn.ui-btn:hover {
-	background-color: rgba(1,51,100,1);
-}
 #share-btn {
 	top: auto;
 	left: 3px;

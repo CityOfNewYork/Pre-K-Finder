@@ -125,6 +125,45 @@
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	<script src="date_rules.js"></script>
+	<!--[if lt IE 9]>
+		<script>
+			window.IE8 = true;
+			
+			var IE8_DEFAULT_DATES = {
+				TODAY: new Date(),
+				APPLY_START_DATE: "03/16/2015",
+				APPLY_END_DATE: "04/25/2015",
+				DEFAULT_DOB_ENTRY: "01/01/2011",
+				SCHOOL_YEAR: "2015-16"
+			};
+			
+			function unIso(dateString){
+				if (typeof dateString != "string") return dateString;
+				var dateParts = dateString.split("-");
+				return dateParts[1] + "/" + dateParts[2] + "/" + dateParts[0];
+			};
+			
+			function ie8Date(dateVarName){
+				var invalidDateProvided = true;
+				if (window[dateVarName]){
+					var unIsoDate = unIso(window[dateVarName]);
+					try{
+						var dateTyr = new Date(unIsoDate);
+						invalidDateProvided = isNaN(dateTyr.getFullYear());
+					}catch(ignore){
+						invalidDateProvided = true;
+					}
+				}
+				return invalidDateProvided ? IE8_DEFAULT_DATES[dateVarName] : unIsoDate;
+			};
+			
+			if(typeof String.prototype.trim !== 'function') {
+			  String.prototype.trim = function() {
+			    return this.replace(/^\s+|\s+$/g, ''); 
+			  }
+			}
+		</script>
+	<![endif]-->
 	<script>
 		/* Modernizr 2.8.3 (Custom Build) | MIT & BSD
 		 * Build: http://modernizr.com/download/#-inputtypes-shiv-cssclasses-load
@@ -164,10 +203,11 @@
 							
 			var validDateString = function(dateVarName){
 				var invalidDateProvided = true;
+				if (window.IE8) return ie8Date(dateVarName);
 				if (window[dateVarName]){
 					try{
 						var dateTyr = new Date(window[dateVarName]);
-						invalidDateProvided = !isNaN(dateTyr.getFullYear());
+						invalidDateProvided = isNaN(dateTyr.getFullYear());
 					}catch(ignore){
 						invalidDateProvided = true;
 					}
@@ -206,7 +246,7 @@
 				if ($(n).prop("required") || $(n).attr("required")){
 					var val = $(n).val(), pattern = $(n).attr("pattern") || $(n).data("pattern"), valid = val.length;
 					if (n.id == "dob"){
-						var dob = new Date(getIsoDob());
+						var dob = window.IE8 ? new Date($("#dob").val()) : new Date(getIsoDob());
 						valid = dob >= new Date(MIN_DOB) && dob <= new Date(MAX_DOB);
 					}else{
 						if (valid && pattern){
