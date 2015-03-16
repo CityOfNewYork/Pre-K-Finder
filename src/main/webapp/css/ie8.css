@@ -14,6 +14,10 @@
 .ctl-btn.ui-btn, #splash .ctl-btn.ui-btn {
 	background-color: rgb(1,51,100);
 }
+.upkDetail {
+	border: 1px solid rgb(1,51,100);
+	background-color: #F8F8F8;
+}
 .oddRow {
 	background-color: #F8F8F8;
 }
@@ -22,4 +26,14 @@
 }
 #filter h3 a:after {
   background-image: url(../img/ie8-filter.png);
+}
+#callout_close {
+	background-color: rgb(1,51,100);
+	margin: 2px 3px 0 0;
+}
+#callout_close:after {
+	background-image: url(../img/ie8-x.gif);
+	content: "X";
+	color: white;
+	background-color: rgb(1,51,100);
 }

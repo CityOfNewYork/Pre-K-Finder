@@ -182,6 +182,7 @@ task buildApp(dependsOn: [setEnv, minifyScript, minifyCss]) << {
 		include 'index.html'
 		include 'upk.csv'
 		include 'css/upk-min.css'
+		include 'css/ie8.css'
 		include 'img/**'
 		include 'js/**'
 		into 'build/webapp'
