@@ -18,13 +18,13 @@ function ie8Date(dateVarName){
 	if (window[dateVarName]){
 		var unIsoDate = unIso(window[dateVarName]);
 		try{
-			var dateTyr = new Date(unIsoDate);
-			invalidDateProvided = isNaN(dateTyr.getFullYear());
+			var dateYr = new Date(unIsoDate);
+			invalidDateProvided = isNaN(dateYr.getFullYear());
 		}catch(ignore){
 			invalidDateProvided = true;
 		}
 	}
-	return invalidDateProvided ? IE8_DEFAULT_DATES[dateVarName] : unIsoDate;
+	return new Date(invalidDateProvided ? IE8_DEFAULT_DATES[dateVarName] : unIsoDate);
 };
 
 if(typeof String.prototype.trim !== 'function') {

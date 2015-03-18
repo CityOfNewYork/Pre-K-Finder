@@ -416,9 +416,9 @@ $(document).ready(function(){
 	};
 	
 	(function(){
-		var dob = new Date(DEFAULT_DOB_ENTRY),
-			start = new Date(APPLY_START_DATE),
-			end = new Date(APPLY_END_DATE);
+		var dob = DEFAULT_DOB_ENTRY,
+			start = APPLY_START_DATE,
+			end = APPLY_END_DATE;
 		end.setDate(end.getDate() - 1);
 		$(".splash-message").html(
 			"The Pre-K for All application for the " +

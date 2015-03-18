@@ -14,24 +14,25 @@
 		SCHOOL_YEAR: "2015-16"
 	};
 					
-	var validDateString = function(dateVarName){
+	var localeDate = function(dateVarName){
 		if (window.IE8) return ie8Date(dateVarName);
 		var invalidDateProvided = true;
 		if (window[dateVarName]){
 			try{
-				var dateTyr = new Date(window[dateVarName]);
-				invalidDateProvided = isNaN(dateTyr.getFullYear());
+				var dateYr = new Date(window[dateVarName]);
+				invalidDateProvided = isNaN(dateYr.getFullYear());
 			}catch(ignore){
 				invalidDateProvided = true;
 			}
 		}
-		return invalidDateProvided ? DEFAULT_DATES[dateVarName] : window[dateVarName];
+		var utcDate = new Date(invalidDateProvided ? DEFAULT_DATES[dateVarName] : window[dateVarName]);
+		return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
 	};
-		
+	
 	window.TODAY = DEFAULT_DATES.TODAY;
-	window.APPLY_START_DATE = validDateString("APPLY_START_DATE");
-	window.APPLY_END_DATE = validDateString("APPLY_END_DATE");
-	window.DEFAULT_DOB_ENTRY = validDateString("DEFAULT_DOB_ENTRY");
+	window.APPLY_START_DATE = localeDate("APPLY_START_DATE");
+	window.APPLY_END_DATE = localeDate("APPLY_END_DATE");
+	window.DEFAULT_DOB_ENTRY = localeDate("DEFAULT_DOB_ENTRY");
 	window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
 
 }());
@@ -39,7 +40,7 @@
 var UPK_SEARCH_BY_CHOICE = "Program name",
 	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name...",
 	THIS_YEAR = TODAY.getFullYear(),
-	DO_APPLY = TODAY >= new Date(APPLY_START_DATE) && TODAY < new Date(APPLY_END_DATE),
+	DO_APPLY = TODAY >= APPLY_START_DATE && TODAY < APPLY_END_DATE,
 	APPLY_TITLE = "Apply Now",
 	INFO_TITLE = "Get in Touch", 
 	MORE_INFO_TITLE = "I would like a call about Pre-K",
