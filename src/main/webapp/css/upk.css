@@ -400,4 +400,8 @@ span.noshow{
 		width: 450px;
 		margin: -1px auto;
 	}
+	#filter .ui-collapsible-content {
+		height: 220px;
+		overflow: auto;
+	}
 }
