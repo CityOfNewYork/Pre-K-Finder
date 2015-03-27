@@ -47,7 +47,7 @@ nyc.App = (function(){
 		me.map.events.register("featureover", map, me.hover);
 		me.map.events.register("featureout", map, me.out);
 		
-		$(window).resize(function(){
+		$(window).on("orientationchange resize", function(){
 			me.map.render(map.div);
 		});
 		
@@ -185,7 +185,11 @@ nyc.App = (function(){
 								'overflow-y': 'scroll'
 							});
 						}else{
-							$('#external-page iframe').height($(window).height() - $('.banner').height());
+							var frameSize = function(){						
+								$('#external-page iframe').height($(window).height() - $('.banner').height());
+							};
+							$(window).on("orientationchange resize", frameSize);
+							frameSize();
 						}
 						if (ui.toPage.attr('id') == 'map-page' && me.openPanel){
 							$('#toggle-list').trigger('click');

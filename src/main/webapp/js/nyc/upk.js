@@ -278,7 +278,7 @@ nyc.upk.List = (function(){
 nyc.upk.ListRenderer = (function(){
 	/** @constructor */
 	var upkTableClass = function(){
-		$(window).resize(this.adjContainerHeight);
+		$(window).on("orientationchange resize", this.adjContainerHeight);
 		this.upkList = null;
 		this.currentLocation = {geometry: null, attributes: {}};
 		$("#list-more").click($.proxy(this.more, this));
