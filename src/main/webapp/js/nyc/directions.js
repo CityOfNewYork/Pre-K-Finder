@@ -15,7 +15,7 @@ nyc.Directions = (function(){
 		//TODO use our google clientid
 		$.getScript('https://maps.googleapis.com/maps/api/js?client=gme-newyorkcitydepartment&channel=upksensor=false&libraries=visualization&callback=nyc.directions.init');
 		$('.dir-mode-btn').click($.proxy(this.mode, this));
-		$(window).resize(me.height);
+		$(window).on('orientationchange resize', me.height);
 		$('#fld-from input').keypress(function(e){
 			if (e.keyCode == 13){
 				me.args.from = $('#fld-from input').val();
@@ -161,17 +161,6 @@ nyc.Directions = (function(){
 				var h =  $('#dir-toggle').css('display') == 'block' ? $('#dir-toggle').height() : 0;
 				$('#directions').height($('#dir-panel').height() - h - $('.banner').height() - $('#dir-content').height() - 10);
 			}
-		},
-		/** @private */
-		addMarker: function(p, title, icon){
-			new google.maps.Marker({
-				map:me.map,
-				optimized: false,
-				position:p,
-				icon:icon,
-				title:title,
-				zIndex:google.maps.Marker.MAX_ZINDEX
-		    });
 		}
 	};
 	return dirClass;

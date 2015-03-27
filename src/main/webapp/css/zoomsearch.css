@@ -107,15 +107,24 @@ li.program-name img {
 	#fld-srch-container {
 		width: 351px;
 	}
+	#mnu-srch-typ {
+		width: 350px;
+	}
 }
 @media only screen and (max-width : 380px) {
 	#fld-srch-container {
 		width: 326px;
 	}
+	#mnu-srch-typ {
+		width: 325px;
+	}
 }
 @media only screen and (max-width : 350px) {
 	#fld-srch-container {
 		width: 271px;
+	}
+	#mnu-srch-typ {
+		width: 270px;
 	}
 }
 
