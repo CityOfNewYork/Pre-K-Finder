@@ -23,6 +23,10 @@
 		.loading div, .loading span, .loading h1, .loading h2, .loading h3, .loading input, .loading select{
 			visibility:hidden;
 		}
+		label{
+			white-space: nowrap;
+			padding-right: 10px;
+		}
 		h2, h3{
 			color: #5681ac;
 		}
@@ -88,16 +92,24 @@
 			width: 50%;
 		}
 		#house_cell{
-			width: 60px;
+			width: 30px;
+		}
+		#street_cell{
+			width: 300px;
 		}
 		#apt_cell{
-			width: 50px;
+			width: 30px;
 		}
 		#borough_cell{
 			width: 70%;
 		}
 		#zip_cell{
 			width: 30%;
+		}
+		@media only screen and (max-width : 600px) {
+			#street_cell{
+				width: auto;
+			}
 		}
 		@media only screen and (max-width : 360px) {
 			#house_cell{
@@ -336,7 +348,7 @@
 									<label for="house_number">House no:</label>
 									<input id="house_number" name="house_number" type="text" required placeholder="52">
 								</td>
-								<td>
+								<td id="street_cell">
 									<label for="street_name">Street name:</label>
 									<input id="street_name" name="street_name" type="text" required placeholder="Chambers St">
 								</td>
