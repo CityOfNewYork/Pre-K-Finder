@@ -49,7 +49,7 @@ nyc.upk.FieldsDecorator = {
 		return this.attributes.PREK_TYPE;
 	},
 	isFullDay: function(){
-		return $.inArray(this.dayLength(), FULL_DAY) > -1;
+		return $.inArray(this.dayLength() * 1, FULL_DAY) > -1;
 	}
 };
 
