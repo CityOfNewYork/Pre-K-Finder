@@ -255,6 +255,7 @@
 		
 		function getApplicationInterval(){
 			var start = new Date(APPLY_START_DATE), end = new Date(APPLY_END_DATE);
+			end.setDate(end.getDate() - 1);
 			return MONTHS[start.getUTCMonth()] + " " +
 				start.getUTCDate() + " to " +
 				MONTHS[end.getUTCMonth()] + " " +
