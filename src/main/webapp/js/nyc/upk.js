@@ -147,11 +147,16 @@ nyc.upk.HtmlDecorator = {
 		anchorHtml.attr("onclick", "nyc.app.showUpkDetail(this, nyc.app);");
 		return detailBtnHtml.append(anchorHtml);
 	},
+	showApply: function(){
+		return DO_APPLY && 
+			this.type() != "CHARTER" && 
+			(this.type() == "DOE" || this.isFullDay());
+	},
 	infoApplyBtnHtml: function(){
 		var infoApplyBtnHtml = $("<td class='apply'></td>"),
 			anchorHtml = $("<a class='ui-btn'></a>"), 
 			url, title;
-		if (DO_APPLY && (this.type() == "DOE" || this.isFullDay())){
+		if (this.showApply()){
 			url = APPLY_URL;
 			title = APPLY_TITLE;
 		}else{
