@@ -56,6 +56,7 @@ div#splash-cont {
 }
 #external-page iframe {
 	overflow: hidden;
+	border: 0;
 }
 .ios #external-page, .ios #external-content, .ios #external-content iframe {
 	height: 2000px;

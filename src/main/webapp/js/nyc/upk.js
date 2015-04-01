@@ -175,7 +175,7 @@ nyc.upk.HtmlDecorator = {
 			url = INFO_URL;
 			title = INFO_TITLE;
 			anchorHtml.attr("data-url", url)
-				.attr("onclick", "nyc.app.changePage(this, nyc.app);");
+				.attr("onclick", "$('body').pagecontainer('change', 'info.html', {transition: 'slideup'});");
 		}
 		anchorHtml.html(title);
 		return infoApplyBtnHtml.append(anchorHtml);		
