@@ -1,5 +1,5 @@
 .info .ui-content {
-	overfolw: auto;
+	overflow: auto;
 	height: calc(100% - 80px);
 }
 .info label{
@@ -32,7 +32,7 @@
 	color:red !important;
 	font-weight:bold !important;
 }
-#info-review, #info-result{
+#info-review, #info-result, #info-fail{
 	position: absolute;
 	top:  50px;
 	margin: 0 calc(50% - 135px);
@@ -45,15 +45,24 @@
 	display:none;
 	z-index: 100;
 }
-#info-review h3{
+#info-review h3,#info-result,  #info-fail{
 	text-align:center;
 }
 #info-review-btns{
 	width:207px;
 	margin:20px 29px;
 }
+#info-review.loading {
+	background-image: url(../img/spin.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
 #info-thanks{
 	padding: 5px;
+}
+#info-fail img {
+	width: 64px;
+	height: 57px;
 }
 #info-note{
 	text-align: center;

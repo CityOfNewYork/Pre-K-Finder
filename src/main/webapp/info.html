@@ -136,18 +136,26 @@
 				<div><span class="name">Evening Telephone:</span> <span id="info-rev-evening_telephone"></span></div>
 				<div><span class="name">Email address:</span> <span id="info-rev-email"></span></div>
 				<div id="reviewBtns">
-					<input type="button" onclick="$('#info-review').fadeOut();" value="Cancel">
+					<input id ="info-cancel-btn" type="button" onclick="$('#info-review').fadeOut();" value="Cancel">
 					<input id ="info-submit-btn" type="button" value="Submit">
 				</div>
 			</div>
 			<div id="info-result">
 				<div id="info-thanks">
+					<img src="img/nycLogoDOE.png" atl="NYC Pre-K for All"><br>
 					Thank you for completing our Pre-K for All information form!  
 					Your submission is being sent to the Pre-K for All Outreach team, 
 					who will contact you soon.   You will also receive an email shortly 
 					confirming your submission.
 				</div>				
 				<input type="button" onclick="$('#info-result').fadeOut();" value="OK">			
+			</div>
+			<div id="info-fail">
+				<div>
+					<img src="img/error.png" atl="Error"><br>
+					There was an error processing your submission data.  Please try again.
+				</div>				
+				<input type="button" onclick="$('#info-fail').fadeOut();" value="OK">			
 			</div>
 		</div>
 		<script>
@@ -203,7 +211,9 @@
 					for (var d in data){
 						$("#info-rev-" + d).html(data[d].toString());
 					}
-					$("#info-review").fadeIn();
+					$("#info-review").fadeIn(function(){
+						$("#info-cancel-btn").focus();
+					});
 				},
 				applicationInterval: function(){
 					var start = APPLY_START_DATE, end = APPLY_END_DATE;
@@ -259,6 +269,7 @@
 				submit: function(){
 					var me = this, data = {id: 0, method: "apply", jsonrpc: "2.0", params:{action: "apply", formfields: this.formData()}};
 					me.submitting = true;
+					$("#info-review").addClass("loading");
 					$.ajax({
 						url: "https://nycenetstg.nycenet.edu/schoolsearch/services/SchoolRpc.ashx?rpc",
 						beforeSend: function(request){
@@ -272,14 +283,20 @@
 								this.error();
 								return;
 							}
+							$("#info-review").removeClass("loading");
 							$("form")[0].reset();					
 							$("#info-review").fadeOut(function(){
-								$("#info-result").fadeIn();
+								$("#info-result").fadeIn(function(){
+									$("#info-result input").focus();
+								});
 								me.submitting = false;						
 							});
 						},
 						error: function(){
-							alert("There was an error processing your submission data.  Please try again.");
+							$("#info-review").removeClass("loading");
+							$("#info-fail").fadeIn(function(){
+								$("#info-fail input").focus();
+							});
 							$("#info-review").fadeOut();
 							me.submitting = false;
 						}

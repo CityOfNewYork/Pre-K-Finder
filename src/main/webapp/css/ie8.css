@@ -37,3 +37,12 @@
 	color: white;
 	background-color: rgb(1,51,100);
 }
+#info-review, #info-result, #info-fail {
+	margin: 0 200px;
+}
+.info .ui-content {
+	height: 85%;
+}
+.ui-loader, .ui-icon-loading {
+	display: none !important;
+}

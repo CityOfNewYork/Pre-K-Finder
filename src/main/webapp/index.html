@@ -35,16 +35,18 @@
 	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76.png">
 	<link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152.png">
-	<!--[if lt IE 9]>
-		<link rel="stylesheet" href="css/ie8.css" type="text/css"> 
-		<script src="js/ie8.js"></script>
-	<![endif]-->
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	<script src="js/jq/jquery.csv.js"></script>
 	<script src="js/OpenLayers-2.13.1/OpenLayers.js"></script>
 	<script src="js/proj4js/proj4js-compressed.js"></script>
 	<script src="date_rules.js"></script>
+
+	<!--[if lt IE 9]>
+		<link rel="stylesheet" href="css/ie8.css" type="text/css"> 
+		<script src="js/ie8.js"></script>
+	<![endif]-->
+
 </head>
 <body class="firstLoad">
 	<div id="map-page" data-role="page" data-title="NYC Pre-K Finder">
@@ -172,7 +174,7 @@
 				Back to Finder
 			</a>
 		</div>
-		<div id="external-content" data-role="content"><iframe frameborder="0"></iframe></div>
+		<div id="external-content" data-role="content"><iframe></iframe></div>
 	</div>
 	<div id="callout-size-check"></div>
 	<script src="js/nyc/constants.js"></script>

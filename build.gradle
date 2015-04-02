@@ -62,7 +62,7 @@ ext{
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
 	addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
 
-	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'share.css', 'zoomsearch.css']
+	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'share.css', 'zoomsearch.css', 'info.css']
 
 	closureArgs = [
 		"--warning_level VERBOSE",
@@ -225,11 +225,13 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/control-common.css" type="text/css">', value: '')
 		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/share.css" type="text/css">', value: '')
 		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
+		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/info.css" type="text/css">', value: '')
 		ant.replace(file: 'build/webapp/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
 	}
 	copy {
 		from 'build/webapp/tmp'
 		include 'index.html'
+		include 'info.html'
 		include 'upk.csv'
 		include 'css/upk-min.css'
 		include 'css/ie8.css'
@@ -242,7 +244,6 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 		copy {
 			from 'build/webapp/tmp'
 			include 'date_rules.js'
-			include 'info.html'
 			include 'css/**'
 			into 'build/webapp'
 		}
