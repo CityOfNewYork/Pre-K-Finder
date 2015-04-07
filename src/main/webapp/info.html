@@ -217,7 +217,7 @@
 				},
 				applicationInterval: function(){
 					var start = APPLY_START_DATE, end = APPLY_END_DATE;
-					end.setDate(end.getDate() - 1);
+					end.setDate(end.getDate());
 					return MONTHS[start.getUTCMonth()] + " " +
 						start.getUTCDate() + " to " +
 						MONTHS[end.getUTCMonth()] + " " +
