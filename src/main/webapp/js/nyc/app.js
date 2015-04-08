@@ -326,39 +326,45 @@ nyc.App = (function(){
 			},
 			/** @private */
 			removeCallout: function(){
-				var f = this.upkList.feature(this.pop.fid);
 				$("#callout").remove();
-				f.renderIntent = "default";
+				if (this.pop.fid){
+					var f = this.upkList.feature(this.pop.fid);
+					f.renderIntent = "default";
+				    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
+					this.upkLayer.removeFeatures([f]);
+					this.upkLayer.addFeatures([f]);
+					$(this.upkLayer.div).trigger("click");
+				}
 			    this.pop = null;
-			    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
-				this.upkLayer.removeFeatures([f]);
-				this.upkLayer.addFeatures([f]);
-				$(this.upkLayer.div).trigger("click");
+			},
+			/** private **/
+			showPop: function(html, p, id){
+				var me = this,
+					checker = $("#callout-size-check"),
+					div = $("<div></div>").append(html);
+				    if (me.pop) me.removeCallout();
+					checker.html(div.html());	
+				    me.pop = new OpenLayers.Popup.FramedCloud(
+			    		"callout", 
+			    		new OpenLayers.LonLat(p.x, p.y), 
+			    		new OpenLayers.Size(checker.width(), checker.height()), 
+			    		div.html(), 
+			    		null, 
+			    		true, 
+			    		function(){me.removeCallout();}
+		    		);
+					me.pop.fid = id;
+					me.pop.autoSize = false;
+					me.pop.keepInMap = true;
+					me.map.addPopup(me.pop);				
+			    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
+			    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
+			    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
 			},
 			/** @private */
 			identify: function(feature){				
-				var me = this,
-					checker = $("#callout-size-check"),
-					div = $("<div></div>").append(feature.html("callout"));
-			    if (me.pop) me.removeCallout();
-				checker.html(div.html());	
-			    me.pop = new OpenLayers.Popup.FramedCloud(
-		    		"callout", 
-		    		new OpenLayers.LonLat(feature.geometry.x, feature.geometry.y), 
-		    		new OpenLayers.Size(checker.width(), checker.height()), 
-		    		div.html(), 
-		    		null, 
-		    		true, 
-		    		function(){me.removeCallout();}
-	    		);
-				me.upkTable.render(me.upkList, feature);		
-				me.pop.fid = feature.id;
-				me.pop.autoSize = false;
-				me.pop.keepInMap = true;
-				me.map.addPopup(me.pop);
-		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
-		    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
-		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
+			    this.showPop(feature.html("callout"), feature.geometry, feature.id);
+				this.upkTable.render(this.upkList, feature);		
 			},
 			/** @private */
 			updateCallout: function(){
@@ -419,14 +425,14 @@ $(document).ready(function(){
 
 	var wmsInfo  = new OpenLayers.Control.WMSGetFeatureInfo({
 	    url: SUBWAY_URLS[0], 
-	    drillDown:true,
+	    drillDown: true,
 	    queryVisible: true,
-	    maxFeatures:1,
-	    vendorParams:{buffer:15},
-	    layers:[subway],
-	    handlerOptions:{
-	    	click:{
-	    		pixelTolerance:50
+	    maxFeatures: 100,
+	    vendorParams:{buffer: 15},
+	    layers: [subway],
+	    handlerOptions: {
+	    	click: {
+	    		pixelTolerance: 50
 	    	}
 		},
 	    eventListeners: {
@@ -434,7 +440,7 @@ $(document).ready(function(){
 	            var p = map.getLonLatFromPixel(e.xy), 
 	            	txt = e.text;
 	            if (e.request.status == 200 && txt){
-	            	console.info(e);
+	            	nyc.app.showPop(txt, new OpenLayers.Geometry.Point(p.lon, p.lat));
 	            }else{
 	            	console.warn(e);
 	            }

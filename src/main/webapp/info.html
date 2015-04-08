@@ -217,9 +217,9 @@
 			};
 
 			window.TODAY = DEFAULT_DATES.TODAY;
-			window.MIN_DOB = localeDate("MIN_DOB");
-			window.MAX_DOB = localeDate("MAX_DOB");
-			window.DEFAULT_DOB_ENTRY = localeDate("DEFAULT_DOB_ENTRY");
+			window.MIN_DOB = localeDate("MIN_DOB").toISOString().split("T")[0];
+			window.MAX_DOB = localeDate("MAX_DOB").toISOString().split("T")[0];
+			window.DEFAULT_DOB_ENTRY = localeDate("DEFAULT_DOB_ENTRY").toISOString().split("T")[0];
 			window.PRE_K_REQUIRED_DOB_YEAR = window.PRE_K_REQUIRED_DOB_YEAR || DEFAULT_DATES.PRE_K_REQUIRED_DOB_YEAR;
 			window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
 			window.APPLY_START_DATE = localeDate("APPLY_START_DATE");
