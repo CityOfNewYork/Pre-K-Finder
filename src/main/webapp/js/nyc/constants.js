@@ -6,14 +6,6 @@
 	window.MONTHS = ["January", "February", "March", "April", "May", "June", "July",
 	                 "August", "September", "October", "November", "December"];
 	
-	var DEFAULT_DATES = {
-		TODAY: new Date(),
-		APPLY_START_DATE: "2015-03-16",
-		APPLY_END_DATE: "2015-04-25",
-		DEFAULT_DOB_ENTRY: "2011-01-01",
-		SCHOOL_YEAR: "2015-16"
-	};
-
 	var localeDate = function(dateVarName){
 		if (window.IE8) return ie8Date(dateVarName);
 		var invalidDateProvided = true;
@@ -29,11 +21,34 @@
 		return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
 	};
 	
+	var pad = function(number){
+		return number < 10 ? "0" + number : number + "";
+	};
+
+	var DEFAULT_DATES = {
+		TODAY: new Date(),
+		MIN_DOB: "2010-01-01",
+		MAX_DOB: (function(){
+			var today = new Date();
+			return today.getUTCFullYear() + "-" +
+				pad(today.getUTCMonth() + 1) + "-" +
+				pad(today.getUTCDate());
+		}()),
+		DEFAULT_DOB_ENTRY: "2011-01-01",
+		PRE_K_REQUIRED_DOB_YEAR: "2011",
+		SCHOOL_YEAR: "2015-16",
+		APPLY_START_DATE: "2015-03-16",
+		APPLY_END_DATE: "2015-04-25"
+	};
+
 	window.TODAY = DEFAULT_DATES.TODAY;
+	window.MIN_DOB = localeDate("MIN_DOB");
+	window.MAX_DOB = localeDate("MAX_DOB");
+	window.DEFAULT_DOB_ENTRY = localeDate("DEFAULT_DOB_ENTRY");
+	window.PRE_K_REQUIRED_DOB_YEAR = window.PRE_K_REQUIRED_DOB_YEAR || DEFAULT_DATES.PRE_K_REQUIRED_DOB_YEAR;
+	window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
 	window.APPLY_START_DATE = localeDate("APPLY_START_DATE");
 	window.APPLY_END_DATE = localeDate("APPLY_END_DATE");
-	window.DEFAULT_DOB_ENTRY = localeDate("DEFAULT_DOB_ENTRY");
-	window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
 
 }());
 
@@ -48,6 +63,7 @@ var UPK_SEARCH_BY_CHOICE = "Program name",
 	APPLY_URL = "//www.semsnycdoe.com/parentsite",
 	GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input=',
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],
+	SUBWAY_URLS = ["//csgis-stg-web.csc.nycnet/geowebcache/service/wms/"],
 	FEEDBACK_URL = '//www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml',
 	RESOLUTIONS = [434.027777777778, 303.819444444444, 222.222222222222, 111.111111111111, 55.5555555555556, 27.7777777777778, 13.8888888888889, 6.94444444444444, 3.47222222222222, 1.73611111111111, 0.868055555555556],
 	SIZE = new OpenLayers.Size(512, 512),

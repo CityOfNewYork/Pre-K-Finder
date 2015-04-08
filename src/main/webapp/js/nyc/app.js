@@ -390,7 +390,7 @@ $(document).ready(function(){
 		{
 		    tileOrigin: ORIGIN,
 		    resolutions: RESOLUTIONS,
-		    tileSize:SIZE,
+		    tileSize: SIZE,
 		    sphericalMercator: false,
 		    maxExtent: MAX_EXT,
 		    useArcGISServer: false,
@@ -399,9 +399,51 @@ $(document).ready(function(){
 		    projection: EPSG_2263,
 		    hexZoom: true
 	});
-	
 	map.addLayer(base);
 
+	var subway = new OpenLayers.Layer.WMS(
+		"Subway", 
+		SUBWAY_URLS,
+		{layers: "subway", format: "image/png"}, 
+		{
+			isBaseLayer: false, 
+			tileSize: SIZE, 
+			tileOrigin: ORIGIN, 
+			visibility: true, 
+			maxResolution: RESOLUTIONS[5], 
+			minResolution: RESOLUTIONS[10]
+		}
+	);
+	subway.setOpacity(0.7);
+	map.addLayer(subway);
+
+	var wmsInfo  = new OpenLayers.Control.WMSGetFeatureInfo({
+	    url: SUBWAY_URLS[0], 
+	    drillDown:true,
+	    queryVisible: true,
+	    maxFeatures:1,
+	    vendorParams:{buffer:15},
+	    layers:[subway],
+	    handlerOptions:{
+	    	click:{
+	    		pixelTolerance:50
+	    	}
+		},
+	    eventListeners: {
+	        getfeatureinfo: function(e) {
+	            var p = map.getLonLatFromPixel(e.xy), 
+	            	txt = e.text;
+	            if (e.request.status == 200 && txt){
+	            	console.info(e);
+	            }else{
+	            	console.warn(e);
+	            }
+	        }
+	    }
+	});
+	map.addControl(wmsInfo);
+	wmsInfo.activate();
+	
 	nyc.app = new nyc.App(
 		map, 
 		new nyc.Locate(map, new nyc.ZoomSearch('#main', map)), 
