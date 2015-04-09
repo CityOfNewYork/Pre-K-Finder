@@ -373,7 +373,7 @@ span.noshow {
 .olImageLoadError {
 	visibility: hidden !important;
 }
-#callout .subway-line, #callout .subway-trans {
+#callout .subway-line, #callout .subway-trans, #callout-size-check .subway-line, #callout-size-check t .subway-trans {
 	display: none;
 }
 @media only screen and (max-width : 360px) {
