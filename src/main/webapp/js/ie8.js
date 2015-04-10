@@ -9,8 +9,10 @@ var IE8_DEFAULT_DATES = {
 };
 
 function unIso(dateString){
-	var dateParts = dateString.split("-");
-	return dateParts[1] + "/" + dateParts[2] + "/" + dateParts[0];
+	if (typeof dateString == "string"){
+		var dateParts = dateString.split("-");
+		return dateParts[1] + "/" + dateParts[2] + "/" + dateParts[0];
+	}
 };
 
 function ie8Date(dateVarName){

@@ -188,7 +188,7 @@ nyc.upk.HtmlDecorator = {
 			.append(this.detailBtnHtml(infoId));
 	},
 	html: function(idPrefix){
-		var html = $("<div class='upkInfo'>"), infoId = idPrefix + this.id;
+		var html = $("<div class='upk-info'>"), infoId = idPrefix + this.id;
 		html.attr("id", infoId);
 		return html.append(this.nameHtml())
 			.append(this.noteHtml())

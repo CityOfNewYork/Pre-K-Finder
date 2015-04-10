@@ -32,7 +32,7 @@ nyc.App = (function(){
 		if (IOS) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
-				  me.toggle({target:$(".toggle-map")[0]});
+				  me.toggle({target: $(".toggle-map")[0]});
 			  }
 		});
 		
@@ -420,7 +420,7 @@ $(document).ready(function(){
 			minResolution: RESOLUTIONS[10]
 		}
 	);
-	subway.setOpacity(0.7);
+	subway.setOpacity(0.6);
 	map.addLayer(subway);
 
 	var wmsInfo  = new OpenLayers.Control.WMSGetFeatureInfo({
@@ -440,9 +440,11 @@ $(document).ready(function(){
 	            var p = map.getLonLatFromPixel(e.xy), 
 	            	txt = e.text;
 	            if (e.request.status == 200 && txt){
-	            	nyc.app.showPop(txt, new OpenLayers.Geometry.Point(p.lon, p.lat));
-	            }else{
-	            	console.warn(e);
+	            	var html;
+	            	$("#callout-size-check").html(txt);
+	            	$("#callout-size-check .subway-line, #callout-size-check .subway-trans").remove();
+	            	html = $("#callout-size-check").html();
+	            	if (html.trim()) nyc.app.showPop(html, new OpenLayers.Geometry.Point(p.lon, p.lat));
 	            }
 	        }
 	    }
