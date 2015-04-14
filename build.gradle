@@ -21,7 +21,6 @@ ext{
 	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 	
 	local_info_url = 'info.html'
-	local_info_ajax_url = 'https://nycenetstg.nycenet.edu/schoolsearch/services/SchoolRpc.ashx?rpc'
 	local_apply_url = '//www.semsnycdoe.com/parentsite?local'
 	local_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local'
 	local_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
@@ -29,7 +28,6 @@ ext{
 	local_date_rules = 'date_rules.js'
 	
 	dev_info_url = 'info.html' //TODO is there a dev url
-	dev_info_ajax_url = 'https://nycenetstg.nycenet.edu/schoolsearch/services/SchoolRpc.ashx?rpc' //TODO is there a dev url
 	dev_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a dev url
 	dev_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a dev url
 	dev_geoclient_url = '//csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
@@ -37,7 +35,6 @@ ext{
 	dev_date_rules = 'date_rules.js'
 
 	stg_info_url = '//nycenetstg.nycenet.edu/schoolsearch/info.html'
-	stg_info_ajax_url = 'https://nycenetstg.nycenet.edu/schoolsearch/services/SchoolRpc.ashx?rpc' //TODO is there a stg url
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
 	stg_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a stg url
 	stg_geoclient_url = '//csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
@@ -45,7 +42,6 @@ ext{
 	stg_date_rules = '//nycenetstg.nycenet.edu/schoolsearch/date_rules.js'
 	
 	prd_info_url = '//www.nycenet.edu/schoolsearch/info.html'
-	prd_info_ajax_url = 'https://www.nycenet.edu/schoolsearch/services/SchoolRpc.ashx?rpc'
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
 	prd_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm'
 	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
@@ -62,7 +58,7 @@ ext{
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
 	addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
 
-	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'share.css', 'zoomsearch.css', 'info.css']
+	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'share.css', 'zoomsearch.css']
 
 	closureArgs = [
 		"--warning_level VERBOSE",
@@ -105,11 +101,9 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	def geoUrl = project.ext["${env}_geoclient_url"]
 	def baseUrls = project.ext["${env}_basemap_urls"]
 	def dateRules = project.ext["${env}_date_rules"]
-	def ajaxUrl = project.ext["${env}_info_ajax_url"]
 
  	println "\nbuilding for env=${env}...\n"
  	println "INFO_URL=${infoUrl}"
- 	println "INFO_AJAX_URL=${ajaxUrl}"
  	println "APPLY_URL=${applyUrl}" 
  	println "DIRECTORY_URL=${directoryUrl}" 
  	println "DATE_RULES_URL=${dateRules}" 
@@ -124,7 +118,6 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	ant.replace(file: 'build/webapp/tmp/index.html', token: local_directory_url, value: directoryUrl)
 	ant.replace(file: 'build/webapp/tmp/index.html', token: local_apply_url, value: applyUrl)
 	ant.replace(file: 'build/webapp/tmp/index.html', token: local_date_rules, value: dateRules)
-	ant.replace(file: 'build/webapp/tmp/info.html', token: local_info_ajax_url, value: ajaxUrl)
 }
 
 task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
@@ -225,13 +218,11 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/control-common.css" type="text/css">', value: '')
 		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/share.css" type="text/css">', value: '')
 		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
-		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/info.css" type="text/css">', value: '')
 		ant.replace(file: 'build/webapp/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
 	}
 	copy {
 		from 'build/webapp/tmp'
 		include 'index.html'
-		include 'info.html'
 		include 'upk.csv'
 		include 'css/upk-min.css'
 		include 'css/ie8.css'
@@ -244,6 +235,7 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 		copy {
 			from 'build/webapp/tmp'
 			include 'date_rules.js'
+			include 'info.html'
 			include 'css/**'
 			into 'build/webapp'
 		}

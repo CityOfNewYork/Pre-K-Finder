@@ -146,9 +146,10 @@ span.noshow {
 	left: 3px;
 	top: 127px;
 }
-#callout .upkInfo, #callout-size-check {
+#callout .upk-info, #callout .subway-sta, #callout-size-check {
 	max-width: 290px;
-	min-height: 170px;	
+	min-width: 200px;
+	min-height: 100px;	
 }
 #callout-size-check {
 	position: absolute;
@@ -301,14 +302,14 @@ span.noshow {
 #list-table td {
 	padding: 3px;
 }
-#callout .upkInfo {
+#callout .upk-info {
 	margin: -3px 0 0 2px;
 }
 .phone {
 	height: 20px;
 	margin: 5px 0 0 0;
 }
-.upkInfo .directions, .upkInfo .phone {
+.upk-info .directions, .upk-info .phone {
 	font-weight: normal;
 	cursor: pointer;
 }
@@ -370,6 +371,12 @@ span.noshow {
 	left: 3px;
 	bottom: 0;
 	font-size: 12px;
+}
+.olImageLoadError {
+	visibility: hidden !important;
+}
+#callout .subway-line, #callout .subway-trans, #callout-size-check .subway-line, #callout-size-check t .subway-trans {
+	display: none;
 }
 @media only screen and (max-width : 360px) {
 	.banner h1 {

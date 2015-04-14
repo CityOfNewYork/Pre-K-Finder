@@ -32,7 +32,7 @@ nyc.App = (function(){
 		if (IOS) $("body").addClass("ios");		
 		$("#panel").panel({
 			  close: function(e, ui){
-				  me.toggle({target:$(".toggle-map")[0]});
+				  me.toggle({target: $(".toggle-map")[0]});
 			  }
 		});
 		
@@ -321,39 +321,45 @@ nyc.App = (function(){
 			},
 			/** @private */
 			removeCallout: function(){
-				var f = this.upkList.feature(this.pop.fid);
 				$("#callout").remove();
-				f.renderIntent = "default";
+				if (this.pop.fid){
+					var f = this.upkList.feature(this.pop.fid);
+					f.renderIntent = "default";
+				    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
+					this.upkLayer.removeFeatures([f]);
+					this.upkLayer.addFeatures([f]);
+					$(this.upkLayer.div).trigger("click");
+				}
 			    this.pop = null;
-			    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
-				this.upkLayer.removeFeatures([f]);
-				this.upkLayer.addFeatures([f]);
-				$(this.upkLayer.div).trigger("click");
+			},
+			/** private **/
+			showPop: function(html, p, id){
+				var me = this,
+					checker = $("#callout-size-check"),
+					div = $("<div></div>").append(html);
+				    if (me.pop) me.removeCallout();
+					checker.html(div.html());	
+				    me.pop = new OpenLayers.Popup.FramedCloud(
+			    		"callout", 
+			    		new OpenLayers.LonLat(p.x, p.y), 
+			    		new OpenLayers.Size(checker.width(), checker.height()), 
+			    		div.html(), 
+			    		null, 
+			    		true, 
+			    		function(){me.removeCallout();}
+		    		);
+					me.pop.fid = id;
+					me.pop.autoSize = false;
+					me.pop.keepInMap = true;
+					me.map.addPopup(me.pop);				
+			    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
+			    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
+			    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
 			},
 			/** @private */
 			identify: function(feature){				
-				var me = this,
-					checker = $("#callout-size-check"),
-					div = $("<div></div>").append(feature.html("callout"));
-			    if (me.pop) me.removeCallout();
-				checker.html(div.html());	
-			    me.pop = new OpenLayers.Popup.FramedCloud(
-		    		"callout", 
-		    		new OpenLayers.LonLat(feature.geometry.x, feature.geometry.y), 
-		    		new OpenLayers.Size(checker.width(), checker.height()), 
-		    		div.html(), 
-		    		null, 
-		    		true, 
-		    		function(){me.removeCallout();}
-	    		);
-				me.upkTable.render(me.upkList, feature);		
-				me.pop.fid = feature.id;
-				me.pop.autoSize = false;
-				me.pop.keepInMap = true;
-				me.map.addPopup(me.pop);
-		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
-		    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
-		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
+			    this.showPop(feature.html("callout"), feature.geometry, feature.id);
+				this.upkTable.render(this.upkList, feature);		
 			},
 			/** @private */
 			updateCallout: function(){
@@ -385,7 +391,7 @@ $(document).ready(function(){
 		{
 		    tileOrigin: ORIGIN,
 		    resolutions: RESOLUTIONS,
-		    tileSize:SIZE,
+		    tileSize: SIZE,
 		    sphericalMercator: false,
 		    maxExtent: MAX_EXT,
 		    useArcGISServer: false,
@@ -394,9 +400,53 @@ $(document).ready(function(){
 		    projection: EPSG_2263,
 		    hexZoom: true
 	});
-	
 	map.addLayer(base);
 
+	var subway = new OpenLayers.Layer.WMS(
+		"Subway", 
+		SUBWAY_URLS,
+		{layers: "subway", format: "image/png"}, 
+		{
+			isBaseLayer: false, 
+			tileSize: SIZE, 
+			tileOrigin: ORIGIN, 
+			visibility: true, 
+			maxResolution: RESOLUTIONS[5], 
+			minResolution: RESOLUTIONS[10]
+		}
+	);
+	subway.setOpacity(0.6);
+	map.addLayer(subway);
+
+	var wmsInfo  = new OpenLayers.Control.WMSGetFeatureInfo({
+	    url: SUBWAY_URLS[0], 
+	    drillDown: true,
+	    queryVisible: true,
+	    maxFeatures: 100,
+	    vendorParams:{buffer: 15},
+	    layers: [subway],
+	    handlerOptions: {
+	    	click: {
+	    		pixelTolerance: 50
+	    	}
+		},
+	    eventListeners: {
+	        getfeatureinfo: function(e) {
+	            var p = map.getLonLatFromPixel(e.xy), 
+	            	txt = e.text;
+	            if (e.request.status == 200 && txt){
+	            	var html;
+	            	$("#callout-size-check").html(txt);
+	            	$("#callout-size-check .subway-line, #callout-size-check .subway-trans").remove();
+	            	html = $("#callout-size-check").html();
+	            	if (html.trim()) nyc.app.showPop(html, new OpenLayers.Geometry.Point(p.lon, p.lat));
+	            }
+	        }
+	    }
+	});
+	map.addControl(wmsInfo);
+	wmsInfo.activate();
+	
 	nyc.app = new nyc.App(
 		map, 
 		new nyc.Locate(map, new nyc.ZoomSearch('#main', map)), 
