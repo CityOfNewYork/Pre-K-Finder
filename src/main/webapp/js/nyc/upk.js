@@ -175,7 +175,7 @@ nyc.upk.HtmlDecorator = {
 			url = INFO_URL;
 			title = INFO_TITLE;
 			anchorHtml.attr("data-url", url)
-				.attr("onclick", "$('body').pagecontainer('change', 'info.html', {transition: 'slideup'});");
+				.attr("onclick", "nyc.app.changePage(this, nyc.app);");
 		}
 		anchorHtml.html(title);
 		return infoApplyBtnHtml.append(anchorHtml);		
@@ -263,9 +263,9 @@ nyc.upk.List = (function(){
 					for (var decoration in decorator){
 						feature[decoration] = decorator[decoration];
 					}
-					me.allFeatures.push(feature);
-					me.filteredFeatures[feature.id] = feature;
 				});
+				me.allFeatures.push(feature);
+				me.filteredFeatures[feature.id] = feature;
 			});
 			this.ready = true;
 		},

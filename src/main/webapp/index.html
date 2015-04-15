@@ -57,7 +57,7 @@
 		        </a>
 				<div class="splash-message"></div>
 				<a class="splash-apply" data-role="button" href="//www.semsnycdoe.com/parentsite?local" target="_blank">I am ready to apply for Pre-K</a>
-				<a class="splash-info" data-role="button" onclick="$('#splash').fadeOut();$('body').pagecontainer('change', 'info.html', {transition: 'slideup'});">Get in Touch</a>
+				<a class="splash-info" data-role="button" onclick="nyc.app.changePage(this, nyc.app);$('#splash').fadeOut();" data-url="info.html">Get in Touch</a>
 				<a class="splash-continue" data-role="button" onclick="$('#splash').fadeOut();">Continue to Pre-K Finder map</a>
 				<a class="splash-directory" data-role="button" href="http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local" target="_blank">View the Pre-K Directory for more info</a>
 			</div>

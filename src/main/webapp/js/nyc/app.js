@@ -43,7 +43,9 @@ nyc.App = (function(){
 		});
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
 		$("#toggle").click(me.toggle);
-		$(share).on('feedback', $.proxy(me.feedback, me));
+		$(share).on('feedback', function(){
+			me.changePage(FEEDBACK_URL, me);
+		});
 		
 		me.map.zoomToExtent(NYC_EXT);			
 		me.map.events.register("featureover", map, me.hover);
@@ -168,10 +170,15 @@ nyc.App = (function(){
 					}
 				}
 			},
-			/** @private */
-			feedback: function(){
-				this.openPanel = this.isPanelOpen();
-				$("#external-page iframe").attr("src", $(btnUrl).data("url"));
+			/**
+			 * @export
+			 * @param {Element|string} btnUrl
+			 * @param {nyc.App} me
+			 */
+			changePage: function(btnUrl, me){
+				var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
+				me.openPanel = me.isPanelOpen();
+				$("#external-page iframe").attr("src", url);
 				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
 			},
 			/** @private */
