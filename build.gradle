@@ -23,7 +23,7 @@ ext{
 	local_info_url = 'info.html'
 	local_apply_url = '//www.semsnycdoe.com/parentsite?local'
 	local_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local'
-	local_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
+	local_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	local_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	local_subway_urls = '["//maps.nyc.gov/geowebcache/service/wms/", "//maps1.nyc.gov/geowebcache/service/wms/", "//maps2.nyc.gov/geowebcache/service/wms/", "//maps3.nyc.gov/geowebcache/service/wms/"]'
 	local_date_rules = 'date_rules.js'
@@ -31,7 +31,7 @@ ext{
 	dev_info_url = 'info.html' //TODO is there a dev url
 	dev_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a dev url
 	dev_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a dev url
-	dev_geoclient_url = '//csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
+	dev_geoclient_url = '//csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	dev_basemap_urls = '["//csgis-dev-web.csc.nycnet/gis/data/tiles/basic/"]'
 	dev_subway_urls = '["//csgis-dev-web.csc.nycnet/geowebcache/service/wms/"]'
 	dev_date_rules = 'date_rules.js'
@@ -39,7 +39,7 @@ ext{
 	stg_info_url = '//nycenetstg.nycenet.edu/schoolsearch/info.html'
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
 	stg_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a stg url
-	stg_geoclient_url = '//csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
+	stg_geoclient_url = '//csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	stg_basemap_urls = '["//csgis-stg-prx.csc.nycnet/gis/data/tiles/basic/"]'
 	stg_subway_urls = '["//csgis-stg-prx.csc.nycnet/geowebcache/service/wms/"]'
 	stg_date_rules = '//nycenetstg.nycenet.edu/schoolsearch/date_rules.js'
@@ -47,7 +47,7 @@ ext{
 	prd_info_url = '//www.nycenet.edu/schoolsearch/info.html'
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
 	prd_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm'
-	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=572204D6172746961&app_id=citymap-gis&input='
+	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	prd_subway_urls = '["//maps.nyc.gov/geowebcache/service/wms/", "//maps1.nyc.gov/geowebcache/service/wms/", "//maps2.nyc.gov/geowebcache/service/wms/", "//maps3.nyc.gov/geowebcache/service/wms/"]'
 	prd_date_rules = '//www.nycenet.edu/schoolsearch/date_rules.js'
@@ -103,6 +103,7 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	def directoryUrl = project.ext["${env}_directory_url"]
 	def applyUrl = project.ext["${env}_apply_url"]
 	def geoUrl = project.ext["${env}_geoclient_url"]
+	def subwayUrls = project.ext["${env}_subway_urls"]
 	def baseUrls = project.ext["${env}_basemap_urls"]
 	def dateRules = project.ext["${env}_date_rules"]
 
@@ -112,12 +113,14 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
  	println "DIRECTORY_URL=${directoryUrl}" 
  	println "DATE_RULES_URL=${dateRules}" 
  	println "GEOCLIENT_URL=${geoUrl}"
+ 	println "SUBWAY_URLS=${subwayUrls}"
  	println "BASEMAP_URLS=${baseUrls}\n"
 
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
 	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_info_url, value: infoUrl)
 	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
 	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
+	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_subway_urls, value: subwayUrls)
 	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
 	ant.replace(file: 'build/webapp/tmp/index.html', token: local_directory_url, value: directoryUrl)
 	ant.replace(file: 'build/webapp/tmp/index.html', token: local_apply_url, value: applyUrl)
