@@ -237,11 +237,16 @@
 			$("select").on("change",function(e){$(e.target).focus();});
 			$("#school_yr").html(SCHOOL_YEAR);
 			$("#birth_yr").html(PRE_K_REQUIRED_DOB_YEAR);
-			$("#application-interval").html(getApplicationInterval());
 			if (Modernizr.inputtypes.date){
 				$("#dob").attr("min", MIN_DOB)
-					.attr("max", MAX_DOB)
-					.val(DEFAULT_DOB_ENTRY);
+					.attr("max", MAX_DOB);
+			}
+			if (TODAY > APPLY_END_DATE){
+				$("#form-note").html(
+					'This form is only a statement of interest and not an application. ' +  
+					'Please only submit the form once per household.  An Enrollment Specialist will contact you shortly. ' + 
+					'For now, please visit <a href="http://nyc.gov/prek" target="_blank">nyc.gov/prek</a> for more information.'
+				);
 			}
 		});
 
@@ -286,16 +291,6 @@
 				$("#result").css("top", $("#review").position().top + "px");
 			});
 		};
-		
-		function getApplicationInterval(){
-			var start = new Date(APPLY_START_DATE), end = new Date(APPLY_END_DATE);
-			end.setDate(end.getDate() - 1);
-			return MONTHS[start.getUTCMonth()] + " " +
-				start.getUTCDate() + " to " +
-				MONTHS[end.getUTCMonth()] + " " +
-				end.getUTCDate() + ", " +
-				end.getUTCFullYear();
-		}
 		
 		function getDoeDob(dob){
 			var dob = dob || $("#dob").val();
@@ -474,11 +469,11 @@
 					<label for="email">Email address:</label>
 					<input id="email" name="email" type="text" required="true" pattern="[\w-]+@([\w-]+\.)+[\w-]+">
 				</div>
-				<div>
+				<div id="form-note">
 					Please note:  This form is only a statement of interest and not an application.
 					An Enrollment Specialist will contact you to assist you with your application shortly.
 					To apply directly please visit <a href="http://nyc.gov/prek" target="_blank">nyc.gov/prek</a> 
-					from <span id="application-interval"></span>.
+					from March 16 to April 24, 2015.
 				</div>
 				<input id="applyNow" type="button" value="Submit Info">
 			</form>
