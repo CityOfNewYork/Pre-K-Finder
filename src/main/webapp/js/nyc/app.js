@@ -469,11 +469,11 @@ $(document).ready(function(){
 
 	if (TODAY > APPLY_END_DATE){
 		$(".splash-message").html(
-			"All NYC children born in 2011 are eligible to attend pre-K in September 2015. " +
+			"All NYC children born in 2011 are eligible to attend pre-K in September 2015.<br><br>" +
 			"Complete the 'Get in Touch' form and an enrollment specialist will contact you with " +
-			"pre-K options for your child. You can also apply in the Round 2 application period from " +
-			"June 22 - July 10, 2015. Round 2 will include new pre-K programs at district schools and " +
-			"NYC Early Education Centers."
+			"pre-K options for your child.<br><br>" +
+			"You can also apply in the Round 2 application period from June 22 - July 10, 2015. " +
+			"Round 2 will include new pre-K programs at district schools and NYC Early Education Centers."
 		);
 	}
 	
