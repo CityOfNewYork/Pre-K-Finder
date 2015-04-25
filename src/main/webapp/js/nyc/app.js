@@ -466,23 +466,14 @@ $(document).ready(function(){
 		nyc.app.changePage(url);
 		$("#splash").fadeOut();
 	};
-	
-	(function(){
-		var dob = DEFAULT_DOB_ENTRY,
-			start = APPLY_START_DATE,
-			end = APPLY_END_DATE;
-		end.setDate(end.getDate() - 1);
+
+	if (TODAY > APPLY_END_DATE){
 		$(".splash-message").html(
-			"The Pre-K for All application for the " +
-			SCHOOL_YEAR + " school year is open from " +
-			MONTHS[start.getUTCMonth()] + " " +
-			start.getUTCDate() + " to " +
-			MONTHS[end.getUTCMonth()] + " " +
-			end.getUTCDate() +
-			". All New York City children born in " +
-			dob.getUTCFullYear() + " are eligible."
+			"All New York City children born in 2011 are eligible for Pre-K for the 2015-16 school year. " +
+			"Please click 'Get In Touch' and submit the contact form in order to be notified when the next " +
+			"citywide application period has opened."		
 		);
-	}());
+	}
 	
 	if (DO_APPLY){
 		$("#splash .splash-info").html(MORE_INFO_TITLE);
