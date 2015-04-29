@@ -23,7 +23,7 @@ div#splash-cont {
 	background-color: white;
 	border: 2px solid #013364;
 	border-radius: 0.6em;
-	width: 288px;
+	width: 350px;
 	margin: 50px auto;
 	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
 	max-height: calc(100% - 70px);
@@ -47,6 +47,9 @@ div#splash-cont {
 #splash .ui-btn:hover {
 	background-color: rgb(1,51,100);
 	color: white;
+}
+.splash-message div {
+	margin-bottom: 8px;
 }
 /* ======================== external ========================= */
 #external-page, #external-content, #external-page iframe {
@@ -414,6 +417,11 @@ span.noshow {
 	}
 	#callout-size-check .detail, #callout .detail {
 		display: none;
+	}
+}
+@media only screen and (max-width : 340px) {
+	div#splash-cont {
+		width: 288px;
 	}
 }
 @media only screen and (max-height : 360px) {

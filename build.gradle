@@ -70,8 +70,8 @@ ext{
 		//"--compilation_level SIMPLE_OPTIMIZATIONS",
 		"--externs etc/closure/openlayers2.js",
 		"--js_output_file build/webapp/js/nyc-min.js",
-		"build/webapp/tmp/js/nyc/*.js",
-		'--source_map_location_mapping "build/webapp/tmp/js/nyc/|nyc/"',
+		"build/tmp/js/nyc/*.js",
+		'--source_map_location_mapping "build/tmp/js/nyc/|nyc/"',
 		"--create_source_map build/webapp/js/nyc-min.js.map",
 		isWindows ? '--output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"' : '--output_wrapper "%output%//# sourceMappingURL=nyc-min.js.map"'
 	]
@@ -90,11 +90,11 @@ task makeArgs << {
 }
 
 task copyFiles(dependsOn: clean) << {
-	def build = new File('build/webapp/tmp')
+	def build = new File('build/tmp')
 	build.mkdirs()
 	copy {
 		from 'src/main/webapp'
-		into 'build/webapp/tmp' 
+		into 'build/tmp' 
 	}
 }
 
@@ -117,14 +117,14 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
  	println "BASEMAP_URLS=${baseUrls}\n"
 
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
-	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_info_url, value: infoUrl)
-	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
-	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
-	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_subway_urls, value: subwayUrls)
-	ant.replace(file: 'build/webapp/tmp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
-	ant.replace(file: 'build/webapp/tmp/index.html', token: local_directory_url, value: directoryUrl)
-	ant.replace(file: 'build/webapp/tmp/index.html', token: local_apply_url, value: applyUrl)
-	ant.replace(file: 'build/webapp/tmp/index.html', token: local_date_rules, value: dateRules)
+	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_info_url, value: infoUrl)
+	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
+	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
+	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_subway_urls, value: subwayUrls)
+	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
+	ant.replace(file: 'build/tmp/index.html', token: local_directory_url, value: directoryUrl)
+	ant.replace(file: 'build/tmp/index.html', token: local_apply_url, value: applyUrl)
+	ant.replace(file: 'build/tmp/index.html', token: local_date_rules, value: dateRules)
 }
 
 task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
@@ -153,9 +153,9 @@ task minifyScript(dependsOn: makeScriptAndExec)
 
 task minifyCss(dependsOn: [setEnv, clean, copyFiles]) << {
 	if (env != 'dev'){
-	def cssOut = new File('build/webapp/tmp/css/upk-min.css')
+	def cssOut = new File('build/tmp/css/upk-min.css')
 		orderedCssFiles.each{ cssFile ->
-			def css = file("build/webapp/tmp/css/${cssFile}").getText('UTF-8')
+			def css = file("build/tmp/css/${cssFile}").getText('UTF-8')
 			css = css.replaceAll(/[\n\r]+\s*/, '')
 			css = css.replaceAll(/\s+/, ' ')
 			css = css.replaceAll(/\s?([:,;{}])\s?/, '$1')
@@ -212,23 +212,23 @@ task cleanCsv(dependsOn: clean) << {
 
 task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
-	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
-	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
-	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/locate.js"></script>', value: '')
-	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/directions.js"></script>', value: '')
-	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/share.js"></script>', value: '')
-	ant.replace(file: 'build/webapp/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
-	ant.replace(file: 'build/webapp/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/locate.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/directions.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/share.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
 
 	if (env != 'dev'){
-		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/directions.css" type="text/css">', value: '')
-		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/control-common.css" type="text/css">', value: '')
-		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/share.css" type="text/css">', value: '')
-		ant.replace(file: 'build/webapp/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
-		ant.replace(file: 'build/webapp/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
+		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/directions.css" type="text/css">', value: '')
+		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/control-common.css" type="text/css">', value: '')
+		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/share.css" type="text/css">', value: '')
+		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
+		ant.replace(file: 'build/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
 	}
 	copy {
-		from 'build/webapp/tmp'
+		from 'build/tmp'
 		include 'index.html'
 		include 'upk.csv'
 		include 'css/upk-min.css'
@@ -240,7 +240,7 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 	}
 	if (env == 'dev'){
 		copy {
-			from 'build/webapp/tmp'
+			from 'build/tmp'
 			include 'date_rules.js'
 			include 'info.html'
 			include 'css/**'
