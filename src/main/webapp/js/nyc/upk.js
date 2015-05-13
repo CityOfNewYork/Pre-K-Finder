@@ -240,7 +240,7 @@ nyc.upk.HtmlDecorator = {
 				.attr("target", "_blank");
 		}else{
 			url = INFO_URL;
-			title = INFO_TITLE;
+			title = INFO_TITLE1;
 			anchorHtml.attr("data-url", url)
 				.attr("onclick", "nyc.app.changePage(this, nyc.app);");
 		}
@@ -408,7 +408,7 @@ nyc.upk.ListRenderer = (function(){
 					td1 = tr0.insertCell(1);
 				tr0.id = "table" + upk.id;
 				tr0.className = upk.type();
-				if (i % 2 == 0) $(tr0).addClass("oddRow");
+				if (i % 2 == 0) $(tr0).addClass("odd-row");
 				td0.className = "distCell";
 				td1.className = "upkCell";
 				td1.id = upk.id;
@@ -425,7 +425,7 @@ nyc.upk.ListRenderer = (function(){
 		},
 		/** @private */
 		adjContainerHeight: function(){
-			$("#list-container").height($("body").height() - $(".banner").height() - $("#filter").height() - $("#list-pager .ui-btn").height() + 15);
+			$("#list-container").height($(window).height() - $(".banner").height() - $("#filter").height() - 15);
 		},
 		/** @private */
 		more: function(){

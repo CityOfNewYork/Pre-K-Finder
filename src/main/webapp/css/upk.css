@@ -5,13 +5,86 @@ html, body, .ui-mobile .ui-page-active, #main, #splash {
 	padding: 0;
 	overflow: hidden;
 }
-html, body, div, span, a, input, input[data-type="search"], li {
+html, body, div, span, a, input, input[data-type="search"], li, .leaflet-container, .ui-btn, .ui-page-theme-a .ui-btn, .ui-page-theme-a .ui-btn:visited {
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	text-shadow: none !important;
 	color: rgb(1,51,100);
 }
-#map-page, #toggle {
-	position: fixed;
+a, div, span, td, .ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head+body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn: visited, html .ui-bar-a .ui-btn: visited, html .ui-body-a .ui-btn: visited, html body .ui-group-theme-a .ui-btn: visited, html head+body .ui-btn.ui-btn-a:visited {
+	color: #013364;
 }
+.ui-page-theme-a .ui-btn.ui-btn-active, html .ui-bar-a .ui-btn.ui-btn-active, html .ui-body-a .ui-btn.ui-btn-active, html body .ui-group-theme-a .ui-btn.ui-btn-active, html head+body .ui-btn.ui-btn-a.ui-btn-active, .ui-page-theme-a .ui-checkbox-on:after, html .ui-bar-a .ui-checkbox-on:after, html .ui-body-a .ui-checkbox-on:after, html body .ui-group-theme-a .ui-checkbox-on:after, .ui-btn.ui-checkbox-on.ui-btn-a:after, .ui-page-theme-a .ui-flipswitch-active, html .ui-bar-a .ui-flipswitch-active, html .ui-body-a .ui-flipswitch-active, html body .ui-group-theme-a .ui-flipswitch-active, html body .ui-flipswitch.ui-bar-a.ui-flipswitch-active, .ui-page-theme-a .ui-slider-track .ui-btn-active, html .ui-bar-a .ui-slider-track .ui-btn-active, html .ui-body-a .ui-slider-track .ui-btn-active, html body .ui-group-theme-a .ui-slider-track .ui-btn-active, html body div.ui-slider-track.ui-body-a .ui-btn-active {
+	background-color: #80b34e;
+}
+#main {
+	width: 100%;
+	height: 100%;
+}
+#map {
+	position: absolute;
+	width: 100%;
+	height: calc(100% - 45px);
+	top: 45px;
+}
+span.noshow {
+	display: none;
+}
+.olFramedCloudPopupContent {
+	padding: 0;
+}
+.olControlZoom {
+	display: none;
+}
+.olImageLoadError {
+	visibility: hidden !important;
+}
+/* ========================== begin panel ======================== */
+
+#panel {
+    position: fixed;
+	width: 320px;
+	top: 45px;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.5);
+}
+.ui-panel-dismiss {
+	z-index: 999;
+	margin-right: 85px;
+}
+.ui-panel-inner {
+	padding: 0;
+}
+
+/* =========================== end panel ========================= */
+
+
+/* ======================= begin first load ======================== */
+
+#first-load {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #E8E8E8;
+	z-index: 1000000;
+}
+#first-load td {
+	text-align: center;
+}
+#first-load p {
+	font-size: 34px;
+	font-weight: bold;
+	color: black;
+	text-align: center;
+	margin-top: -14px;
+}
+
+/* ======================= end first load ======================== */
+
 
 /* ======================== begin splash ========================= */
 
@@ -29,7 +102,7 @@ div#splash-cont {
 	background-color: white;
 	border: 2px solid #013364;
 	border-radius: 0.6em;
-	width: 350px;
+	width: 288px;
 	margin: 50px auto;
 	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.5);
 	max-height: calc(100% - 70px);
@@ -60,17 +133,106 @@ div#splash-cont {
 	background-color: rgb(1,51,100);
 	color: white;
 }
-.ui-btn:after {
-  background-color: rgba(1,51,100,0.5);
-}
-.splash-message div {
-	margin-bottom: 8px;
-}
 
 /* ========================= end splash ========================== */
 
 
-/* ======================== external ========================= */
+/* ========================= begin banner ======================== */
+
+.banner {
+	background-color: #013364 !important;
+	height: 44px;
+}
+.banner-doe-logo {
+	height: 24px;
+	cursor: pointer;
+	position: absolute;
+	left: 3px;
+	top: 10px;
+}
+.banner h1, .banner-school-yr {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.banner h1 {
+	color: white;
+	margin: -9px 0 0 0 !important;
+	cursor: pointer;
+	font-size: 24px !important;
+	font-weight: bold !important;
+	text-align: left !important;
+	position: absolute;
+	left: 80px;
+	top: -7px;
+}
+.banner-school-yr {
+	position: absolute;
+	z-index: 1000;
+	left: 80px;
+	top: 27px;
+}
+.banner-school-yr, .school-yr {
+	color: white;
+	font-size: 12px;
+}
+
+/* ========================== end banner ========================= */
+
+
+/* ===================== begin header buttons ==================== */
+
+.hdr-btn {
+	top: 4px;
+}
+.ui-page-theme-a .hdr-btn, .ui-page-theme-a #toggle button {
+	font-size: 12.5px;
+}
+.ui-btn:after {
+	background-color: rgba(1,51,100,0.5);
+}
+#toggle {
+	position: absolute;
+	right: 3px;
+	top: -2px;
+	z-index: 1000;
+	white-space: nowrap;
+}
+#map-page, #toggle {
+	position: fixed;
+}
+
+/* ====================== end header buttons ===================== */
+
+
+/* ===================== begin other buttons ===================== */
+
+.ctl-tbn:hover, .upk-action a:hover, #alert .ui-btn:hover, #list-more:hover, #back:hover {
+	background-color: #013364 !important;
+	color: white !important;
+	text-shadow: none !important;
+}
+.ui-btn:hover:after {
+	background-color: rgb(1,51,100);
+}
+#alert .ui-btn, #list-more, #back {
+	width: 44px;
+	height: 20px;
+	padding: 12px 0;
+	text-align: center;
+	vertical-align: middle;
+	margin: auto;
+	text-shadow: none;
+	background-color: rgba(1,51,100,0.5) !important;
+	color: white;
+	border-radius: 0.6em;	
+}
+
+/* ====================== end other buttons ====================== */
+
+
+/* ===================== begin external page ===================== */
+
 #external-page, #external-content, #external-page iframe {
 	padding: 0;
 	width: 100%;
@@ -84,85 +246,209 @@ div#splash-cont {
 	height: 2000px;
 	overflow: hidden !important;
 }
-/* ======================== external ========================= */
-body.firstLoad, #iframeContainer.firstLoad {
-	background-image: url(../img/firstLoad.gif);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-color: #E8E8E8;
+
+/* ====================== end external page ====================== */
+
+
+/* ========================= begin filter ======================== */
+
+#filter-type .type-icon {
+	margin: 1px 5px -5px -1px;
 }
-/* comment out above this rule to show apply buttons */
+#filter {
+	margin: 3px 5px;
+	border-radius: 0.6em;
+}
+#filter .ui-collapsible-content {
+	padding: 1px 20px 0 20px;
+}
+#filter h3 a {
+	text-align: center;
+}
+#filter h3 a:after {
+	background-image: url(../img/filter.png);
+	background-size: 12px;
+	background-color: #f8993a;
+}
+#filter label.ui-checkbox-on:after {
+	background-color: #80b34e;
+}
+#filter-type .ui-controlgroup-controls, #filter-day .ui-controlgroup-controls {
+	width: 100%;	
+}
+#filter-type a, #filter-day a {
+    font-size: 13px;
+    height: 30px;
+    width: 32%;
+    padding: 5px 0 8px 0;
+}
+label[for="filter-type-doe"] {
+	text-transform: capitalize;
+}
+
+/* ========================== end filter ========================= */
+
+/* ======================== begin upk list ======================= */
+
+#list-container {
+	overflow: auto;
+}
+#list-table {
+	border-collapse: collapse;
+	width: 100%;
+}
+#list-table td {
+	padding: 3px;
+}
+.upk-info .directions, .upk-info .phone {
+	font-weight: normal;
+	cursor: pointer;
+}
+.odd-row {
+	background-color: rgba(1,51,100,0.1);
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+.distCell {
+	text-align: center;
+	width: 35px;
+}
+#list-more {
+	height: 44px;
+	margin: 5px;
+	width:  calc(100% - 10px);
+}
+
+/* ========================= end upk list ======================== */
+
+
+/* ======================== begin upk info ======================= */
+
+.name {
+	font-weight: bold;
+}
+.phone {
+	height: 20px;
+	margin: 5px 0 0 0;
+}
 .note {
 	color: red;
 }
-#ol-popup-preload {
-	position: absolute;
-	left: -5000px;
-	top: -5000px;
-	visibility: hidden;
-	z-index: -1;
+.callout .upk-info {
+	max-width: 290px;
+	min-width: 200px;
+	min-height: 100px;	
 }
-a, div, span, td, .ui-page-theme-a .ui-btn, html .ui-bar-a .ui-btn, html .ui-body-a .ui-btn, html body .ui-group-theme-a .ui-btn, html head+body .ui-btn.ui-btn-a, .ui-page-theme-a .ui-btn: visited, html .ui-bar-a .ui-btn: visited, html .ui-body-a .ui-btn: visited, html body .ui-group-theme-a .ui-btn: visited, html head+body .ui-btn.ui-btn-a:visited {
-	color: #013364;
+.type-icon {
+	width: 20px;
+	height: 20px;
+	margin: 2px 12px -2px -32px;
 }
-.ui-page-theme-a .ui-btn.ui-btn-active, html .ui-bar-a .ui-btn.ui-btn-active, html .ui-body-a .ui-btn.ui-btn-active, html body .ui-group-theme-a .ui-btn.ui-btn-active, html head+body .ui-btn.ui-btn-a.ui-btn-active, .ui-page-theme-a .ui-checkbox-on:after, html .ui-bar-a .ui-checkbox-on:after, html .ui-body-a .ui-checkbox-on:after, html body .ui-group-theme-a .ui-checkbox-on:after, .ui-btn.ui-checkbox-on.ui-btn-a:after, .ui-page-theme-a .ui-flipswitch-active, html .ui-bar-a .ui-flipswitch-active, html .ui-body-a .ui-flipswitch-active, html body .ui-group-theme-a .ui-flipswitch-active, html body .ui-flipswitch.ui-bar-a.ui-flipswitch-active, .ui-page-theme-a .ui-slider-track .ui-btn-active, html .ui-bar-a .ui-slider-track .ui-btn-active, html .ui-body-a .ui-slider-track .ui-btn-active, html body .ui-group-theme-a .ui-slider-track .ui-btn-active, html body div.ui-slider-track.ui-body-a .ui-btn-active {
-	background-color: #80b34e;
-}
-.firstLoad div {
-	visibility: hidden;
-}
-span.noshow {
+.callout .type-icon {
 	display: none;
 }
-.banner {
-	background-color: #013364 !important;
-	height: 44px;
+.upk-detail {
+	margin: 5px 5px 0 0;
+	padding: 5px;
+	border-radius: 0.6em;
+	border: 1px solid rgba(1,51,100,0.5);
+	background-color: rgba(1,51,100,0.1);
 }
-.banner-doe-logo {
-	height: 24px;
+.email, .web {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 242px;
+	margin: 10px 0;
+}
+.web a {
+	text-decoration: underline;
 	cursor: pointer;
-	position: absolute;
-	left: 3px;
-	top: 10px;
 }
-.banner h1 {
-	margin: -9px 0 0 0 !important;
-	color: white;
-	cursor: pointer;
-	font-size: 24px !important;
-	font-weight: bold !important;
-	text-align: left !important;
-	position: absolute;
-	left: 80px;
-	top: -7px;
+.upk-detail ul {
+	margin: 0 0 3px 0;
 }
-.banner-school-yr {
-	position: absolute;
-	z-index: 1000;
-	color: white;
+.upk-detail li {
+	margin-left: -25px;
 	font-size: 12px;
-	left: 80px;
-	top: 27px;
 }
-#toggle {
-	position: absolute;
-	right: 3px;
-	top: -4px;
+.callout .map, .upk-detail, #list-table .directions {
+	display: none;
+}
+.upk-action {
+	font-weight: bold;
+	cursor: pointer;
+	width: 100%;
+	margin: 10px 0 0;
+}
+.upk-action div.directions, .upk-action div.map, .upk-action div.apply {
+    margin: 0 5px 0 0;
+}
+.upk-action div{
+	display: inline-block;
+}
+.upk-action a {
+	padding: 12px 9px;
+	margin: 0;
+	border-radius: 0.6em;
+}
+.odd-row .upk-action a, .odd-row .upk-action a:visited {
+	background-color: white;
+}
+.odd-row .upk-detail {
+	background-color: white;
+}
+
+/* ========================= end upk info ======================== */
+
+
+/* ========================= begin alert ========================= */
+
+#alert {
+	position: relative;
+	margin: 100px auto;
+	width: 303px;
+	border-radius: 0.6em;
+	border: 1px solid lightgrey;
+	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
+	display: none;
+	background-color: white;
+	padding: 5px;
 	z-index: 1000;
-	white-space: nowrap;
+	min-height: 74px;
 }
-#toggle a {
-	padding: 9px 14px;
+.alert-msg {
+	text-align: center;	
+	margin: 0 0 5px 0;
 }
-#main {
-	width: 100%;
-	height: 100%;
+
+/* ========================== end alert ========================== */
+
+
+/* ======================= begin copyright ======================= */
+
+#copyright {
+	left: 3px;
+	bottom: 0;
+	background-color: rgba(255,255,255,0.5);
 }
-#map {
-	position: absolute;
-	width: 100%;
-	height: calc(100% - 45px);
-	top: 45px;
+#copyright, #copyright a {
+	font-size: 12px !important;
+	font-weight: normal !important;
+}
+
+/* ======================== end copyright ======================== */
+
+
+/* ============== begin cartodb infowindow/tooltip =============== */
+
+#callout .subway-line, #callout .subway-trans, #callout-size-check .subway-line, #callout-size-check t .subway-trans {
+	display: none;
+}
+#callout {
+	max-width: 320px;
+}
+#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1, #callout_FrameDecorationDiv_2, #callout_FrameDecorationDiv_3 {
+	max-width: 300px;
 }
 #callout .upk-info, #callout .subway-sta, #callout-size-check {
 	max-width: 290px;
@@ -171,18 +457,14 @@ span.noshow {
 }
 #callout-size-check {
 	position: absolute;
-	left: -2000px;
-	top: -2000px;
+	left: 100px;
+	top: 100px;
 	visibility: hidden;
 	z-index: -1;
+	padding: 5px;
 }
 #callout-size-check .map {
 	display: none;
-}
-.type-icon {
-	width: 20px;
-	height: 20px;
-	margin: 2px 12px -2px -32px;
 }
 #callout_close {
 	background-color: rgba(1,51,100,0.5);
@@ -200,202 +482,12 @@ span.noshow {
 #callout .type-icon {
 	display: none;
 }
-.upk-detail {
-	margin: 5px 5px 0 0;
-	padding: 5px;
-	border-radius: 0.6em;
-	border: 1px solid rgba(1,51,100,0.5);
-	background-color: rgba(1,51,100,0.1);
-	font-size: 14px;
-}
-.email, .web {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: 242px;
-}
-.web a {
-	text-decoration: underline;
-	cursor: pointer;
-}
-.oddRow .upk-detail {
-	background-color: white;
-}
-.upk-detail ul {
-	margin: 0 0 3px 0;
-	font-size: 12px;
-}
-.upk-detail li {
-	margin-left: -25px;
-}
-.email, .web {
-	margin: 10px 0;
-}
-#callout .map, .upk-detail, #list-table .directions {
-	display: none;
-}
-.olFramedCloudPopupContent {
-	padding: 0;
-}
-.upkAction {
-	font-weight: bold;
-	cursor: pointer;
-}
-.upkAction {
-	width: 100%;
-}
-.upkAction a {
-	padding: 12px 9px;
-	margin: 10px 0 0 0;
-	border-radius: 0.6em;
-}
-.oddRow .upkAction a {
-	background-color: white !important;
-}
 
-#filter-type .type-icon {
-	margin: 0 60px 0 0;
-	float: right;
-}
-.ctl-tn:hover, .upkAction a:hover, #alert .ui-btn:hover, #list-pager .ui-btn:hover, #back:hover {
-	background-color: #013364 !important;
-	color: white !important;
-	text-shadow: none !important;
-}
-#panel {
-    position: fixed;
-	width: 320px;
-	top: 45px;
-	right: 0;
-	bottom: 0;
-	z-index: 1000;
-}
-#list-container {
-	overflow: auto;
-}
-.ui-panel-dismiss {
-	z-index: 999;
-	margin-right: 50px;
-}
-#filter {
-	margin: 3px 5px;
-	border-radius: 0.6em;
-}
-#filter .ui-collapsible-content {
-	padding: 1px 20px 0 20px;
-}
-#filter h3 a {
-	text-align: center;
-}
-#filter h3 a:after {
-	background-image: url(../img/filter.png);
-	background-size: 12px;
-	background-color: #f8993a;
-}
+/* =============== end cartodb infowindow/tooltip ================ */
 
-#filter label.ui-checkbox-on:after {
-	background-color: #80b34e;
-}
-#filter-type .ui-controlgroup-controls, #filter-day .ui-controlgroup-controls {
-	width: 100%;	
-}
-#filter-type a, #filter-day a {
-    font-size: 13px;
-    height: 30px;
-    width: 32%;
-    padding: 5px 0 8px 0;
-}
-#allTypes,  #filter-day a {
-	padding: 13px 0 0 0 !important;
-}
-.ui-btn {
-	font-size: 14px;
-}
-.ui-panel-inner {
-	padding: 0;
-}
-#list-table {
-	border-collapse: collapse;
-	width: 100%;
-}
-#list-table td {
-	padding: 3px;
-}
-#callout .upk-info {
-	margin: -3px 0 0 2px;
-}
-.phone {
-	height: 20px;
-	margin: 5px 0 0 0;
-}
-.upk-info .directions, .upk-info .phone {
-	font-weight: normal;
-	cursor: pointer;
-}
-.oddRow {
-	background-color: rgba(1,51,100,0.1);
-	border-top: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-}
-.distCell {
-	text-align: center;
-	width: 35px;
-}
-.addr {
-	text-transform: capitalize;
-}
-.name {
-	font-weight: bold;
-}
-.olControlZoom {
-	display: none;
-}
-#alert {
-	position: relative;
-	margin: 100px auto;
-	width: 303px;
-	border-radius: 0.6em;
-	border: 1px solid lightgrey;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	display: none;
-	background-color: white;
-	padding: 5px;
-	z-index: 1000;
-	min-height: 74px;
-}
-.alert-msg {
-	text-align: center;	
-	margin: 0 0 5px 0;
-}
-#alert .ui-btn, #list-pager .ui-btn, #back {
-	width: 44px;
-	height: 20px;
-	padding: 12px 0;
-	text-align: center;
-	vertical-align: middle;
-	margin: auto;
-	text-shadow: none;
-	background-color: rgba(1,51,100,0.5) !important;
-	color: white;
-	border-radius: 0.6em;	
-}
-#list-pager {
-	width: 100%;
-	padding: 5px 7px 5px 5px;
-}
-#list-pager .ui-btn {
-	width: 100%;
-}
-#copyright {
-	left: 3px;
-	bottom: 0;
-	font-size: 12px;
-}
-.olImageLoadError {
-	visibility: hidden !important;
-}
-#callout .subway-line, #callout .subway-trans, #callout-size-check .subway-line, #callout-size-check t .subway-trans {
-	display: none;
-}
+
+/* ===================== begin media queries ===================== */
+
 @media only screen and (max-width : 360px) {
 	.banner h1 {
 		font-size: 16px !important;
@@ -412,32 +504,40 @@ span.noshow {
 	#external-page .banner-school-yr {
 		display: none;
 	}
-	#toggle a {
+	#toggle button {
 		padding: 9px 12.5px;
+	}
+	#copyright, #copyright a {
+	  font-size: 8px !important;
+	}
+	#copyright {
+		maging-bottom: 3px;
 	}
 }
 @media only screen and (max-width : 495px), screen and (max-height: 350px) {
 	#panel {
 		width: 100%;
 	}
+	#list-more{
+		margin: 5px 5px 5px 46px;
+		width: calc(100% - 51px);
+	}
 	.ui-panel-dismiss {
 		display: none;
 	}
-	.upkAction a:hover {
+	.upk-action a:hover {
 		background-color: #f6f6f6 !important;
 		color: #013364 !important;
 	}
-	.oddRow .upkAction a:hover {
+	.odd-row .upk-action a:hover {
 		background-color: white !important;
+	}
+	.callout .detail {
+		display: none;
 	}
 	#callout-size-check .detail, #callout .detail {
 		display: none;
-	}
-}
-@media only screen and (max-width : 340px) {
-	div#splash-cont {
-		width: 288px;
-	}
+	}	
 }
 @media only screen and (max-height : 360px) {
 	div#splash-cont {
@@ -449,3 +549,5 @@ span.noshow {
 		overflow: auto;
 	}
 }
+
+/* ====================== end media queries ====================== */

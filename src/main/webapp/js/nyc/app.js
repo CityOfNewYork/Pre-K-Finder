@@ -86,7 +86,7 @@ nyc.App = (function(){
 					})(),
 					eventListeners:{
 					    featuresadded: function(){
-							$("body").removeClass("firstLoad");
+							$("#first-load").remove();
 						}
 					}
 				});
@@ -372,7 +372,7 @@ nyc.App = (function(){
 				    me.pop = new OpenLayers.Popup.FramedCloud(
 			    		"callout", 
 			    		new OpenLayers.LonLat(p.x, p.y), 
-			    		new OpenLayers.Size(checker.width(), checker.height()), 
+			    		new OpenLayers.Size(checker[0].offsetWidth, checker[0].offsetHeight), 
 			    		div.html(), 
 			    		null, 
 			    		true, 
@@ -395,7 +395,10 @@ nyc.App = (function(){
 			updateCallout: function(){
 				var pop = this.pop;
 				if (pop){
-					pop.updateSize();
+					var h = $("#callout .upk-info").height();
+					$("#callout").height(h + 52);
+					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").css("height", h + "px");
+					$("#callout_contentDiv").css("height", "100%");
 					pop.panIntoView();
 				}
 			}
@@ -486,6 +489,13 @@ $(document).ready(function(){
 		new nyc.upk.ListRenderer(), 
 		new nyc.Share('#main')
 	); 
+
+	/*
+	 * resize callout for language changes
+	 */
+	setInterval(function(){
+		nyc.app.updateCallout();		
+	}, 200);
 
 	var changePage = function(url){
 		nyc.app.changePage(url);
