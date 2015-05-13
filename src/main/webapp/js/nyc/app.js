@@ -502,12 +502,13 @@ $(document).ready(function(){
 		$("#splash").fadeOut();
 	};
 	
-	if (GET_IN_TOUCH_ONLY) $("#splash .splash-apply, #splash .splash-directory").hide();
+	if (GET_IN_TOUCH_ONLY) $("#splash .splash-apply, #splash .splash-directory, #filter-appy").hide();
 	$(".splash-message").html(SPLASH_MSG);
 	$("#splash .splash-info").html(INFO_TITLE);	
 	$("#splash .splash-info").data("url", INFO_URL);
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();
+	
 	
 	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
 	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);

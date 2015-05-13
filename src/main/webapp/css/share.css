@@ -1,7 +1,8 @@
 #share-btn {
-	top: auto;
+	position: fixed;
 	left: 3px;
 	bottom: 10px;
+	background-image: url(../img/share.png);
 }
 #share-btn.ctl-btn, #share-btns .ctl-btn {
 	padding: 0;
@@ -20,9 +21,6 @@
 	position: relative;
 	display: inline-block;
 	margin: 0 2px 0 3px;
-}
-#share-btn {
-	background-image: url(../img/share.png);
 }
 #feedback-btn {
 	background-image: url(../img/feedback.png);

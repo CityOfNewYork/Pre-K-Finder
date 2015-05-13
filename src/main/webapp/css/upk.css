@@ -482,7 +482,9 @@ label[for="filter-type-doe"] {
 #callout .type-icon {
 	display: none;
 }
-
+#ol-popup-preload {
+	visibility: hidden;
+}
 /* =============== end cartodb infowindow/tooltip ================ */
 
 

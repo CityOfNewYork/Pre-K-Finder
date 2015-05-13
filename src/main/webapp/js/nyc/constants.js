@@ -4,7 +4,7 @@ function localeDate(dateString){
 	return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
 };
 
-var TODAY = localeDate("2015-06-22"),
+var TODAY = localeDate(),
 	GET_IN_TOUCH_ONLY = TODAY < localeDate("2015-06-22") || TODAY > localeDate("2015-07-11"),
 	SPLASH_MSG1 = "<div>All NYC children born in 2011 are eligible to attend pre-K in September 2015.</div><div>Complete the 'Get in Touch' form and an enrollment specialist will contact you with pre-K options for your child.</div>You can also apply in the Round 2 application period from June 22 - July 10, 2015. Round 2 will include new pre-K programs at district schools and NYC Early Education Centers.",
 	SPLASH_MSG2 = "Some other message!",
@@ -16,7 +16,7 @@ var TODAY = localeDate("2015-06-22"),
 	UPK_SEARCH_BY_CHOICE = "Program name or location code",
 	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name or code...",
 	APPLY_TITLE = "Apply Now",
-	INFO_URL = "info.html",
+	INFO_URL = "doe/info.html",
 	APPLY_URL = "//www.semsnycdoe.com/parentsite",
 	GEOCLIENT_URL = "//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input=",
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],

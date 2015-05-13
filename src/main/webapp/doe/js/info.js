@@ -1,4 +1,4 @@
-var TODAY = localeDate("2015-06-22");
+var TODAY = localeDate();
 var GET_IN_TOUCH_ONLY = TODAY < localeDate("2015-06-22") || TODAY > localeDate("2015-07-11");
 var FORM_MSG1 = "This form is only a statement of interest and not an application. Please only submit the form once per household. An Enrollment Specialist will contact you shortly. For now, please visit <a href='http://nyc.gov/prek' target='_blank'>nyc.gov/prek</a> for more information.";
 var FORM_MSG2 = "Some other message!";
