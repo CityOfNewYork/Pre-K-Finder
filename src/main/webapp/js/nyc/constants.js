@@ -1,67 +1,24 @@
-/* 
- * Set all global date strings and date-like strings 
- * set by DOE in date_rules.js
- */
-(function(){
-	window.MONTHS = ["January", "February", "March", "April", "May", "June", "July",
-	                 "August", "September", "October", "November", "December"];
-	
-	var localeDate = function(dateVarName){
-		if (window.IE8) return ie8Date(dateVarName);
-		var invalidDateProvided = true;
-		if (window[dateVarName]){
-			try{
-				var dateYr = new Date(window[dateVarName]);
-				invalidDateProvided = isNaN(dateYr.getFullYear());
-			}catch(ignore){
-				invalidDateProvided = true;
-			}
-		}
-		var utcDate = new Date(invalidDateProvided ? DEFAULT_DATES[dateVarName] : window[dateVarName]);
-		return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
-	};
-	
-	var pad = function(number){
-		return number < 10 ? "0" + number : number + "";
-	};
+function localeDate(dateString){
+	if (window.IE8) return ie8Date(dateString);
+	var utcDate = dateString ? new Date(dateString) : new Date();
+	return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
+};
 
-	var DEFAULT_DATES = {
-		TODAY: new Date(),
-		MIN_DOB: "2010-01-01",
-		MAX_DOB: (function(){
-			var today = new Date();
-			return today.getUTCFullYear() + "-" +
-				pad(today.getUTCMonth() + 1) + "-" +
-				pad(today.getUTCDate());
-		}()),
-		DEFAULT_DOB_ENTRY: "2011-01-01",
-		PRE_K_REQUIRED_DOB_YEAR: "2011",
-		SCHOOL_YEAR: "2015-16",
-		APPLY_START_DATE: "2015-03-16",
-		APPLY_END_DATE: "2015-04-25"
-	};
-
-	window.TODAY = DEFAULT_DATES.TODAY;
-	window.MIN_DOB = localeDate("MIN_DOB");
-	window.MAX_DOB = localeDate("MAX_DOB");
-	window.DEFAULT_DOB_ENTRY = localeDate("DEFAULT_DOB_ENTRY");
-	window.PRE_K_REQUIRED_DOB_YEAR = window.PRE_K_REQUIRED_DOB_YEAR || DEFAULT_DATES.PRE_K_REQUIRED_DOB_YEAR;
-	window.SCHOOL_YEAR = window.SCHOOL_YEAR || DEFAULT_DATES.SCHOOL_YEAR;
-	window.APPLY_START_DATE = localeDate("APPLY_START_DATE");
-	window.APPLY_END_DATE = localeDate("APPLY_END_DATE");
-
-}());
-
-var UPK_SEARCH_BY_CHOICE = "Program name",
-	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name...",
-	THIS_YEAR = TODAY.getFullYear(),
-	DO_APPLY = TODAY >= APPLY_START_DATE && TODAY < APPLY_END_DATE,
+var TODAY = localeDate("2015-06-22"),
+	GET_IN_TOUCH_ONLY = TODAY < localeDate("2015-06-22") || TODAY > localeDate("2015-07-11"),
+	SPLASH_MSG1 = "<div>All NYC children born in 2011 are eligible to attend pre-K in September 2015.</div><div>Complete the 'Get in Touch' form and an enrollment specialist will contact you with pre-K options for your child.</div>You can also apply in the Round 2 application period from June 22 - July 10, 2015. Round 2 will include new pre-K programs at district schools and NYC Early Education Centers.",
+	SPLASH_MSG2 = "Some other message!",
+	SPLASH_MSG = GET_IN_TOUCH_ONLY ? SPLASH_MSG1 : SPLASH_MSG2,
+	INFO_TITLE1 = "Get in Touch", 
+	INFO_TITLE2 = "I would like a call about Pre-K",
+	INFO_TITLE = GET_IN_TOUCH_ONLY ? INFO_TITLE1 : INFO_TITLE2,
+	SCHOOL_YEAR = "2016",
+	UPK_SEARCH_BY_CHOICE = "Program name or location code",
+	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name or code...",
 	APPLY_TITLE = "Apply Now",
-	INFO_TITLE = "Get in Touch", 
-	MORE_INFO_TITLE = "I would like a call about Pre-K",
 	INFO_URL = "info.html",
 	APPLY_URL = "//www.semsnycdoe.com/parentsite",
-	GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input=',
+	GEOCLIENT_URL = "//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input=",
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],
 	SUBWAY_URLS = ["//maps.nyc.gov/geowebcache/service/wms/", "//maps1.nyc.gov/geowebcache/service/wms/", "//maps2.nyc.gov/geowebcache/service/wms/", "//maps3.nyc.gov/geowebcache/service/wms/"],
 	FEEDBACK_URL = '//www.nyc.gov/html/static/pages/forms/pre-k-feedback.shtml',

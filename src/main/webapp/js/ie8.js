@@ -14,18 +14,8 @@ function unIso(dateString){
 	return dateParts[1] + "/" + dateParts[2] + "/" + dateParts[0];
 };
 
-function ie8Date(dateVarName){
-	var invalidDateProvided = true;
-	if (window[dateVarName]){
-		var unIsoDate = unIso(window[dateVarName]);
-		try{
-			var dateYr = new Date(unIsoDate);
-			invalidDateProvided = isNaN(dateYr.getFullYear());
-		}catch(ignore){
-			invalidDateProvided = true;
-		}
-	}
-	return new Date(invalidDateProvided ? IE8_DEFAULT_DATES[dateVarName] : unIsoDate);
+function ie8Date(dateString){
+	return dateString : new Date(unIso(dateString)) : new Date();
 };
 
 if(typeof String.prototype.trim !== 'function') {

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	
+	<title>NYC Pre-K Finder - Get in Touch</title>
+
+	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
+	<link rel="stylesheet" href="css/info.css">
+	
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+	<script src="//libs.cartocdn.com/cartodb.js/v3/3.13/cartodb.js"></script>
+	<!--[if lt IE 9]><script src="../js/ie8.js"></script><![endif]-->
+	<script src="js/date.js"></script>
+	<script src="js/info.js"></script>
+</head>
+<body>
+	<div id="page" data-role="page">
+		<div id="main" data-role="main" class="ui-content">
+			<form autocomplete="on" novalidate>
+				<div class="sect">
+					<h2>Student Information</h2>
+					<label for="dob">Date of birth:</label>
+					<div id="dob"></div>
+					<span id="dob-note"></span>
+					<h3>Current Address</h3>
+					<table class="fields">
+						<tbody>
+							<tr>
+								<td id="house_cell">
+									<label for="house_number">House no:</label>
+									<input id="house_number" name="house_number" type="text" maxlength="10" required placeholder="52">
+								</td>
+								<td id="street_cell">
+									<label for="street_name">Street name:</label>
+									<input id="street_name" name="street_name" type="text" required placeholder="Chambers St">
+								</td>
+								<td id="apt_cell">
+									<label for="apt">Apt:</label>
+									<input id="apt" name="apt" type="text" placeholder="1A">					
+								</td>
+							</tr>
+						</tbody>
+					</table>	
+					<table class="fields">
+						<tbody>
+							<tr>
+								<td id="borough_cell">
+									<label for="borough">Borough:</label>
+									<select id="borough" name="borough" required data-pattern="^((?!Choose).)*$">
+										<option value="">Choose...</option>
+										<option>Bronx</option>
+										<option>Brooklyn</option>
+										<option>Manhattan</option>
+										<option>Queens</option>
+										<option>Staten Island</option>
+									</select>
+								</td>
+								<td id="zip_cell">		
+									<label for="zip_code">ZIP Code:</label>
+									<input id="zip_code" name="zip_code" type="text" maxlength="5" required pattern="^\d{5}$" placeholder="12345">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>					
+				<div class="sect">
+					<h2>Parent/Guardian Information</h2>
+					<table class="fields">
+						<tbody>
+							<tr>
+								<td>
+									<label for="parent_first_name">First name:</label>
+									<input id="parent_first_name" name="parent_first_name" type="text" required>
+								</td>
+								<td>
+									<label for="parent_last_name">Last name:</label>
+									<input id="parent_last_name" name="parent_last_name" type="text" required>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<label for="relationship">Relationship:</label>
+					<select id="relationship" name="relationship" required data-pattern="^((?!Choose).)*$">
+						<option value="">Choose...</option>
+						<option>Mother</option>
+						<option>Father</option>
+						<option>Grandparent</option>
+						<option>Sister/Brother</option>
+						<option>Other Relative</option>
+						<option>Step Parent</option>
+						<option>Foster Parent</option>
+						<option>Agency</option>
+						<option>Ward Of State</option>
+						<option>Other Legal Guardian</option>
+						<option>Non-Relative</option>
+					</select>
+					<h3>Contact Information</h3>
+					<table class="fields">
+						<tbody>
+							<tr>
+								<td>
+									<label for="day_telephone">Day phone:</label>
+									<input id="day_telephone" name="day_telephone" type="text" maxlength="10" required pattern="[0-9]{10}" placeholder="2125555555">
+								</td>
+								<td>	
+									<label for="evening_telephone">Evening phone:</label>
+									<input id="evening_telephone" name="evening_telephone" maxlength="10" type="text" required pattern="[0-9]{10}" placeholder="2125555555">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<label for="email">Email address:</label>
+					<input id="email" name="email" type="text" required pattern="[\w-]+@([\w-]+\.)+[\w-]+">
+				</div>
+				<div id="form-note"></div>
+				<input id="applyNow" type="button" value="Submit Info">
+			</form>
+			<div id="review">		
+				<h3>Please review your submission:</h3>
+				<div>
+					<span class="name">Date of birth:</span><br><span id="review_dob"></span><br>
+				</div>
+				<div>
+					<span class="name">Current address:</span><br><span id="review_house_number"></span> <span id="review_street_name"></span> <span id="review_apt"></span><br>
+					<span id="review_borough"></span>, NY <span id="review_zip_code"></span>
+				</div>
+				<div><span class="name">Parent/Guardian name:</span><br><span id="review_parent_first_name"></span> <span id="review_parent_last_name"></span></div>
+				<div><span class="name">Relationship:</span> <span id="review_relationship"></span></div>
+				<div><span class="name">Day Telephone:</span> <span id="review_day_telephone"></span></div>
+				<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
+				<div><span class="name">Email address:</span> <span id="review_email"></span></div>
+				<div id="reviewBtns">
+					<input type="button" onclick="$('#review').fadeOut();" value="Cancel">
+					<input id="review-submit" type="button" onclick="apply();" value="Submit">
+				</div>
+			</div>
+			<div id="result">
+				<img id="result-thanks" src="img/thanks.png"><img id="result-error" src="img/error.png">
+				<div id="result-message"></div>				
+				<input type="button" onclick="$('#result').fadeOut();" value="OK">			
+			</div>
+		</div>
+	</div>
+	<script>
+		/* google analytics */
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		
+		ga('create', 'UA-41281554-9', 'auto');
+		ga('send', 'pageview');
+	</script>	
+</body>
+</html>

@@ -1,0 +1,34 @@
+#lang-btn {
+	top: auto;
+	left: 3px;
+	bottom: 52px;
+	background-image: url(../img/translate.png);
+	padding: 0;
+	background-size: 28px 28px;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 100000;
+	border-color: #ddd;
+}
+.first-load #lang-btn {
+	display: none;
+}
+.lang-placeholder {
+	display: none;
+}
+#lang-btn .goog-te-gadget-icon {
+	display: none;
+}
+#lang-btn .goog-te-gadget-simple {
+	background-color: transparent;
+	border: none;
+	width: 36px;
+	height: 36px;
+}
+#lang-btn .goog-te-gadget-simple span {
+	color: transparent;
+}
+.goog-te-menu-frame {
+	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.5);
+	border: none;	
+}

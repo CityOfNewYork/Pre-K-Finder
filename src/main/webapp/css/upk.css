@@ -12,11 +12,17 @@ html, body, div, span, a, input, input[data-type="search"], li {
 #map-page, #toggle {
 	position: fixed;
 }
-/* ======================== splash ========================= */
+
+/* ======================== begin splash ========================= */
+
 #splash {
 	display: none;
 	position: absolute;
-	z-index: 2000;
+	z-index: 10000;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
 }
 div#splash-cont {
 	padding: 10px 6px 5px 6px;
@@ -25,15 +31,20 @@ div#splash-cont {
 	border-radius: 0.6em;
 	width: 350px;
 	margin: 50px auto;
-	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
+	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.5);
 	max-height: calc(100% - 70px);
  	overflow-y: auto;
 }
-.ui-btn:after {
-	background-color: rgba(1,51,100,0.5);
+#splash a[data-icon="delete"], #splash a[data-icon="delete"]:hover {
+  background-color: transparent;
+  border: none;
+  float: right;
+  margin: -5px -2px 0 3px;
+  box-shadow: none;
 }
-.ui-btn:hover:after {
-	background-color: rgb(1,51,100);
+#btn-splash {
+	left: 3px;
+	top: 127px;
 }
 #splash .ctl-btn.ui-btn {
 	background-color: rgba(1,51,100,0.5);
@@ -43,14 +54,22 @@ div#splash-cont {
 }
 #splash .ui-btn {
 	background-color: #f8993a;
+	border: 1px solid #013364;
 }
 #splash .ui-btn:hover {
 	background-color: rgb(1,51,100);
 	color: white;
 }
+.ui-btn:after {
+  background-color: rgba(1,51,100,0.5);
+}
 .splash-message div {
 	margin-bottom: 8px;
 }
+
+/* ========================= end splash ========================== */
+
+
 /* ======================== external ========================= */
 #external-page, #external-content, #external-page iframe {
 	padding: 0;
@@ -145,10 +164,6 @@ span.noshow {
 	height: calc(100% - 45px);
 	top: 45px;
 }
-#btn-splash {
-	left: 3px;
-	top: 127px;
-}
 #callout .upk-info, #callout .subway-sta, #callout-size-check {
 	max-width: 290px;
 	min-width: 200px;
@@ -185,7 +200,7 @@ span.noshow {
 #callout .type-icon {
 	display: none;
 }
-.upkDetail {
+.upk-detail {
 	margin: 5px 5px 0 0;
 	padding: 5px;
 	border-radius: 0.6em;
@@ -202,20 +217,20 @@ span.noshow {
 	text-decoration: underline;
 	cursor: pointer;
 }
-.oddRow .upkDetail {
+.oddRow .upk-detail {
 	background-color: white;
 }
-.upkDetail ul {
+.upk-detail ul {
 	margin: 0 0 3px 0;
 	font-size: 12px;
 }
-.upkDetail li {
+.upk-detail li {
 	margin-left: -25px;
 }
 .email, .web {
 	margin: 10px 0;
 }
-#callout .map, .upkDetail, #list-table .directions {
+#callout .map, .upk-detail, #list-table .directions {
 	display: none;
 }
 .olFramedCloudPopupContent {

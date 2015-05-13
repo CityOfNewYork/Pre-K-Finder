@@ -28,6 +28,7 @@
 	<link rel="stylesheet" href="css/directions.css" type="text/css"> 
 	<link rel="stylesheet" href="css/control-common.css" type="text/css"> 
 	<link rel="stylesheet" href="css/info.css" type="text/css"> 
+	<link rel="stylesheet" href="css/lang.css" type="text/css"> 
 	<link rel="stylesheet" href="css/share.css" type="text/css"> 
 	<link rel="stylesheet" href="css/zoomsearch.css" type="text/css"> 
 
@@ -35,10 +36,11 @@
 	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76.png">
 	<link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152.png">
+
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	<script src="js/jq/jquery.csv.js"></script>
-	<script src="js/OpenLayers-2.13.1/OpenLayers.js"></script>
+	<script src="js/OpenLayers-2.13.1/OpenLayers.js"></script>	
 	<script src="js/proj4js/proj4js-compressed.js"></script>
 	<script src="date_rules.js"></script>
 
@@ -52,16 +54,16 @@
 	<div id="map-page" data-role="page" data-title="NYC Pre-K Finder">
 		<div id="splash">
 			<div id="splash-cont">
-				<a class="ctl-btn" data-role="button" data-icon="info" data-iconpos="notext" title="Get in Touch" onclick="$('#splash').fadeOut();">
-					<span>Get in Touch</span>
+				<a  data-role="button" data-icon=delete data-iconpos="notext" title="Close" onclick="nyc.app.hideSplash();">
+					<span>Close</span>
 		        </a>
 				<div class="splash-message">
 					The Pre-K for All application for the 2015-16 school year is open from March 16 to April 24. 
 					All New York City children born in 2011 are eligible.				
 				</div>
 				<a class="splash-apply" data-role="button" href="//www.semsnycdoe.com/parentsite?local" target="_blank">I am ready to apply for Pre-K</a>
-				<a class="splash-info" data-role="button" onclick="nyc.app.changePage(this, nyc.app);$('#splash').fadeOut();" data-url="info.html">Get in Touch</a>
-				<a class="splash-continue" data-role="button" onclick="$('#splash').fadeOut();">Continue to Pre-K Finder map</a>
+				<a class="splash-info" data-role="button" onclick="nyc.app.changePage('doe/info.html', nyc.app);nyc.app.hideSplash();"></a>
+				<a class="splash-continue" data-role="button" onclick="nyc.app.hideSplash();">Continue to Pre-K Finder map</a>
 				<a class="splash-directory" data-role="button" href="http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local" target="_blank">View the Pre-K Directory for more info</a>
 			</div>
 		</div>
@@ -86,6 +88,10 @@
 							<label for="filter-day-half">Half Day</label>
 							<input id="filter-day-5hr" type="checkbox" checked data-filter-name="dayLength" data-filter-values="4,5,6,7">
 							<label for="filter-day-5hr">5-Hour</label>
+						</div>
+						<div id="filter-appy" data-role="controlgroup" data-type="vertical">
+							<input id="filter-apply-only" type="checkbox" data-filter-name="applyOnly" data-filter-values="true">
+							<label for="filter-apply-only">Accepting applications</label>
 						</div>
 					</div>
 				</div>
@@ -182,6 +188,7 @@
 	<div id="callout-size-check"></div>
 	<script src="js/nyc/constants.js"></script>
 	<script src="js/nyc/upk.js"></script>
+	<script src="js/nyc/lang.js"></script>
 	<script src="js/nyc/locate.js"></script>
 	<script src="js/nyc/directions.js"></script>
 	<script src="js/nyc/share.js"></script>

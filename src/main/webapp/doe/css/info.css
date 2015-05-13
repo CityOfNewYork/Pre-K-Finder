@@ -1,0 +1,121 @@
+body, label, span, div {
+	color: #013364 !important;
+}
+body.loading {
+	background-image: url(https://maps.nyc.gov/upk/img/spin.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.loading div, .loading span, .loading h1, .loading h2, .loading h3, .loading input, .loading select{
+	visibility: hidden;
+}
+label {
+	white-space: nowrap;
+	padding-right: 10px;
+}
+h2, h3 {
+	color: #5681ac;
+}
+form {
+	margin: 0 auto 100px;
+	max-width: 600px;
+}
+.sect {
+	border: 1px solid #5681ac;
+	border-radius: 0.6em;
+	padding: 5px;
+	margin: 0 0 10px 0;
+}
+.ui-selectmenu-button {
+	width: 100% !important;
+}
+.ui-btn:after {
+	background-color: rgba(1,51,100,0.5);
+}
+.ui-btn:hover:after {
+	background-color: rgb(1,51,100);
+}
+.err {
+	color: red !important;
+	font-weight: bold !important;
+}
+#dob {
+	margin-top: -9px;
+}
+#dob table {
+	width: 100%;
+}
+#dob td {
+	width: 33%;
+}
+#review, #result {
+	position: absolute;
+	margin: 12px calc(50% - 135px);
+	width: 270px;
+	border-radius: 0.6em;
+	border: 1px solid lightgrey;
+	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
+	background-color: white;
+	padding: 5px;
+	display:none;
+	z-index: 100;
+}
+#result-message {
+	padding: 5px;
+}
+#result img {
+	margin: 3px calc(50% - 36px);
+	width: 72px;
+}
+.ui-btn.ui-corner-all, .ui-corner-all {
+	border-radius: 0.6em;
+}
+#review h3 {
+	text-align: center;
+}
+.name {
+	font-weight: bold;
+}
+#reviewBtns {
+	width: 207px;
+	margin: 20px 29px;
+}
+#req_note {
+	text-align: center;
+}
+table.fields {
+	width: 100%;
+	border-collapse: collapse;
+}
+.fields td {
+	vertical-align: top;
+	width: 50%;
+}
+#house_cell {
+	width: 30px;
+}
+#street_cell {
+	width: 300px;
+}
+#apt_cell {
+	width: 30px;
+}
+#borough_cell {
+	width: 70%;
+}
+#zip_cell {
+	width: 30%;
+}
+@media only screen and (max-width : 600px) {
+	#street_cell {
+		width: auto;
+	}
+}
+@media only screen and (max-width : 360px) {
+	#house_cell {
+		width: 60px;
+	}
+	#apt_cell {
+		width: 30px;
+	}		
+}

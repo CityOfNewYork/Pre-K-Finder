@@ -23,6 +23,12 @@ nyc.ZoomSearch = function(target, map){
 		me.val('');
 		me.input.focus();
 	});
+	$('#srch-type-geo').click(function(){
+		me.setSourceList('srch-type-addr');
+		me.val('');
+		me.input.focus();
+		$(me).trigger("geolocate");
+	});
 	me.input.on('blur focus', function(e){
 		if (e.type == 'focus'){
 			me.typBtn.addClass('ctl-active');
@@ -68,12 +74,6 @@ nyc.ZoomSearch.prototype = {
 		}
 	},	
 	/** @private */
-	cssClass: function(obj){
-		var cssClass = obj.name.trim().toLowerCase().replace(/[^A-Za-z0-9]/g, '-');
-		obj.cssClass = cssClass;
-		return cssClass;
-	},	
-	/** @private */
 	setListCss: function(){
 		$('#mnu-srch-typ li.ui-last-child, #fld-srch li.ui-last-child').last().removeClass('ui-last-child');
 		$('#mnu-srch-typ li, #fld-srch li').last().addClass('ui-last-child');
@@ -81,7 +81,10 @@ nyc.ZoomSearch.prototype = {
 	},	
 	/** @private */
 	setSourceList: function(cssClass, noChoose){
-		var plcHldr = cssClass == 'srch-type-addr' ? 'Search for an address...' : UPK_SEARCH_BY_PLACEHOLDER, name;
+		var isAddr = cssClass == 'srch-type-addr',
+			plcHldr = isAddr ? 'Search for an address...' : UPK_SEARCH_BY_PLACEHOLDER,
+			name;
+		this.isAddr = isAddr;
 		$.each(this.sources, function(_, src){
 			if (src.cssClass == cssClass) name = src.name;
 		});
@@ -103,8 +106,9 @@ nyc.ZoomSearch.prototype = {
 	addFeatures: function(namedSource){
 		var me = this, src = namedSource.source;
 		$.each(src.features(), function(_, feature){
-			var li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' + me.cssClass(namedSource) + '">' +
-					'<img src="img/' + feature.type() + '0.png">' + feature.name() + '</li>');
+			var li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' + namedSource.cssClass + '">' +
+					'<img src="img/' + feature.type() + '0.png"><span class="' + namedSource.cssClass + '-id">' + 
+					feature.locCode() + "</span>" + feature.name() + '</li>');
 
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
@@ -124,7 +128,9 @@ nyc.ZoomSearch.prototype.addSources = function(sources){
 	var me = this;
 	me.sources = sources;
 	$.each(sources, function(_, src){
-		var cls = me.cssClass(src), li = $('<li class="ui-li-static ui-body-inherit">' + src.name + '</li>');
+		var cls = src.cssClass, li = $(
+			'<li class="ui-li-static ui-body-inherit">' + 
+			'<span class="ui-btn-icon-left ' + cls + '-icon"></span>' + src.name + '</li>');
 		li.click(function(){
 			me.setSourceList(cls);
 			me.val('');
@@ -191,7 +197,8 @@ nyc.ZoomSearch.HTML =
 	'<div id="fld-srch-container" class="ctl">' +
 		'<ul id="mnu-srch-typ" class="ctl ui-corner-all" data-role="listview">' + 
 		'<li id="srch-by">Search by...</li>' +
-		'<li id="srch-type-addr">Address, intersection, ZIP Code, etc.</li>' +
+		'<li id="srch-type-geo"><span class="ui-btn-icon-left srch-icon-geo"></span>My current location</li>' +
+		'<li id="srch-type-addr"><span class="ui-btn-icon-left ui-icon-home"></span>Address, intersection, ZIP Code, etc.</li>' +
 		'</ul>' +
 		'<ul id="fld-srch" class="ui-corner-all" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search for an address..."></ul>' +
 		'<a id="btn-srch-typ" class="ui-btn ui-icon-carat-d ui-btn-icon-notext" title="Search Type">Search Type</a>' +

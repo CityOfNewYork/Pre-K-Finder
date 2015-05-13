@@ -29,7 +29,15 @@ nyc.Locate = (function(){
 		map.addControl(me.geolocate);
 		map.addLayer(me.locationLyr);
 		me.geolocate.events.register("locationupdated", me, me.updated);
+		me.geolocate.events.register("locationfailed", me, me.updated);
 
+		$(controls).on("geolocate", function(){
+			if (!me.isGeolocateAllowed){
+				$(me).trigger("fail", "You have disabled location services for this page. To use this feature you must enable location services.");
+			}else{
+				me.locate();
+			}
+		});
 		$(controls).on("search", function(e, input){
 			me.search(input);
 		});
@@ -40,6 +48,8 @@ nyc.Locate = (function(){
 	};
 	
 	locateClass.prototype = {
+		/** @private */
+		isGeolocateAllowed: true,
 		/** @export */
 		locate: function(){
 			this.locationLyr.removeAllFeatures();
@@ -172,15 +182,19 @@ nyc.Locate = (function(){
 		},
 		/** @private */
 		updated: function(e) {
-			var epsg2263 = new Proj4js.Point(e.point.x, e.point.y), 
-				epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263),
-				name = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6),
-				feature = new OpenLayers.Feature.Vector(e.point, {name: name});
-			this.decorate(feature);
-		    if (NYC_EXT.contains(e.point.x, e.point.y)){
-			    this.mapLocation(feature);
-				$(this).trigger("found", {type: "geoclocation", feature: feature});
-		    }
+			if (e.type == 'locationfailed'){
+				if (e.error.code == 1) this.isGeolocateAllowed = false;
+			}else{
+				var epsg2263 = new Proj4js.Point(e.point.x, e.point.y), 
+					epsg4326 = Proj4js.transform(this.EPSG_2263, this.EPSG_4326, epsg2263),
+					name = epsg4326.y.toFixed(6) + ", " + epsg4326.x.toFixed(6),
+					feature = new OpenLayers.Feature.Vector(e.point, {name: name});
+				this.decorate(feature);
+			    if (NYC_EXT.contains(e.point.x, e.point.y)){
+				    this.mapLocation(feature);
+					$(this).trigger("found", {type: "geoclocation", feature: feature});
+			    }
+			}
 		}
 	};
 	

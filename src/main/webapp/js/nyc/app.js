@@ -104,7 +104,7 @@ nyc.App = (function(){
 				me.setUpkSearch(me.upkList.features());
 				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);
-				locate.controls.addSources([{name: UPK_SEARCH_BY_CHOICE, source: me.upkList}]);
+				me.locate.controls.addSources([{name: UPK_SEARCH_BY_CHOICE, cssClass: "srch-upk", source: me.upkList}]);
 			},
 			error: function(){
 				$("body").removeClass("firstLoad");
@@ -116,20 +116,19 @@ nyc.App = (function(){
 		appClass.prototype = {
 			/**
 			 * @export
-			 * @param {Element} btn
+			 * @param {String} id
 			 * @param {nyc.App} me
 			 */
-			mapUpk: function(btn, me){
-				me.centerUpk($(btn).data("upk-fid"));
+			mapUpk: function(id, me){
+				me.centerUpk(id);
 			},
 			/**
 			 * @export
 			 * @param {Element} btn
 			 * @param {nyc.App} me
 			 */
-			showUpkDetail: function(btn, me){
-				var id = $(btn).data("upk-info-id"), 
-					detail = $("#" + id +" .upkDetail"), 
+			showUpkDetail: function(id, me){
+				var detail = $("#" + id + " .upk-detail"), 
 					show = detail.css("display") == "none";
 				detail.slideToggle(function(){
 					me.updateCallout();
@@ -181,6 +180,29 @@ nyc.App = (function(){
 				$("#external-page iframe").attr("src", url);
 				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
 			},
+			/** @export **/
+			hideSplash: function(){
+				$("#splash-cont").css({
+					top : "0",
+					left : $("#splash-cont").offset().left + "px",
+					position : "absolute",
+					overflow : "hidden"
+				});
+				$("#splash-cont").animate({
+					top : "88px",
+					left : "4px",
+					height : "36px",
+					width : "36px",
+					opacity : 0,
+					padding : 0,
+					"border-width" : 0
+				}, 
+				1000, 
+				function() {
+					$("#splash").hide();
+					$("#splash-cont").attr("style", "");
+				});
+			},			
 			/** @private */
 			initPages: function(){
 				var me = this, change = function(e, ui){
@@ -263,9 +285,10 @@ nyc.App = (function(){
 			/** @private */
 			filter: function(e){
 				var me = this;
-				var filters = {type:[], dayLength:[]};
+				var filters = {type:[], dayLength:[], applyOnly:[]};
 				$.each($("#filter input[type=checkbox]:checked"), function(_, n){
 					var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
+					console.warn(name, values);
 					values = filters[name].concat(values.split(","));
 					filters[name] = values;
 				});
@@ -339,7 +362,7 @@ nyc.App = (function(){
 				}
 			    this.pop = null;
 			},
-			/** private **/
+			/** @private **/
 			showPop: function(html, p, id){
 				var me = this,
 					checker = $("#callout-size-check"),
@@ -382,6 +405,8 @@ nyc.App = (function(){
 }());
 
 $(document).ready(function(){
+
+	new nyc.Lang("body", "ar,bn,zh-CN,fr,ht,ko,ru,es,ur");
 
 	var map = new OpenLayers.Map(
 		"map", 
@@ -466,24 +491,10 @@ $(document).ready(function(){
 		nyc.app.changePage(url);
 		$("#splash").fadeOut();
 	};
-
-	if (TODAY > APPLY_END_DATE){
-		$(".splash-message").html(
-			"<div>All NYC children born in 2011 are eligible to attend pre-K in September 2015.</div>" +
-			"<div>Complete the 'Get in Touch' form and an enrollment specialist will contact you with " +
-			"pre-K options for your child.</div>" +
-			"You can also apply in the Round 2 application period from June 22 - July 10, 2015. " +
-			"Round 2 will include new pre-K programs at district schools and NYC Early Education Centers."
-		);
-	}
 	
-	if (DO_APPLY){
-		$("#splash .splash-info").html(MORE_INFO_TITLE);
-	}else{
-		$("#splash .splash-apply, #splash .splash-directory").hide();
-		$("#splash .splash-info").html(INFO_TITLE);
-	}	
-	
+	if (GET_IN_TOUCH_ONLY) $("#splash .splash-apply, #splash .splash-directory").hide();
+	$(".splash-message").html(SPLASH_MSG);
+	$("#splash .splash-info").html(INFO_TITLE);	
 	$("#splash .splash-info").data("url", INFO_URL);
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();

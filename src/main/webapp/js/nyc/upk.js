@@ -5,6 +5,9 @@ nyc.upk = nyc.upk || {};
 
 /** @export */
 nyc.upk.FieldsDecorator = {
+	locCode: function(){
+		return this.attributes.LOCCODE;
+	},
 	code: function(){
 		return this.attributes.SEMS_CODE;
 	},
@@ -52,40 +55,67 @@ nyc.upk.FieldsDecorator = {
 	},
 	isFullDay: function(){
 		return $.inArray(this.dayLength() * 1, FULL_DAY) > -1;
+	},
+	showApply: function(){
+		return !GET_IN_TOUCH_ONLY && this.attributes.BUTTON_TYPE == "apply";
 	}
 };
 
-/** @export */
+/** 
+ * Field decorator for HTML rendering of a Pre-K Program geoJSON object
+ * @export
+ */
 nyc.upk.HtmlDecorator = {
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	codeHtml: function(){
 		var codeHtml =  $("<div class='code'><span class='name'>Program Code: </span></div>");
 		return codeHtml.append(this.code());
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	nameHtml: function(){
-		var nameHtml = $("<div class='name'></div>"),
+		var nameHtml = $("<div class='name notranslate' translate='no'></div>"),
 			iconHtml = $("<img class='type-icon'>");		
 		iconHtml.attr("src", "img/" + this.type() + "0.png");
 		nameHtml.append(iconHtml);
 		return nameHtml.append(this.name());
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	noteHtml: function(){
 		var noteHtml = $("<div class='note'></div>");		
 		return noteHtml.html(this.note());
 	},
+	/** 
+	 * @private 
+	 * @return {Array<jQuery>}
+	 */
 	addrHtml: function(){
-		var addr1Html = $("<div class='addr'></div>"),
-			addr2Html = $("<div class='addr'></div>");		
+		var addr1Html = $("<div class='addr notranslate' translate='no'></div>"),
+			addr2Html = $("<div class='addr notranslate' translate='no'></div>");		
 		addr1Html.append(this.address1());
 		addr2Html.append(this.address2());
 		return [addr1Html, addr2Html];
 	},
+	/** @private */
 	targetAttr: function(field, elem){
 		if (IOS || (field == "web")) elem.attr("target", "_blank");
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery|string}
+	 */
 	linkHtml: function(field, hrefPrefix){
 		var value = this[field]().trim();
 		if (value){
-			var linkHtml = $("<div></div>"),
+			var linkHtml = $("<div class='notranslate' translate='no'></div>"),
 				href= $("<a></a>"),
 				text = value;
 			if (field == "web"){
@@ -99,19 +129,39 @@ nyc.upk.HtmlDecorator = {
 		}
 		return "";
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	phoneHtml: function(){
 		return this.linkHtml("phone", "tel:");
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	emailHtml: function(){
 		return this.linkHtml("email", "mailto:");
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	webHtml: function(){
 		return this.linkHtml("web", "");
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	programFeatureHtml: function(field, msgMap){
 		var programFeatureHtml = $("<li></li>");
 		return programFeatureHtml.append(msgMap[this[field]()]);
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	programFeaturesHtml: function(){
 		var programFeaturesHtml = $("<div class='name'>Program Features:</div>"),
 			featureList = $("<ul class='feats'></ul>");
@@ -120,50 +170,67 @@ nyc.upk.HtmlDecorator = {
 			.append(this.programFeatureHtml("extend", EXTEND));
 		return [programFeaturesHtml, featureList];
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	seatsDayHtml: function(){
 		var seatsDayHtml = $("<div class='seats'></div>"),
 			yrHtml = $("<span class='name'></span>");
-		yrHtml.append(SCHOOL_YEAR + " Seats: ");
+		yrHtml.append(window.SCHOOL_YEAR + " Seats: ");
 		return seatsDayHtml.append(yrHtml)
 			.append(this.seats() + " " + DAY_LENGTH[this.dayLength()]);
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	detailHtml: function(){
-		var detailHtml = $("<div class='upkDetail'></div>");
+		var detailHtml = $("<div class='upk-detail'></div>");
 		return detailHtml.append(this.codeHtml())
 			.append(this.emailHtml())
 			.append(this.webHtml())
 			.append(this.programFeaturesHtml())
 			.append(this.seatsDayHtml());
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	directionsBtnHtml: function(){
-		var directionsBtnHtml = $("<td class='directions'></td>"),
+		var directionsBtnHtml = $("<div class='directions'></div>"),
 			anchorHtml = $("<a class='ui-btn'>Directions</a>");
 		anchorHtml.attr("data-upk-addr", this.address());
 		anchorHtml.attr("data-upk-name", this.name());
 		anchorHtml.attr("onclick", "nyc.app.direct(this, nyc.app);");
 		return directionsBtnHtml.append(anchorHtml);
 	},
-	mapBtnHtml: function(){
-		var mapBtnHtml = $("<td class='map'></td>"),
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
+	mapBtnHtml: function(infoId){
+		var mapBtnHtml = $("<div class='map'></div>"),
 			anchorHtml = $("<a class='ui-btn'>Map</a>");
-		anchorHtml.attr("data-upk-fid", this.id);
-		anchorHtml.attr("onclick", "nyc.app.mapUpk(this, nyc.app);");
+		anchorHtml.attr("onclick", "nyc.app.mapUpk('" + this.id + "', nyc.app);");
 		return mapBtnHtml.append(anchorHtml);
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	detailBtnHtml: function(infoId){
-		var detailBtnHtml = $("<td class='detail'></td>"),
+		var detailBtnHtml = $("<div class='detail'></div>"),
 			anchorHtml = $("<a class='ui-btn'>Details</a>");
-		anchorHtml.attr("data-upk-info-id", infoId);
-		anchorHtml.attr("onclick", "nyc.app.showUpkDetail(this, nyc.app);");
+		anchorHtml.attr("onclick", "nyc.app.showUpkDetail('" + infoId + "', nyc.app);");
 		return detailBtnHtml.append(anchorHtml);
 	},
-	showApply: function(){
-		return DO_APPLY && 
-			this.type() != "CHARTER" && 
-			(this.type() == "DOE" || this.isFullDay());
-	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	infoApplyBtnHtml: function(){
-		var infoApplyBtnHtml = $("<td class='apply'></td>"),
+		var infoApplyBtnHtml = $("<div class='apply'></div>"),
 			anchorHtml = $("<a class='ui-btn'></a>"), 
 			url, title;
 		if (this.showApply()){
@@ -180,15 +247,23 @@ nyc.upk.HtmlDecorator = {
 		anchorHtml.html(title);
 		return infoApplyBtnHtml.append(anchorHtml);		
 	},
+	/** 
+	 * @private 
+	 * @return {jQuery}
+	 */
 	buttonsHtml: function(infoId){
-		var buttonsHtml = $("<table class='upkAction'><tbody><tr></tr></tbody></table>");
+		var buttonsHtml = $("<div class='upk-action'></div>");
 		return buttonsHtml.append(this.directionsBtnHtml())
 			.append(this.mapBtnHtml())
 			.append(this.infoApplyBtnHtml())
 			.append(this.detailBtnHtml(infoId));
 	},
-	html: function(idPrefix){
-		var html = $("<div class='upk-info'>"), infoId = idPrefix + this.id;
+	/** 
+	 * @export 
+	 * @return {jQuery}
+	 */
+	html: function(infoClass){
+		var html = $("<div class='" + infoClass + " upk-info'>"), infoId = infoClass + this.id;
 		html.attr("id", infoId);
 		return html.append(this.nameHtml())
 			.append(this.noteHtml())
@@ -217,9 +292,13 @@ nyc.upk.List = (function(){
 			me.filteredFeatures = {};
 			$.each(me.allFeatures, function(_, upk){
 				var type = filters.type,
-				dayLength = filters.dayLength;
-				if ($.inArray(upk.type() + "", type) > -1 && $.inArray(upk.dayLength() + "", dayLength) > -1)
-					me.filteredFeatures[upk.id] = upk;
+				dayLength = filters.dayLength,
+				applyOnly = filters.applyOnly.length;
+				if ($.inArray(upk.type() + "", type) > -1 && $.inArray(upk.dayLength() + "", dayLength) > -1){
+					if (!applyOnly || upk.showApply()){
+						me.filteredFeatures[upk.id] = upk;
+					}
+				}
 			});
 		},
 		/**
