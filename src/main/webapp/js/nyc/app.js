@@ -67,6 +67,7 @@ nyc.App = (function(){
 				$.each(csvFeatures, function(_, f){
 					var feature = wkt.read("POINT (" + f.X + " " + f.Y + ")");
 					feature.attributes = f;
+					feature.attributes.id = f.LOCCOCDE;
 					features.push(feature);
 				});
 				me.upkLayer = new OpenLayers.Layer.Vector("", {

@@ -32,7 +32,6 @@ nyc.Lang = (function(){
 				autoDisplay: false
 			}, 'lang-btn');
 			nyc.lang.hack();
-			$('head').append('<link rel="stylesheet" href="css/lang.css" type="text/css">');
 			$('#lang-btn').show();
 			$('#lang-btn').click(function(){
 				nyc.lang.translate.setEnabled(false);

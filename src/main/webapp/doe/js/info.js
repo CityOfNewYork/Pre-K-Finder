@@ -17,7 +17,7 @@ var ERROR_MESSAGE = "There was an error processing your submission data.  Please
 $("document").ready(function(){
 	window.dob = new nyc.DateField("#dob", MIN_DOB_YEAR, MAX_DOB_YEAR);
 	$("#dob").trigger("create");
-	$("#applyNow").click(valid);
+	$("#apply-submit").click(valid);
 	$("select").on("change",function(e){$(e.target).focus();});
 	$("#form-note").html(FORM_MSG);
 	$("#dob-note").html(DOB_MSG);

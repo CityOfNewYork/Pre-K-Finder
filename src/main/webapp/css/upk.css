@@ -447,6 +447,9 @@ label[for="filter-type-doe"] {
 #callout {
 	max-width: 320px;
 }
+#callout_contentDiv {
+	overflow: hidden;
+}
 #callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1, #callout_FrameDecorationDiv_2, #callout_FrameDecorationDiv_3 {
 	max-width: 300px;
 }
