@@ -509,12 +509,6 @@ label[for="filter-type-doe"] {
 	#toggle button {
 		padding: 9px 12.5px;
 	}
-	#copyright, #copyright a {
-	  font-size: 8px !important;
-	}
-	#copyright {
-		maging-bottom: 3px;
-	}
 }
 @media only screen and (max-width : 495px), screen and (max-height: 350px) {
 	#panel {

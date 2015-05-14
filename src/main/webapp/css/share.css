@@ -1,7 +1,7 @@
 #share-btn {
 	position: fixed;
 	left: 3px;
-	bottom: 10px;
+	bottom: 52px;
 	background-image: url(../img/share.png);
 }
 #share-btn.ctl-btn, #share-btns .ctl-btn {

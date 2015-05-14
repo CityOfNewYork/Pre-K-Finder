@@ -496,6 +496,12 @@ $(document).ready(function(){
 	setInterval(function(){
 		nyc.app.updateCallout();		
 	}, 200);
+	/* manage banner text for translations */
+	setInterval(function(){
+		$(".banner h1, .banner-school-yr").css({
+			"max-width": $("#toggle").position().left - $(".banner-school-yr").position().left - 6 + "px"
+		});
+	}, 200);
 
 	var changePage = function(url){
 		nyc.app.changePage(url);
