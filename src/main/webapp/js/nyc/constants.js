@@ -3,16 +3,13 @@ function localeDate(dateString){
 	var utcDate = dateString ? new Date(dateString) : new Date();
 	return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
 };
+APPLY_START_DATE = localeDate(APPLY_START_DATE);
+APPLY_END_DATE = localeDate(APPLY_END_DATE);
 
 var TODAY = localeDate(),
-	GET_IN_TOUCH_ONLY = TODAY < localeDate("2015-06-22") || TODAY > localeDate("2015-07-11"),
-	SPLASH_MSG1 = "<div>All NYC children born in 2011 are eligible to attend pre-K in September 2015.</div><div>Complete the 'Get in Touch' form and an enrollment specialist will contact you with pre-K options for your child.</div>You can also apply in the Round 2 application period from June 22 - July 10, 2015. Round 2 will include new pre-K programs at district schools and NYC Early Education Centers.",
-	SPLASH_MSG2 = "Some other message!",
-	SPLASH_MSG = GET_IN_TOUCH_ONLY ? SPLASH_MSG1 : SPLASH_MSG2,
-	INFO_TITLE1 = "Get in Touch", 
-	INFO_TITLE2 = "I would like a call about Pre-K",
-	INFO_TITLE = GET_IN_TOUCH_ONLY ? INFO_TITLE1 : INFO_TITLE2,
-	SCHOOL_YEAR = "2016",
+	GET_IN_TOUCH_ONLY = TODAY < APPLY_START_DATE || TODAY > APPLY_END_DATE,
+	SPLASH_MSG = GET_IN_TOUCH_ONLY ? SPLASH_MSG_NO_APPLY : SPLASH_MSG_YES_APPLY,
+	INFO_TITLE = GET_IN_TOUCH_ONLY ? SPLASH_INFO_BUTTON_TITLE_NO_APPLY : SPLASH_INFO_BUTTON_TITLE_YES_APPLY,
 	UPK_SEARCH_BY_CHOICE = "Program name or location code",
 	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name or code...",
 	APPLY_TITLE = "Apply Now",

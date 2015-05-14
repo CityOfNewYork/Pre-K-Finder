@@ -1,10 +1,14 @@
+function localeDate(dateString){
+	if (window.IE8) return ie8Date(dateString);
+	var utcDate = dateString ? new Date(dateString) : new Date();
+	return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
+};
+APPLY_START_DATE = localeDate(APPLY_START_DATE);
+APPLY_END_DATE = localeDate(APPLY_END_DATE);
+
 var TODAY = localeDate();
-var GET_IN_TOUCH_ONLY = TODAY < localeDate("2015-06-22") || TODAY > localeDate("2015-07-11");
-var FORM_MSG1 = "This form is only a statement of interest and not an application. Please only submit the form once per household. An Enrollment Specialist will contact you shortly. For now, please visit <a href='http://nyc.gov/prek' target='_blank'>nyc.gov/prek</a> for more information.";
-var FORM_MSG2 = "Some other message!";
-var FORM_MSG =  GET_IN_TOUCH_ONLY ? FORM_MSG1 : FORM_MSG2;
-var MIN_DOB_YEAR = 2011;
-var MAX_DOB_YEAR = 2014;
+var GET_IN_TOUCH_ONLY = TODAY < APPLY_START_DATE || TODAY > APPLY_END_DATE;
+var FORM_MSG =  GET_IN_TOUCH_ONLY ? FORM_MSG_NO_APPLY : FORM_MSG_YES_APPLY;
 var THANK_YOU_MESSAGE = "Thank you for completing our Pre-K for All information form! Your submission is being " +
 		"sent to the Pre-K for All Outreach team, who will contact you soon. You will also receive an email " +
 		"shortly confirming your submission.";
@@ -15,6 +19,8 @@ $("document").ready(function(){
 	$("#dob").trigger("create");
 	$("#applyNow").click(valid);
 	$("select").on("change",function(e){$(e.target).focus();});
+	$("#form-note").html(FORM_MSG);
+	$("#dob-note").html(DOB_MSG);
 });
 
 function valid(){

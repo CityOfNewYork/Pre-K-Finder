@@ -240,7 +240,7 @@ nyc.upk.HtmlDecorator = {
 				.attr("target", "_blank");
 		}else{
 			url = INFO_URL;
-			title = INFO_TITLE1;
+			title = SPLASH_INFO_BUTTON_TITLE_NO_APPLY;
 			anchorHtml.attr("data-url", url)
 				.attr("onclick", "nyc.app.changePage(this, nyc.app);");
 		}
