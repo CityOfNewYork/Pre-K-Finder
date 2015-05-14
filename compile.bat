@@ -1,1 +1,0 @@
-java -jar etc/closure/compiler.jar  --warning_level VERBOSE --compilation_level WHITESPACE_ONLY --externs etc/closure/openlayers2.js --js_output_file build/webapp/js/nyc-min.js build/tmp/js/nyc/*.js --source_map_location_mapping "build/tmp/js/nyc/|nyc/" --create_source_map build/webapp/js/nyc-min.js.map --output_wrapper "%%output%%//# sourceMappingURL=nyc-min.js.map"
