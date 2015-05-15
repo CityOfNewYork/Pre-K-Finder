@@ -347,7 +347,7 @@ nyc.App = (function(){
 			toggle: function(e){
 				var target = $(e.target);
 				$("#toggle .ui-btn").removeClass("ui-btn-active");
-				$("#panel").panel(target.html() == "Map" ? "close" : "open");
+				$("#panel").panel(target.attr("id") == "toggle-list" ? "open" : "close");
 				setTimeout(function(){target.addClass("ui-btn-active");}, 100);
 			},
 			/** @private */
@@ -397,7 +397,7 @@ nyc.App = (function(){
 				var pop = this.pop;
 				if (pop){
 					var h = $("#callout .upk-info").height();
-					$("#callout").height(h + 52);
+					$("#callout").height(h + 51);
 					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").css("height", h + "px");
 					$("#callout_contentDiv").css("height", "100%");
 					pop.panIntoView();
