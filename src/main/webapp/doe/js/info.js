@@ -7,8 +7,8 @@ APPLY_START_DATE = localeDate(APPLY_START_DATE);
 APPLY_END_DATE = localeDate(APPLY_END_DATE);
 
 var TODAY = localeDate();
-var GET_IN_TOUCH_ONLY = TODAY < APPLY_START_DATE || TODAY > APPLY_END_DATE;
-var FORM_MSG =  GET_IN_TOUCH_ONLY ? FORM_MSG_NO_APPLY : FORM_MSG_YES_APPLY;
+var ACTIVE_APPLY_PERIOD = TODAY >= APPLY_START_DATE && TODAY < APPLY_END_DATE;
+var FORM_MSG =  ACTIVE_APPLY_PERIOD ? FORM_MSG_YES_APPLY : FORM_MSG_NO_APPLY;
 var THANK_YOU_MESSAGE = "Thank you for completing our Pre-K for All information form! Your submission is being " +
 		"sent to the Pre-K for All Outreach team, who will contact you soon. You will also receive an email " +
 		"shortly confirming your submission.";

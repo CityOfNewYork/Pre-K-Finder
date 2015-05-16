@@ -509,7 +509,7 @@ $(document).ready(function(){
 		$("#splash").fadeOut();
 	};
 	
-	if (GET_IN_TOUCH_ONLY) $("#splash .splash-apply, #splash .splash-directory, #filter-appy").hide();
+	if (!ACTIVE_APPLY_PERIOD) $("#splash .splash-apply, #splash .splash-directory, #filter-appy").hide();
 	$(".splash-message").html(SPLASH_MSG);
 	$("#splash .splash-info").html(INFO_TITLE);	
 	$("#splash .splash-info").data("url", INFO_URL);

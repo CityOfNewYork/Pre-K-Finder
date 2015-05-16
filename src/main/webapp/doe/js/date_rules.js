@@ -17,7 +17,7 @@ var SPLASH_INFO_BUTTON_TITLE_NO_APPLY = "Get in Touch";
 
 var SPLASH_INFO_BUTTON_TITLE_YES_APPLY = "I would like a call about Pre-K"; 
 
-var SCHOOL_YEAR = 2016;
+var SCHOOL_YEAR = "2015-16";
 
 
 

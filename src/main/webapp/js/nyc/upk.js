@@ -57,7 +57,7 @@ nyc.upk.FieldsDecorator = {
 		return $.inArray(this.dayLength() * 1, FULL_DAY) > -1;
 	},
 	showApply: function(){
-		return !GET_IN_TOUCH_ONLY && this.attributes.BUTTON_TYPE == "apply";
+		return ACTIVE_APPLY_PERIOD && this.attributes.BUTTON_TYPE == "apply";
 	}
 };
 
