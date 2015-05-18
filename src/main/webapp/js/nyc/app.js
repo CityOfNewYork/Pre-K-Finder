@@ -115,6 +115,8 @@ nyc.App = (function(){
 		};
 
 		appClass.prototype = {
+			/** @private */
+			pannedCallout: false,
 			/**
 			 * @export
 			 * @param {String} id
@@ -263,7 +265,7 @@ nyc.App = (function(){
 						clearInterval(i);
 					}
 				}, 200);
-				$("#callout").remove();
+				me.removeCallout();
 				$("#alert").fadeOut();
 				me.pop = null;
 				if (location.type == "feature"){
@@ -298,7 +300,7 @@ nyc.App = (function(){
 				me.upkLayer.removeAllFeatures();
 				me.upkLayer.addFeatures(me.upkList.features());
 				me.setUpkSearch(me.upkList.features());				
-				$("#callout").remove();
+				me.removeCallout();
 				me.upkLayer.redraw();
 			},
 			/** @private */
@@ -353,6 +355,7 @@ nyc.App = (function(){
 			/** @private */
 			removeCallout: function(){
 				$("#callout").remove();
+				this.pannedCallout = false;
 				if (this.pop.fid){
 					var f = this.upkList.feature(this.pop.fid);
 					f.renderIntent = "default";
@@ -393,6 +396,18 @@ nyc.App = (function(){
 				this.upkTable.render(this.upkList, feature);		
 			},
 			/** @private */
+			panOnce: function(){
+				var mapH = $(this.map.div).height(),
+					info = $("#callout"),
+					infoH = info.height(),
+					infoBottom = info.position().top + info.parent().position().top + infoH;
+				if (!this.pannedCallout && infoBottom > mapH){
+					var pan = infoBottom - mapH + 5;
+					this.map.pan(0, pan);
+					this.pannedCallout = true;
+				}
+			},
+			/** @private */
 			updateCallout: function(){
 				var pop = this.pop;
 				if (pop){
@@ -400,7 +415,7 @@ nyc.App = (function(){
 					$("#callout").height(h + 51);
 					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").css("height", h + "px");
 					$("#callout_contentDiv").css("height", "100%");
-					pop.panIntoView();
+					this.panOnce();
 				}
 			}
 		};
