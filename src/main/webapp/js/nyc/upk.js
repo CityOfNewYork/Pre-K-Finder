@@ -425,7 +425,7 @@ nyc.upk.ListRenderer = (function(){
 		},
 		/** @private */
 		adjContainerHeight: function(){
-			$("#list-container").height($(window).height() - $(".banner").height() - $("#filter").height() - 15);
+			$("#list-container").height($(window).height() - $(".banner").height() - $("#filter").height() - 22);
 		},
 		/** @private */
 		more: function(){

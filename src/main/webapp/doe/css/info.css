@@ -1,5 +1,5 @@
 body, label, span, div {
-	color: #013364 !important;
+	color: #013364;
 }
 body.loading {
 	background-image: url(https://maps.nyc.gov/upk/img/spin.gif);
@@ -106,16 +106,37 @@ table.fields {
 #zip_cell {
 	width: 30%;
 }
+#lang-btn {
+	width: 36px;
+	height: 36px;
+	background-color: rgba(1,51,100,0.5);
+	margin: 5px;
+	position: fixed;
+	top: 16px;
+	
+}
+#lang-btn:hover {
+	background-color: rgb(1,51,100);
+}
+.noshow {
+	display: none;
+}
 @media only screen and (max-width : 600px) {
 	#street_cell {
 		width: auto;
 	}
 }
 @media only screen and (max-width : 360px) {
+	.ui-content {
+		padding: 5px;
+	}
 	#house_cell {
 		width: 60px;
 	}
 	#apt_cell {
 		width: 30px;
-	}		
+	}	
+	#dob div.ui-btn {
+		font-size: 12px;
+	}
 }

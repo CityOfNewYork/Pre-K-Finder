@@ -1,21 +1,6 @@
  GET http://localhost/Pre-K-Finder/src/main/webapp/img/0.png 404 (Not Found)
  
-"Please contact site for more information" is not a 
-valid URL for the WEB_SITE column of the upk data... 
-use a default doe url or null
-
-/geoserver/wfs?request=GetFeature&version=1.1.0&typeName=doe:UPK&outputFormat=csv
-
-
-
-
-
-
-
-
-
-
-
+translate button bounces
 
 
 

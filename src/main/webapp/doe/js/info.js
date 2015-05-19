@@ -14,7 +14,24 @@ var THANK_YOU_MESSAGE = "Thank you for completing our Pre-K for All information 
 		"shortly confirming your submission.";
 var ERROR_MESSAGE = "There was an error processing your submission data.  Please try again.";
 
+var langChoice = (function(){
+	try{//parse query string for lang
+		var params = document.location.search.substr(1).split("&");
+		for (var i = 0; i < params.length; i++){
+			var p = params[i].split("=");
+			if (p[0] == "lang"){
+				return p[1];
+			}
+		}
+	}catch(ignore){}	
+	return "en";
+})();
+
 $("document").ready(function(){
+	var lang = new nyc.Lang("body", "ar,bn,zh-CN,fr,ht,ko,ru,es,ur");
+	$("form").append($("#lang-btn"));
+	langPosition();
+	$(window).resize(langPosition);
 	window.dob = new nyc.DateField("#dob", MIN_DOB_YEAR, MAX_DOB_YEAR);
 	$("#dob").trigger("create");
 	$("#apply-submit").click(valid);
@@ -22,6 +39,10 @@ $("document").ready(function(){
 	$("#form-note").html(FORM_MSG);
 	$("#dob-note").html(DOB_MSG);
 });
+
+function langPosition(){
+	$("#lang-btn").css("left", $(".sect").position().left + $(".sect").width() - 36 + "px"); 
+};
 
 function valid(){
 	var err = [];
@@ -50,7 +71,7 @@ function valid(){
 	}
 };	
 
-function review(){				
+function review(){
 	var data = formData();
 	for (var d in data){
 		$("#review_" + d).html(data[d].toString());

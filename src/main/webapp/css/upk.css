@@ -430,13 +430,13 @@ label[for="filter-type-doe"] {
 /* ======================= begin copyright ======================= */
 
 #copyright {
-	left: 3px;
+	left: 0;
 	bottom: 0;
 	background-color: rgba(255,255,255,0.5);
 }
-#copyright, #copyright a {
+#copyright {
 	font-size: 12px !important;
-	font-weight: normal !important;
+	padding: 0 3px;
 }
 
 /* ======================== end copyright ======================== */
@@ -516,7 +516,7 @@ label[for="filter-type-doe"] {
 		padding: 9px 12.5px;
 	}
 	div#splash-cont {
-		width: 100%;
+		width: 95%;
 	}
 }
 @media only screen and (max-width : 495px), screen and (max-height: 350px) {

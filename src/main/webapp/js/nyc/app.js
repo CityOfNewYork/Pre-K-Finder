@@ -12,6 +12,7 @@ nyc.App = (function(){
 	 * @param {nyc.UpkList} upkList
 	 * @param {nyc.UpkTable} upkTable
 	 * @param {nyc.Share} share
+	 * @param {nyc.Lang} lang
 	 * 
 	 */
 	var appClass = function(map, locate, upkList, upkTable, share){
@@ -180,8 +181,9 @@ nyc.App = (function(){
 			changePage: function(btnUrl, me){
 				var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
 				me.openPanel = me.isPanelOpen();
-				$("#external-page iframe").attr("src", url);
+				$("#external-page iframe").attr("src", url + "?lang=" + me.lang.lang());
 				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
+				$("#lang-btn").hide();
 			},
 			/** @export **/
 			hideSplash: function(){
@@ -220,6 +222,7 @@ nyc.App = (function(){
 						}
 						if (ui.toPage.attr('id') == 'map-page' && me.openPanel){
 							$('#toggle-list').trigger('click');
+							$("#lang-btn").show();
 						}
 					};
 				$('body').pagecontainer({change: change});
@@ -356,7 +359,7 @@ nyc.App = (function(){
 			removeCallout: function(){
 				$("#callout").remove();
 				this.pannedCallout = false;
-				if (this.pop.fid){
+				if (this.pop && this.pop.fid){
 					var f = this.upkList.feature(this.pop.fid);
 					f.renderIntent = "default";
 				    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
@@ -425,7 +428,7 @@ nyc.App = (function(){
 
 $(document).ready(function(){
 
-	new nyc.Lang("body", "ar,bn,zh-CN,fr,ht,ko,ru,es,ur");
+	new nyc.Lang("body", SUPPORTED_LANGUAGES);
 
 	var map = new OpenLayers.Map(
 		"map", 
@@ -500,10 +503,10 @@ $(document).ready(function(){
 	
 	nyc.app = new nyc.App(
 		map, 
-		new nyc.Locate(map, new nyc.ZoomSearch('#main', map)), 
+		new nyc.Locate(map, new nyc.ZoomSearch("#main", map)), 
 		new nyc.upk.List(), 
 		new nyc.upk.ListRenderer(), 
-		new nyc.Share('#main')
+		new nyc.Share("#main")
 	); 
 
 	/*
@@ -532,7 +535,7 @@ $(document).ready(function(){
 	$("#splash").fadeIn();
 	
 	
-	$("#copyright").html("&copy; " + new Date().getFullYear() + " City of New York");
+	$("body").append("<div id='copyright' class='ctl notranslate' translate='no'>&copy; " + new Date().getFullYear() + " City of New York</div>");
 	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);
 	
 });

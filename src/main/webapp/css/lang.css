@@ -1,14 +1,28 @@
 #lang-btn {
+	display: block;
 	top: auto;
 	left: 3px;
 	bottom: 10px;
-	background-image: url(../img/translate.png);
-	padding: 0;
-	background-size: 28px 28px;
-	background-position: center;
-	background-repeat: no-repeat;
+	position: fixed;
 	z-index: 100000;
-	border-color: #ddd;
+}
+#lang-choice-button {
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	border: 1px solid #ddd;
+	background-color: rgba(1,51,100,0.5);
+	cursor: pointer;
+	background-image: url(../img/translate.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 28px 28px;
+}
+#lang-choice-button span {
+	display: none;
+}
+#lang-choice-button:after {
+	display: none;
 }
 .first-load #lang-btn {
 	display: none;
@@ -16,19 +30,6 @@
 .lang-placeholder {
 	display: none;
 }
-#lang-btn .goog-te-gadget-icon {
+#lang-btn .goog-te-gadget-icon, #lang-trans, .goog-te-banner-frame {
 	display: none;
-}
-#lang-btn .goog-te-gadget-simple {
-	background-color: transparent;
-	border: none;
-	width: 36px;
-	height: 36px;
-}
-#lang-btn .goog-te-gadget-simple span {
-	color: transparent;
-}
-.goog-te-menu-frame {
-	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.5);
-	border: none;	
 }
