@@ -21,18 +21,13 @@
 #lang-choice-button:hover {
 	background-color: rgb(1,51,100);
 }
-#lang-choice-button span {
+#lang-choice-button span, #lang-choice-button:after, .first-load #lang-btn, .lang-placeholder {
 	display: none;
 }
-#lang-choice-button:after {
+#lang-btn .goog-te-gadget-icon, #lang-trans, .skiptranslate, .goog-te-banner-frame {
 	display: none;
-}
-.first-load #lang-btn {
-	display: none;
-}
-.lang-placeholder {
-	display: none;
-}
-#lang-btn .goog-te-gadget-icon, #lang-trans, .goog-te-banner-frame {
-	display: none;
+	height: 0;
+	position: absolute;
+	left: -1000px;
+	top: -1000px;
 }

@@ -129,7 +129,6 @@ nyc.Lang = (function(){
 					}
 				}
 			});
-			$(document.getElementById(':2.container')).hide();
 			$('body').css('top', 'auto');
 			$('#goog-gt-tt').remove();
 		},
