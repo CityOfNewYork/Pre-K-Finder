@@ -88,7 +88,8 @@ nyc.ZoomSearch.prototype = {
 		$.each(this.sources, function(_, src){
 			if (src.cssClass == cssClass) name = src.name;
 		});
-		this.list.filterable('option', 'filterPlaceholder', plcHldr);
+		$('#fld-srch-container input[data-type="search"]').attr("placeholder", plcHldr);
+		$('#fld-srch-container span.lang-placeholder').remove();
 		$('#fld-srch-retention').append($('#fld-srch li'));
 		this.list.append($('li.' + cssClass));
 		if (!noChoose) this.chooseSource();

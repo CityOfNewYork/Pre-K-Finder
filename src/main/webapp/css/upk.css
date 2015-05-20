@@ -442,7 +442,7 @@ label[for="filter-type-doe"] {
 /* ======================== end copyright ======================== */
 
 
-/* ============== begin cartodb infowindow/tooltip =============== */
+/* ====================== begin callout ========================== */
 
 #callout .subway-line, #callout .subway-trans, #callout-size-check .subway-line, #callout-size-check t .subway-trans {
 	display: none;
@@ -491,7 +491,10 @@ label[for="filter-type-doe"] {
 #ol-popup-preload {
 	visibility: hidden;
 }
-/* =============== end cartodb infowindow/tooltip ================ */
+.callout.upk-info div.name {
+	max-width: 272px;
+}
+/* ========================= end callout ========================= */
 
 
 /* ===================== begin media queries ===================== */

@@ -413,9 +413,9 @@ nyc.App = (function(){
 			},
 			/** @private */
 			updateCallout: function(){
-				var pop = this.pop;
-				if (pop){
-					var h = $("#callout .upk-info").height();
+				var pop = this.pop, info = $("#callout .upk-info");
+				if (pop && info.length){
+					var h = info.height();
 					$("#callout").height(h + 51);
 					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").css("height", h + "px");
 					$("#callout_contentDiv").css("height", "100%");
