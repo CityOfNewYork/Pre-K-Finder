@@ -69,6 +69,7 @@ ext{
 		"--warning_level VERBOSE",
 		"--compilation_level WHITESPACE_ONLY",
 		//"--compilation_level SIMPLE_OPTIMIZATIONS",
+		"--charset utf8",
 		"--externs etc/closure/openlayers2.js",
 		"--js_output_file build/webapp/js/nyc-min.js",
 		"build/tmp/js/nyc/*.js",
