@@ -13,22 +13,35 @@ var THANK_YOU_MESSAGE = "Thank you for completing our Pre-K for All information 
 		"sent to the Pre-K for All Outreach team, who will contact you soon. You will also receive an email " +
 		"shortly confirming your submission.";
 var ERROR_MESSAGE = "There was an error processing your submission data.  Please try again.";
+var SUPPORTED_LANGUAGES = {
+	en: {val: "English", desc: "English"},
+	ar: {val: "Arabic", desc: "العربية"},
+	bn: {val: "Bengali", desc: "বাঙালি"},
+	"zh-CN": {val: "Chinese (Simplified)", desc: "中国"},
+	fr: {val: "French", desc: "Français"},
+	ht: {val: "Haitian Creole", desc: "Kreyòl Ayisyen"},
+	ko: {val: "Korean", desc: "한국의"},
+	ru: {val: "Russian", desc: "Pусский"},
+	es: {val: "Spanish", desc: "Español"},
+	ur: {val: "Urdu", desc: "اردو"}
+};
 
-var langChoice = (function(){
-	try{//parse query string for lang
-		var params = document.location.search.substr(1).split("&");
+//parse query string for lang
+(function(){
+	try{
+		var lang = false, params = document.location.search.substr(1).split("&");
 		for (var i = 0; i < params.length; i++){
 			var p = params[i].split("=");
 			if (p[0] == "lang"){
-				return p[1];
+				lang = p[1];
 			}
 		}
-	}catch(ignore){}	
-	return "en";
+	}catch(ignore){}
+	if (lang) document.cookie = "googtrans=/en/" + lang;
 })();
 
 $("document").ready(function(){
-	var lang = new nyc.Lang("body", "ar,bn,zh-CN,fr,ht,ko,ru,es,ur");
+	var lang = new nyc.Lang("body", SUPPORTED_LANGUAGES);
 	$("form").append($("#lang-btn"));
 	langPosition();
 	$(window).resize(langPosition);
@@ -140,3 +153,4 @@ function message(msg){
 	$("#result").fadeIn();
 	$("#result input").focus();
 };
+

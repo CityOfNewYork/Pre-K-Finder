@@ -94,6 +94,11 @@ nyc.Lang = (function(){
 			}
 		},
 		/** @export */
+		lang: function(){
+			if (nyc.lang.translate) return nyc.lang.translate.e;
+			return "en";
+		},
+		/** @export */
 		hack: function(){
 			/*
 			 * google translate doesn't translate placeholder attributes
@@ -133,13 +138,12 @@ nyc.Lang = (function(){
 		 * @return {string}
 		 */
 		getCookie: function(){
-		    var nameEQ = "googtrans=";
 		    var ca = document.cookie.split(";");
-		    for (var i=0; i < ca.length; i++){
+		    for (var i = 0; i < ca.length; i++){
 		        var c = ca[i];
 		        while (c.charAt(0) == " ") c = c.substring(1, c.length);
-		        if ( c.indexOf(nameEQ) == 0 ){
-		            return c.substring(nameEQ.length,c.length);
+		        if ( c.indexOf("googtrans=") == 0 ){
+		            return c.substring(10, c.length);
 		        }
 		    }
 		},
@@ -166,7 +170,7 @@ nyc.Lang = (function(){
  * @type {string}
  */
 nyc.Lang.HTML = 
-	"<div id='lang-btn'>" +
+	"<div id='lang-btn' title='Translate...'>" +
 		"<div id='lang-trans'></div>" +
 		"<select id='lang-choice' class='notranslate' translate='no'></select>" +
 	"</div>";

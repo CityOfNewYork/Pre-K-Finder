@@ -18,6 +18,9 @@
 	background-position: center;
 	background-size: 28px 28px;
 }
+#lang-choice-button:hover {
+	background-color: rgb(1,51,100);
+}
 #lang-choice-button span {
 	display: none;
 }

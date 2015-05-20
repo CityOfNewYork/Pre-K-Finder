@@ -107,16 +107,10 @@ table.fields {
 	width: 30%;
 }
 #lang-btn {
-	width: 36px;
-	height: 36px;
-	background-color: rgba(1,51,100,0.5);
 	margin: 5px;
-	position: fixed;
-	top: 16px;
-	
-}
-#lang-btn:hover {
-	background-color: rgb(1,51,100);
+	position: absolute;
+	top: 8px;
+	height: 36px;
 }
 .noshow {
 	display: none;
