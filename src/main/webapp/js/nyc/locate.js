@@ -41,9 +41,9 @@ nyc.Locate = (function(){
 		$(controls).on("search", function(e, input){
 			me.search(input);
 		});
-		$(controls).on("disambiguated", function(e, feature){
-			me.mapLocation(feature);
-			$(me).trigger("found", {type: "feature", feature: feature});				
+		$(controls).on("disambiguated", function(e, location){
+			me.mapLocation(location.feature);
+			$(me).trigger("found", location);				
 		});
 	};
 	

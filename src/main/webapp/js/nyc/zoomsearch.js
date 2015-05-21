@@ -114,7 +114,7 @@ nyc.ZoomSearch.prototype = {
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
 				me.val(feature.name());
-				$(me).trigger('disambiguated', me.clone(feature));
+				$(me).trigger('disambiguated', {type: 'feature', feature: me.clone(feature)});
 				li.parent().slideUp();
 			});
 		});
@@ -166,13 +166,13 @@ nyc.ZoomSearch.prototype.disambiguate = function(possibleValues){
 			var point = feature.geometry,
 				name = feature.attributes.name,
 				li = $('<li class="ui-li-static ui-body-inherit srch-type-addr">' + name + '</li>'),
-				cls = me.cssClass({name: name + point.x + point.y});
+				cls = name.replace(/ /, '-') + point.x + point.y;
 			$('li.' + cls).remove();
 			li.addClass(cls);
 			$('#fld-srch-retention').append(li);
 			li.click(function(){
 				me.val(name);
-				$(me).trigger('disambiguated', feature);
+				$(me).trigger('disambiguated', {type: 'geocode', feature: feature});
 				li.parent().slideUp();
 			});
 		});
