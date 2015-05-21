@@ -11,11 +11,13 @@ nyc.Lang = (function(){
 	 * 
 	 * @param {string} selector
 	 * @param {Object} languages
+	 * @param {boolean} hint
 	 * 
 	 */
-	var langClass = function(target, languages){
+	var langClass = function(target, languages, hint){
 		var codes = [], langs = {}, div = $(nyc.Lang.HTML);
 		nyc.lang = this;
+		this.hint = hint;
 		$(target).append(div);
 		for (var code in languages){
 			var val = languages[code].val, opt = $("<option></option>");
@@ -49,8 +51,23 @@ nyc.Lang = (function(){
 			nyc.lang.setLangDropdown();
 			nyc.lang.hack();
 			$('#lang-btn').show();
+			nyc.lang.showHint();
 			$(nyc.lang).trigger('ready');
 		},
+		/** 
+		 * @export 
+		 * 
+		 * my sincerest apologies to all sensible people
+		 */
+		showHint: function(){
+	    	if (this.hint){
+	    		$('#lang-hint').fadeIn(function(){
+		    		$('#lang-hint').animate(function(){
+		    			$('#lang-hint').fadeOut();
+		    		});
+	    		});
+	    	}
+	    },
 		/** @export */
 	    initDropdown: function(){
 			$("#lang-choice").change(function(){
@@ -172,4 +189,5 @@ nyc.Lang.HTML =
 	"<div id='lang-btn' title='Translate...'>" +
 		"<div id='lang-trans'></div>" +
 		"<select id='lang-choice' class='notranslate' translate='no'></select>" +
-	"</div>";
+	"</div>" +
+	"<div id='lang-hint'>Translate</div>";

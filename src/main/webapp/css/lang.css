@@ -31,3 +31,11 @@
 	left: -1000px;
 	top: -1000px;
 }
+#lang-hint {
+	display: none;
+	position: fixed;
+	background-color: white;
+	background-image: url(../img/lang-hint.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
