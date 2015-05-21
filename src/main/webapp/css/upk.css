@@ -546,13 +546,19 @@ label[for="filter-type-doe"] {
 	}
 	#callout-size-check .detail, #callout .detail {
 		display: none;
-	}	
+	}
+	#filter .ui-checkbox {
+		margin: 0 18px;
+	}
 }
 @media only screen and (max-height : 360px) {
 	div#splash-cont {
-		width: 450px;
+		width: 96%;
 		margin: 45px auto;
 	}
+	#splash .ui-btn {
+		margin: 7px 35px;
+	}	
 	#filter .ui-collapsible-content {
 		height: 220px;
 		overflow: auto;

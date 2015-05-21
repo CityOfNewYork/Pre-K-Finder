@@ -61,11 +61,19 @@ nyc.Lang = (function(){
 		 */
 		showHint: function(){
 	    	if (this.hint){
-	    		$('#lang-hint').fadeIn(function(){
-		    		$('#lang-hint').animate(function(){
-		    			$('#lang-hint').fadeOut();
-		    		});
-	    		});
+	    		var hint = $('#lang-hint'), 
+	    			start = hint.position().left,
+	    			i = 0,
+	    			bounce = function(){
+	    				var left = start + (i % 2 == 0 ? 10 : -10);
+		    			if (i > 5){
+		    				hint.fadeOut();
+		    			}else{
+			    			hint.animate({left: left + "px"}, bounce);
+		    			}
+		    			i++;
+	    			}; 
+	    		hint.fadeIn(bounce);
 	    	}
 	    },
 		/** @export */
