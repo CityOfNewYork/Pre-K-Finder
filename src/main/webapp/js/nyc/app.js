@@ -136,8 +136,10 @@ nyc.App = (function(){
 				var detail = $("#" + id + " .upk-detail"), 
 					show = detail.css("display") == "none";
 				detail.slideToggle(function(){
-					me.updateCallout();
-					if (show){
+					if (id.indexOf("callout") > -1){
+						me.pop.doResize = true;
+						me.updateCallout();
+					}else if (show){
 						var upkHtml = $("#" + id),
 							upkHeight = upkHtml.height(),
 							upkBottom = upkHtml.position().top + upkHeight,
@@ -393,6 +395,13 @@ nyc.App = (function(){
 			    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
 			    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
 			    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
+			    	me.pop.originalHeight = $("#callout").height();
+			    	if (me.pop.relativePosition.indexOf("t") == 0){
+			    		$("#callout").css({
+			    			top: "auto",
+			    			bottom: -($("#callout").position().top + $("#callout").height()) + "px"
+			    		});
+			    	}
 			},
 			/** @private */
 			identify: function(feature){				
@@ -413,13 +422,12 @@ nyc.App = (function(){
 			},
 			/** @private */
 			updateCallout: function(){
-				var pop = this.pop, info = $("#callout .upk-info");
+				var me = this, pop = this.pop, callout = $("#callout"), info = $("#callout .upk-info");
 				if (pop && info.length){
-					var h = info.height();
-					$("#callout").height(h + 51);
-					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").css("height", h + "px");
+					var calloutHeight = callout.height(), infoHeight = info.height();
 					$("#callout_contentDiv").css("height", "100%");
-					this.panOnce();
+					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").animate({height: infoHeight});
+					callout.animate({height: infoHeight + 51});
 				}
 			}
 		};
