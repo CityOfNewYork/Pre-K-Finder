@@ -450,6 +450,7 @@ label[for="filter-type-doe"] {
 }
 #callout {
 	max-width: 320px;
+	overflow: hidden;
 }
 #callout_contentDiv {
 	overflow: hidden;
