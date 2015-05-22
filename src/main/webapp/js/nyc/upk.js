@@ -72,7 +72,7 @@ nyc.upk.HtmlDecorator = {
 	 */
 	codeHtml: function(){
 		var codeHtml =  $("<div class='code'><span class='name'>Program Code: </span></div>");
-		return codeHtml.append(this.code());
+		return codeHtml.append("<span class='name notranslate' translate='no'>" + this.code() + "</span>");
 	},
 	/** 
 	 * @private 
