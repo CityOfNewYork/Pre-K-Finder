@@ -107,7 +107,8 @@ nyc.ZoomSearch.prototype = {
 	addFeatures: function(namedSource){
 		var me = this, src = namedSource.source;
 		$.each(src.features(), function(_, feature){
-			var li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden ' + namedSource.cssClass + '">' +
+			var li = $('<li class="ui-li-static ui-body-inherit ui-screen-hidden notranslate ' + 
+					namedSource.cssClass + '" translate="no">' +
 					'<img src="img/' + feature.type() + '0.png"><span class="' + namedSource.cssClass + '-id">' + 
 					feature.locCode() + "</span>" + feature.name() + '</li>');
 
@@ -165,7 +166,7 @@ nyc.ZoomSearch.prototype.disambiguate = function(possibleValues){
 		$.each(possibleValues, function(i, feature){
 			var point = feature.geometry,
 				name = feature.attributes.name,
-				li = $('<li class="ui-li-static ui-body-inherit srch-type-addr">' + name + '</li>'),
+				li = $('<li class="ui-li-static ui-body-inherit srch-type-addr notranslate" translate="no">' + name + '</li>'),
 				cls = name.replace(/ /, '-') + point.x + point.y;
 			$('li.' + cls).remove();
 			li.addClass(cls);
