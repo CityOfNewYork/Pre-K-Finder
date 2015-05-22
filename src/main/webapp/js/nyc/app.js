@@ -137,7 +137,6 @@ nyc.App = (function(){
 					show = detail.css("display") == "none";
 				detail.slideToggle(function(){
 					if (id.indexOf("callout") > -1){
-						me.pop.doResize = true;
 						me.updateCallout();
 					}else if (show){
 						var upkHtml = $("#" + id),
@@ -408,20 +407,28 @@ nyc.App = (function(){
 				this.upkTable.render(this.upkList, feature);		
 			},
 			/** @private */
-			panOnce: function(){
+			panOnce: function(calloutHeight){
+				
+				this.pop.panIntoView();
+				this.pannedCallout = true;
+				return;
+				
 				var callout = $("#callout");
 				if (callout.length){
-					var mapH = $(this.map.div).height(),
-						calloutH = callout.height(),
-						calloutTop = callout.position().top,
-						calloutBottom = calloutTop + callout.parent().position().top + calloutH;
+					var mapHeight = $(this.map.div).height(),
+						calloutTop = this.map.getViewPortPxFromLonLat(this.pop.lonlat).y - calloutHeight,
+						calloutBottom = callout.position().top + callout.parent().position().top + calloutHeight;
 					if (!this.pannedCallout){
 						var pan = 0;
-						if (calloutBottom > mapH){
-							pan = calloutBottom - mapH + 5;
-						}else if (callout.parent().position().top + calloutTop < 0){
-							pan = calloutTop - 5;
+						if (calloutBottom > mapHeight){
+							pan = calloutBottom - mapHeight + 5;
+							console.info("too low");
+						}else if (calloutTop < 0 && $("#callout").css("top") == "auto"){
+							console.info(this.map.getViewPortPxFromLonLat(this.pop.lonlat).y, calloutHeight);
+							pan = calloutTop;
+							console.info("too high");
 						}
+						console.warn(pan);
 						if (pan){
 							this.map.pan(0, pan);
 							this.pannedCallout = true;
@@ -431,13 +438,13 @@ nyc.App = (function(){
 			},
 			/** @private */
 			updateCallout: function(){
-				var me = this, pop = this.pop, callout = $("#callout"), info = $("#callout .upk-info");
+				var pop = this.pop, callout = $("#callout"), info = $("#callout .upk-info");
 				if (pop && info.length){
-					var calloutHeight = callout.height(), infoHeight = info.height();
+					var infoHeight = info.height(), calloutHeight = infoHeight + 51;
 					$("#callout_contentDiv").css("height", "100%");
 					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").height(infoHeight);
-					callout.height(infoHeight + 51);
-					me.panOnce();
+					callout.height(calloutHeight);
+					this.panOnce();
 				}
 			}
 		};
