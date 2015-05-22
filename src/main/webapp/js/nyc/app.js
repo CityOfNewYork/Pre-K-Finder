@@ -297,7 +297,6 @@ nyc.App = (function(){
 				var filters = {type:[], dayLength:[], applyOnly:[]};
 				$.each($("#filter input[type=checkbox]:checked"), function(_, n){
 					var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
-					console.warn(name, values);
 					values = filters[name].concat(values.split(","));
 					filters[name] = values;
 				});
@@ -410,14 +409,24 @@ nyc.App = (function(){
 			},
 			/** @private */
 			panOnce: function(){
-				var mapH = $(this.map.div).height(),
-					info = $("#callout"),
-					infoH = info.height(),
-					infoBottom = info.position().top + info.parent().position().top + infoH;
-				if (!this.pannedCallout && infoBottom > mapH){
-					var pan = infoBottom - mapH + 5;
-					this.map.pan(0, pan);
-					this.pannedCallout = true;
+				var callout = $("#callout");
+				if (callout.length){
+					var mapH = $(this.map.div).height(),
+						calloutH = callout.height(),
+						calloutTop = callout.position().top,
+						calloutBottom = calloutTop + callout.parent().position().top + calloutH;
+					if (!this.pannedCallout){
+						var pan = 0;
+						if (calloutBottom > mapH){
+							pan = calloutBottom - mapH + 5;
+						}else if (callout.parent().position().top + calloutTop < 0){
+							pan = calloutTop - 5;
+						}
+						if (pan){
+							this.map.pan(0, pan);
+							this.pannedCallout = true;
+						}
+					}
 				}
 			},
 			/** @private */
@@ -426,8 +435,9 @@ nyc.App = (function(){
 				if (pop && info.length){
 					var calloutHeight = callout.height(), infoHeight = info.height();
 					$("#callout_contentDiv").css("height", "100%");
-					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").animate({height: infoHeight});
-					callout.animate({height: infoHeight + 51});
+					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").height(infoHeight);
+					callout.height(infoHeight + 51);
+					me.panOnce();
 				}
 			}
 		};
