@@ -37,6 +37,7 @@ ext{
 	dev_date_rules = 'doe/js/date_rules.js'
 
 	stg_info_url = '//nycenetstg.nycenet.edu/schoolsearch/info.html'
+	//stg_info_url = 'doe/info.html'
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
 	stg_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a stg url
 	stg_geoclient_url = '//csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
@@ -83,6 +84,13 @@ ext{
 
 task setEnv << {
 	if (!project.hasProperty('env')) project.ext.env = default_env
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+	if (!project.hasProperty('revision')) project.ext.revision =  proc.text.trim()
+    println "\nbuilding from git revision ${revision}..."
+ 	println "building for ${project.ext.env} environment...\n"
+ 	buildDoe.archiveName = "get-in-touch-${revision}.zip"
+	buildDoe.from {project.ext.env == 'dev' ? 'nowhere' : 'build/tmp/doe'}
 }
 
 task makeArgs << {
@@ -96,6 +104,13 @@ task copyFiles(dependsOn: clean) << {
 	build.mkdirs()
 	copy {
 		from 'src/main/webapp'
+		include 'index.html'
+		include 'css/**'
+		include 'js/nyc/**'
+		include 'js/proj4js/**'
+		include 'js/OpenLayers-2.13.1/OpenLayers.js'
+		include 'js/OpenLayers-2.13.1/theme/default/style.mobile.tidy.css'
+		include 'doe/**'
 		into 'build/tmp' 
 	}
 }
@@ -109,7 +124,6 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	def baseUrls = project.ext["${env}_basemap_urls"]
 	def dateRules = project.ext["${env}_date_rules"]
 
- 	println "\nbuilding for env=${env}...\n"
  	println "INFO_URL=${infoUrl}"
  	println "APPLY_URL=${applyUrl}" 
  	println "DIRECTORY_URL=${directoryUrl}" 
@@ -211,7 +225,35 @@ task cleanCsv(dependsOn: clean) << {
 	}
 }
 
-task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
+task rewiteDoeSrcs(dependsOn: [setEnv, copyFiles]) << {
+	if (env != 'dev'){
+		ant.replace(file: 'build/tmp/doe/info.html', token: '../css/lang.css', value: 'css/lang.css')
+		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/nyc/lang.js', value: 'js/lang.js')
+		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/ie8.js', value: 'js/ie8.js')
+		copy {
+			from 'build/tmp'
+			include 'doe/**'
+			into 'build'
+		}
+		copy {
+			from 'build/tmp/css'
+			include 'lang.css'
+			into 'build/doe/css'
+		}
+		copy {
+			from 'build/tmp/js/nyc'
+			include 'lang.js'
+			into 'build/doe/js'
+		}
+		copy {
+			from 'build/tmp/js'
+			include 'ie8.js'
+			into 'build/doe/js'
+		}
+	}
+}
+
+task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss, rewiteDoeSrcs]) << {
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
@@ -230,6 +272,11 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
 		ant.replace(file: 'build/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
 	}
+}
+
+task buildDoe(type: Zip, dependsOn: [setEnv, rewiteDoeSrcs]) {}
+
+task buildApp(dependsOn: [rewiteSrcs, buildDoe]) << {
 	copy {
 		from 'build/tmp'
 		include 'index.html'
@@ -250,7 +297,8 @@ task buildApp(dependsOn: [cleanCsv, setEnv, minifyScript, minifyCss]) << {
 			into 'build/webapp'
 		}
 	}
-	delete 'build/tmp'
+	println "\nCleaning up...\n"
+	//delete 'build/tmp'
 	delete 'compile.bat'
 	delete 'compile.sh'
 }
