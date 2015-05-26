@@ -111,9 +111,17 @@ table.fields {
 	position: absolute;
 	top: 8px;
 	height: 36px;
+	overflow: visible;
 }
 .noshow {
 	display: none;
+}
+#lang-hint {
+	background-image: url(../img/lang-hint-r.png);
+	left: -143px;
+	bottom: auto;
+	padding: 19px 10px 11px 0px;
+	top: -6px;
 }
 @media only screen and (max-width : 600px) {
 	#street_cell {

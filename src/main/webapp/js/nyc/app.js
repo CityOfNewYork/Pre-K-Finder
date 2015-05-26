@@ -523,7 +523,7 @@ $(document).ready(function(){
 		new nyc.upk.List(), 
 		new nyc.upk.ListRenderer(), 
 		new nyc.Share("#main"),
-		new nyc.Lang("body", SUPPORTED_LANGUAGES, true)
+		new nyc.Lang("body", SUPPORTED_LANGUAGES, "left")
 	); 
 
 	/*

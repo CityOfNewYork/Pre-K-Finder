@@ -43,12 +43,12 @@ body .goog-text-highlight {
 }
 #lang-hint {
 	display: block;
-	position: fixed;
-	background-image: url(../img/lang-hint.png);
+	position: absolute;
+	background-image: url(../img/lang-hint-l.png);
 	background-position: center;
 	background-repeat: no-repeat;
 	left: 44px;
-	bottom: 2px;
+	bottom: -8px;
 	font-size: 20px;
 	background-size: 128px 64px;
 	width: 128px;

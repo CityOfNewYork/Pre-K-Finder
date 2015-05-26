@@ -1,7 +1,6 @@
  GET http://localhost/Pre-K-Finder/src/main/webapp/img/0.png 404 (Not Found)
  
-translate button bounces
-
+alert positionin is wrong!
 
 
 

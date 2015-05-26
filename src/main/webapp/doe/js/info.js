@@ -14,22 +14,23 @@ var THANK_YOU_MESSAGE = "Thank you for completing our Pre-K for All information 
 		"shortly confirming your submission.";
 var ERROR_MESSAGE = "There was an error processing your submission data.  Please try again.";
 var SUPPORTED_LANGUAGES = {
-	en: {val: "English", desc: "English"},
-	ar: {val: "Arabic", desc: "العربية"},
-	bn: {val: "Bengali", desc: "বাঙালি"},
-	"zh-CN": {val: "Chinese (Simplified)", desc: "中国"},
-	fr: {val: "French", desc: "Français"},
-	ht: {val: "Haitian Creole", desc: "Kreyòl Ayisyen"},
-	ko: {val: "Korean", desc: "한국의"},
-	ru: {val: "Russian", desc: "Pусский"},
-	es: {val: "Spanish", desc: "Español"},
-	ur: {val: "Urdu", desc: "اردو"}
+    en: {val: "English", desc: "English"},
+    ar: {val: "Arabic", desc: "&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; " /* العربية */},
+    bn: {val: "Bengali", desc: "&#x9AC;&#x9BE;&#x999;&#x9BE;&#x9B2;&#x9BF;" /* বাঙালি */},
+    "zh-CN": {val: "Chinese (Simplified)", desc: "&#x4E2D;&#x56FD;" /* 中国 */},
+    fr: {val: "French", desc: "Fran&#231;ais" /* Français */},
+    ht: {val: "Haitian Creole", desc: "Krey&#242;l Ayisyen" /* Kreyòl Ayisyen */},
+    ko: {val: "Korean", desc: "&#xD55C;&#xAD6D;&#xC758;" /* 한국의 */},
+    ru: {val: "Russian", desc: "P&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;" /* Pусский */},
+    es: {val: "Spanish", desc: "Espa&#241;ol" /* Español */},
+    ur: {val: "Urdu", desc: "&#x627;&#x631;&#x62F;&#x648;" /* اردو */}
 };
 
 //parse query string for lang
 (function(){
+	var lang = "none";
 	try{
-		var lang = false, params = document.location.search.substr(1).split("&");
+		var params = document.location.search.substr(1).split("&");
 		for (var i = 0; i < params.length; i++){
 			var p = params[i].split("=");
 			if (p[0] == "lang"){
@@ -37,14 +38,28 @@ var SUPPORTED_LANGUAGES = {
 			}
 		}
 	}catch(ignore){}
-	if (lang) document.cookie = "googtrans=/en/" + lang;
+	if (lang != "en" && lang != "none"){
+		document.cookie = "googtrans=/en/" + lang;
+	}else{
+		document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+	}
+	$("document").ready(function(){
+		if (lang != "en") new nyc.Lang("body", SUPPORTED_LANGUAGES, "right");
+		if (lang == "none"){
+			var langPosition = function(){
+				$("#lang-btn").css("left", $(".sect").position().left + $(".sect").width() - 36 + "px"); 
+			};
+			$("form").append($("#lang-btn"));
+			langPosition();
+			$(nyc.lang).on("change", langPosition);
+			$(window).resize(langPosition);				
+		}else{
+			$("#lang-btn").hide();
+		}
+	});
 })();
 
 $("document").ready(function(){
-	var lang = new nyc.Lang("body", SUPPORTED_LANGUAGES);
-	$("form").append($("#lang-btn"));
-	langPosition();
-	$(window).resize(langPosition);
 	window.dob = new nyc.DateField("#dob", MIN_DOB_YEAR, MAX_DOB_YEAR);
 	$("#dob").trigger("create");
 	$("#apply-submit").click(valid);
@@ -52,10 +67,6 @@ $("document").ready(function(){
 	$("#form-note").html(FORM_MSG);
 	$("#dob-note").html(DOB_MSG);
 });
-
-function langPosition(){
-	$("#lang-btn").css("left", $(".sect").position().left + $(".sect").width() - 36 + "px"); 
-};
 
 function valid(){
 	var err = [];
