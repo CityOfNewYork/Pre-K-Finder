@@ -105,11 +105,15 @@ task copyFiles(dependsOn: clean) << {
 	copy {
 		from 'src/main/webapp'
 		include 'index.html'
+		include 'img/**'
 		include 'css/**'
 		include 'js/nyc/**'
+		include 'js/jq/**'
 		include 'js/proj4js/**'
 		include 'js/OpenLayers-2.13.1/OpenLayers.js'
 		include 'js/OpenLayers-2.13.1/theme/default/style.mobile.tidy.css'
+		include 'js/OpenLayers-2.13.1/theme/default/style.css'
+		include 'js/OpenLayers-2.13.1/img/cloud-popup-relative.png'
 		include 'doe/**'
 		into 'build/tmp' 
 	}
@@ -231,24 +235,19 @@ task rewiteDoeSrcs(dependsOn: [setEnv, copyFiles]) << {
 		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/nyc/lang.js', value: 'js/lang.js')
 		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/ie8.js', value: 'js/ie8.js')
 		copy {
-			from 'build/tmp'
-			include 'doe/**'
-			into 'build'
-		}
-		copy {
 			from 'build/tmp/css'
 			include 'lang.css'
-			into 'build/doe/css'
+			into 'build/tmp/doe/css'
 		}
 		copy {
 			from 'build/tmp/js/nyc'
 			include 'lang.js'
-			into 'build/doe/js'
+			into 'build/tmp/doe/js'
 		}
 		copy {
 			from 'build/tmp/js'
 			include 'ie8.js'
-			into 'build/doe/js'
+			into 'build/tmp/doe/js'
 		}
 	}
 }
