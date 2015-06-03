@@ -27,6 +27,7 @@
 	<link rel="stylesheet" href="css/upk.css" type="text/css"> 
 	<link rel="stylesheet" href="css/directions.css" type="text/css"> 
 	<link rel="stylesheet" href="css/control-common.css" type="text/css"> 
+	<link rel="stylesheet" href="css/get-in-touch.css" type="text/css"> 
 	<link rel="stylesheet" href="css/lang.css" type="text/css"> 
 	<link rel="stylesheet" href="css/share.css" type="text/css"> 
 	<link rel="stylesheet" href="css/zoomsearch.css" type="text/css"> 
@@ -65,7 +66,7 @@
 					All New York City children born in 2011 are eligible.				
 				</div>
 				<a class="splash-apply" data-role="button" href="//www.semsnycdoe.com/parentsite?local" target="_blank">I am ready to apply for Pre-K</a>
-				<a class="splash-info" data-role="button" onclick="nyc.app.changePage('doe/info.html', nyc.app);nyc.app.hideSplash();"></a>
+				<a class="splash-info" data-role="button" onclick="nyc.app.getInTouch();nyc.app.hideSplash();"></a>
 				<a class="splash-continue" data-role="button" onclick="nyc.app.hideSplash();">Continue to <span class="notranslate" translate="no"> Pre-K Finder </span> map</a>
 				<a class="splash-directory" data-role="button" href="http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local" target="_blank">View the Pre-K Directory for more info</a>
 			</div>
@@ -133,7 +134,7 @@
 			<h1 class="notranslate" translate="no" onclick="document.location='./';" title="NYC Pre-K Finder">
 				Pre-K Finder
 			</h1>
-			<a data-role="button" data-icon="arrow-l" class="hdr-btn ui-btn-right" href="#map-page" data-transition="slidedown">
+			<a data-role="button" data-icon="arrow-l" class="hdr-btn back-btn ui-btn-right" href="#map-page" data-transition="slidedown">
 				Back to Finder
 			</a>
 		</div>
@@ -179,14 +180,14 @@
 			<h1 class="notranslate" translate="no" onclick="document.location='./';" title="NYC Pre-K Finder">
 				Pre-K Finder
 			</h1>
-			<a data-role="button" data-icon="arrow-l" class="hdr-btn ui-btn-right" href="#map-page" data-transition="slidedown">
+			<a data-role="button" data-icon="arrow-l" class="hdr-btn back-btn ui-btn-right" href="#map-page" data-transition="slidedown" onclick="$('#lang-btn').show();">
 				Back to Finder
 			</a>
 		</div>
 		<div id="external-content" data-role="content"><iframe></iframe></div>
 	</div>
 	<div id="callout-size-check"></div>
-	<script src="doe/js/date_rules.js"></script>
+	<script src="doe/js/date-rules.js"></script>
 	<script src="js/nyc/constants.js"></script>
 	<script src="js/nyc/upk.js"></script>
 	<script src="js/nyc/lang.js"></script>
@@ -194,6 +195,8 @@
 	<script src="js/nyc/directions.js"></script>
 	<script src="js/nyc/share.js"></script>
 	<script src="js/nyc/zoomsearch.js"></script>
+	<script src="js/nyc/get-in-touch.js"></script>
+	<script src="js/nyc/date.js"></script>
 	<script src="js/nyc/app.js"></script>
 	<script>
 		/* google analytics */

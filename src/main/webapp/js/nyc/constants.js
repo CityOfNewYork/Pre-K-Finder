@@ -24,8 +24,13 @@ var TODAY = localeDate(),
 	    es: {val: "Spanish", desc: "Espa&#241;ol" /* Español */},
 	    ur: {val: "Urdu", desc: "&#x627;&#x631;&#x62F;&#x648;" /* اردو */}
 	},
+	FORM_MSG =  ACTIVE_APPLY_PERIOD ? FORM_MSG_YES_APPLY : FORM_MSG_NO_APPLY,
+	FORM_THANK_YOU_MSG = "Thank you for completing our Pre-K for All information form! Your submission is being " +
+			"sent to the Pre-K for All Outreach team, who will contact you soon. You will also receive an email " +
+			"shortly confirming your submission.",
+	FORM_ERROR_MSG = "There was an error processing your submission data.  Please try again.",
 	APPLY_TITLE = "Apply Now",
-	INFO_URL = "doe/info.html",
+	FORM_HANDLER_URL = "doe/form-handler.html",
 	APPLY_URL = "//www.semsnycdoe.com/parentsite",
 	GEOCLIENT_URL = "//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input=",
 	BASEMAP_URLS = ["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"],

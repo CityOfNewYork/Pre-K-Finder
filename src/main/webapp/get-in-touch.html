@@ -9,20 +9,31 @@
 	<title>NYC Pre-K Finder - Get in Touch</title>
 
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
-	<link rel="stylesheet" href="../css/lang.css">
-	<link rel="stylesheet" href="css/info.css">
+	<link rel="stylesheet" href="css/get-in-touch.css">
+	<link rel="stylesheet" href="css/upk.css">
 	
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-	<!--[if lt IE 9]><script src="../js/ie8.js"></script><![endif]-->
-	<script src="js/date_rules.js"></script>
-	<script src="js/date.js"></script>
-	<script src="../js/nyc/lang.js"></script>
-	<script src="js/info.js"></script>
+	<!--[if lt IE 9]><script src="js/ie8.js"></script><![endif]-->
+	<script src="doe/js/date-rules.js"></script>
+	<script src="js/OpenLayers-2.13.1/OpenLayers.js"></script>	
+	<script src="js/nyc/constants.js"></script>
+	<script src="js/nyc/date.js"></script>
+	<script src="js/nyc/get-in-touch.js"></script>
 </head>
 <body>
-	<div id="page" data-role="page">
-		<div id="main" data-role="main" class="ui-content">
+	<div id="info-page" data-role="page">
+		<div class="banner" data-role="header">
+			<img class="banner-doe-logo" src="img/nycLogoDOE.png" onclick="document.location='./';" alt="NYC Pre-K Finder" title="NYC Pre-K Finder" />
+			<div class="banner-school-yr">for School Year <span class="school-yr"></span></div>
+			<h1 class="notranslate" translate="no" onclick="document.location='./';" title="NYC Pre-K Finder">
+				Pre-K Finder
+			</h1>
+			<a id="info-back" data-role="button" data-icon="arrow-l" class="hdr-btn back-btn ui-btn-right" href="#map-page" data-transition="slidedown">
+				Back to Finder
+			</a>
+		</div>
+		<div data-role="content">
 			<form autocomplete="on" novalidate>
 				<div class="sect">
 					<h2>Student Information</h2>
@@ -120,7 +131,7 @@
 					<input id="email" name="email" type="text" required pattern="[\w-]+@([\w-]+\.)+[\w-]+">
 				</div>
 				<div id="form-note"></div>
-				<input id="apply-submit" type="button" value="Submit Info">
+				<button id="apply-submit">Submit Info</button>
 			</form>
 			<div id="review">		
 				<h3>Please review your submission:</h3>
@@ -136,15 +147,10 @@
 				<div><span class="name">Day Telephone:</span> <span id="review_day_telephone"></span></div>
 				<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
 				<div><span class="name">Email address:</span> <span id="review_email"></span></div>
-				<div id="reviewBtns">
+				<div id="review-btns">
 					<input type="button" onclick="$('#review').fadeOut();" value="Cancel">
-					<input id="review-submit" type="button" onclick="apply();" value="Submit">
+					<button id="review-submit" type="button" onclick="nyc.info.apply();">Submit</button>
 				</div>
-			</div>
-			<div id="result">
-				<img id="result-thanks" src="img/thanks.png"><img id="result-error" src="img/error.png">
-				<div id="result-message"></div>				
-				<input type="button" onclick="$('#result').fadeOut();" value="OK">			
 			</div>
 		</div>
 	</div>
@@ -159,4 +165,4 @@
 		ga('send', 'pageview');
 	</script>	
 </body>
-</html>
+</html>	

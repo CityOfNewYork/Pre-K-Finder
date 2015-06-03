@@ -1,0 +1,128 @@
+#info-page label {
+	white-space: nowrap;
+	padding-right: 10px;
+}
+#info-page.info-wait {
+	background-image: url(../img/spin.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+#info-page.info-wait .ui-content {
+	display: none;
+}
+#info-page h2, #info-page h3 {
+	color: #5681ac;
+}
+#info-page form {
+	margin: 0 auto 100px;
+	max-width: 600px;
+}
+#info-page .sect {
+	border: 1px solid #5681ac;
+	border-radius: 0.6em;
+	padding: 5px;
+	margin: 0 0 10px 0;
+}
+#info-page .ui-selectmenu-button {
+	width: 100% !important;
+}
+#info-page .err {
+	color: red !important;
+	font-weight: bold !important;
+}
+#dob {
+	margin-top: -9px;
+}
+#dob table {
+	width: 100%;
+}
+#dob td {
+	width: 33%;
+}
+#review, #result {
+	position: fixed;
+	margin: 0 calc(50% - 147px);
+	width: 270px;
+	border-radius: 0.6em;
+	border: 1px solid lightgrey;
+	box-shadow: 5px 10px 20px 5px rgba(1,51,100,0.9);
+	background-color: white;
+	padding: 5px;
+	display:none;
+	z-index: 100;
+	top: 100px;
+}
+#result-message {
+	padding: 5px;
+	text-align: center;
+}
+#result img {
+	margin: 3px calc(50% - 36px);
+	width: 72px;
+}
+#review h3 {
+	text-align: center;
+}
+#review-btns {
+	width: 207px;
+	margin: 20px 29px;
+}
+#req_note {
+	text-align: center;
+}
+#info-page table.fields {
+	width: 100%;
+	border-collapse: collapse;
+}
+#info-page .fields td {
+	vertical-align: top;
+	width: 50%;
+}
+#house_cell {
+	width: 30px;
+}
+#street_cell {
+	width: 300px;
+}
+#apt_cell {
+	width: 30px;
+}
+#borough_cell {
+	width: 70%;
+}
+#zip_cell {
+	width: 30%;
+}
+#info-page .ui-content {
+  overflow: auto;
+  height: calc(100% - 45px);
+}
+@media only screen and (max-width : 600px) {
+	#street_cell {
+		width: auto;
+	}
+	#review, #result {
+		top: 46px;
+	}
+}
+@media only screen and (max-width : 360px) {
+	#info-page .ui-content {
+		padding: 5px;
+	}
+	#house_cell {
+		width: 60px;
+	}
+	#apt_cell {
+		width: 30px;
+	}	
+	#dob div.ui-btn {
+		font-size: 12px;
+	}
+}
+@media only screen and (max-height : 360px) {
+	#review, #result {
+		max-height: 280px;
+		overflow: auto;
+		top: 10px;
+	}	
+}

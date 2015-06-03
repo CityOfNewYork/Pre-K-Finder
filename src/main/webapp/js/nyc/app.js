@@ -161,7 +161,6 @@ nyc.App = (function(){
 				var to = escape($(btn).data("upk-addr")),
 					name = escape($(btn).data("upk-name")),
 					from = escape(me.currentLocation && me.currentLocation.name ? me.currentLocation.name() : "");
-				me.openPanel = me.isPanelOpen();
 				$("body").pagecontainer("change", $("#dir-page"), {transition: "slideup"});
 				if (me.lastDir != from + "|" + to){
 					var args = {from: unescape(from), to: unescape(to), facility: unescape(name)};
@@ -175,6 +174,10 @@ nyc.App = (function(){
 					}
 				}
 			},
+			getInTouch: function(){
+				$("body").pagecontainer("change", "get-in-touch.html", {transition: "slideup"});
+				$("#date-month").focus(200);
+			},
 			/**
 			 * @export
 			 * @param {Element|string} btnUrl
@@ -182,7 +185,6 @@ nyc.App = (function(){
 			 */
 			changePage: function(btnUrl, me){
 				var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
-				me.openPanel = me.isPanelOpen();
 				$("#external-page iframe").attr("src", url + "?lang=" + me.lang.lang());
 				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
 				$("#lang-btn, #copyright").hide();
@@ -213,6 +215,7 @@ nyc.App = (function(){
 			/** @private */
 			initPages: function(){
 				var me = this, change = function(e, ui){
+						var toPage = ui.toPage.attr("id");
 						if (IOS){
 							$("html").css("overflow-y", "scroll");
 						}else{
@@ -222,10 +225,17 @@ nyc.App = (function(){
 							$(window).on("orientationchange resize", frameSize);
 							frameSize();
 						}
-						if (ui.toPage.attr("id") == "map-page" && me.openPanel){
+						if (toPage == "map-page"){
 							$("#toggle-list").trigger("click");
 						}
-						if (ui.toPage.attr("id") != "external-page") $("#lang-btn, #copyright").show();
+						if (toPage == "info-page" || toPage == "external-page"){
+							$("#lang-btn, #copyright").hide(200);
+							if (toPage == "info-page"){
+								nyc.info.init();
+							}
+						}else{
+							$("#lang-btn, #copyright").show();
+						}
 					};
 				$("body").pagecontainer({change: change});
 			},
@@ -547,7 +557,6 @@ $(document).ready(function(){
 	if (!ACTIVE_APPLY_PERIOD) $("#splash .splash-apply, #splash .splash-directory, #filter-appy").hide();
 	$(".splash-message").html(SPLASH_MSG);
 	$("#splash .splash-info").html(INFO_TITLE);	
-	$("#splash .splash-info").data("url", INFO_URL);
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();
 	

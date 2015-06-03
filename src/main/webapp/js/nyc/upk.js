@@ -239,10 +239,8 @@ nyc.upk.HtmlDecorator = {
 			anchorHtml.attr("href", url)
 				.attr("target", "_blank");
 		}else{
-			url = INFO_URL;
 			title = SPLASH_INFO_BUTTON_TITLE_NO_APPLY;
-			anchorHtml.attr("data-url", url)
-				.attr("onclick", "nyc.app.changePage(this, nyc.app);");
+			anchorHtml.attr("onclick", "nyc.app.getInTouch();");
 		}
 		anchorHtml.html(title);
 		return infoApplyBtnHtml.append(anchorHtml);		

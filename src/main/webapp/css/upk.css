@@ -218,7 +218,7 @@ div#splash-cont {
 .ui-btn:hover:after {
 	background-color: rgb(1,51,100);
 }
-#alert .ui-btn, #list-more, #back {
+#alert .ui-btn, #list-more {
 	width: 44px;
 	height: 20px;
 	padding: 12px 0;
@@ -230,7 +230,9 @@ div#splash-cont {
 	color: white;
 	border-radius: 0.6em;	
 }
-
+.ui-btn.ui-corner-all {
+	border-radius: 0.6em;
+}
 /* ====================== end other buttons ====================== */
 
 

@@ -20,39 +20,38 @@ ext{
 	default_env = 'dev'
 	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 	
-	local_info_url = 'doe/info.html'
+	local_form_handler_url = 'doe/form-handler.html'
 	local_apply_url = '//www.semsnycdoe.com/parentsite?local'
 	local_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local'
 	local_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	local_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	local_subway_urls = '["//maps.nyc.gov/geowebcache/service/wms/", "//maps1.nyc.gov/geowebcache/service/wms/", "//maps2.nyc.gov/geowebcache/service/wms/", "//maps3.nyc.gov/geowebcache/service/wms/"]'
-	local_date_rules = 'doe/js/date_rules.js'
+	local_date_rules = 'doe/js/date-rules.js'
 	
-	dev_info_url = 'doe/info.html' //TODO is there a dev url
+	dev_form_handler_url = 'doe/form-handler.html'
 	dev_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a dev url
 	dev_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a dev url
 	dev_geoclient_url = '//csgis-dev-web.csc.nycnet/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	dev_basemap_urls = '["//csgis-dev-web.csc.nycnet/gis/data/tiles/basic/"]'
 	dev_subway_urls = '["//csgis-dev-web.csc.nycnet/geowebcache/service/wms/"]'
-	dev_date_rules = 'doe/js/date_rules.js'
+	dev_date_rules = 'doe/js/date-rules.js'
 
-	stg_info_url = '//nycenetstg.nycenet.edu/schoolsearch/info.html'
-	//stg_info_url = 'doe/info.html'
+	stg_form_handler_url = '//nycenetstg.nycenet.edu/schoolsearch/form-handler.html'		
 	stg_apply_url = '//www.semsnycdoe.com/parentsite' //TODO is there a stg url
 	stg_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm' //TODO is there a stg url
 	stg_geoclient_url = '//csgis-stg-prx.csc.nycnet/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	stg_basemap_urls = '["//csgis-stg-prx.csc.nycnet/gis/data/tiles/basic/"]'
 	stg_subway_urls = '["//csgis-stg-prx.csc.nycnet/geowebcache/service/wms/"]'
-	stg_date_rules = '//nycenetstg.nycenet.edu/schoolsearch/js/date_rules.js'
-	//stg_date_rules = 'doe/js/date_rules.js'
+	stg_date_rules = '//nycenetstg.nycenet.edu/schoolsearch/js/date-rules.js'
+	//stg_date_rules = 'doe/js/date-rules.js'
 	
-	prd_info_url = '//www.nycenet.edu/schoolsearch/info.html'
+	prd_form_hanlder_url = '//www.nycenet.edu/schoolsearch/form-handler.html'		
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
 	prd_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm'
 	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
 	prd_basemap_urls = '["//maps.nyc.gov/gis/data/tiles/basic/", "//maps1.nyc.gov/gis/data/tiles/basic/", "//maps2.nyc.gov/gis/data/tiles/basic/", "//maps3.nyc.gov/gis/data/tiles/basic/"]'
 	prd_subway_urls = '["//maps.nyc.gov/geowebcache/service/wms/", "//maps1.nyc.gov/geowebcache/service/wms/", "//maps2.nyc.gov/geowebcache/service/wms/", "//maps3.nyc.gov/geowebcache/service/wms/"]'
-	prd_date_rules = '//www.nycenet.edu/schoolsearch/js/date_rules.js'
+	prd_date_rules = '//www.nycenet.edu/schoolsearch/js/date-rules.js'
 
 	csvFileIn = 'etc/pm/data/UPK_Report_2015_05_07.csv'
 	csvOutColumns = ['LOCCODE', 'X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
@@ -64,7 +63,7 @@ ext{
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
 	addressReplace = CSVParser.parse(new File(csvAddressReplace).getText(), CSVFormat.EXCEL).getRecords()
 
-	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'lang.css', 'share.css', 'zoomsearch.css']
+	orderedCssFiles = ['upk.css', 'directions.css', 'control-common.css', 'lang.css', 'share.css', 'zoomsearch.css', 'get-in-touch.css']
 
 	closureArgs = [
 		"--warning_level VERBOSE",
@@ -105,18 +104,23 @@ task copyFiles(dependsOn: clean) << {
 	copy {
 		from 'src/main/webapp'
 		include 'index.html'
+		include 'get-in-touch.html'
+		include 'doe/**'
+		include 'img/**'
 		include 'css/**'
+		include 'js/jq/**'
 		include 'js/nyc/**'
 		include 'js/proj4js/**'
 		include 'js/OpenLayers-2.13.1/OpenLayers.js'
+		include 'js/OpenLayers-2.13.1/theme/default/style.css'
 		include 'js/OpenLayers-2.13.1/theme/default/style.mobile.tidy.css'
-		include 'doe/**'
+		include 'js/OpenLayers-2.13.1/img/cloud-popup-relative.png'
 		into 'build/tmp' 
 	}
 }
 
 task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
-	def infoUrl = project.ext["${env}_info_url"]
+	def formUrl = project.ext["${env}_form_handler_url"]
 	def directoryUrl = project.ext["${env}_directory_url"]
 	def applyUrl = project.ext["${env}_apply_url"]
 	def geoUrl = project.ext["${env}_geoclient_url"]
@@ -124,7 +128,6 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	def baseUrls = project.ext["${env}_basemap_urls"]
 	def dateRules = project.ext["${env}_date_rules"]
 
- 	println "INFO_URL=${infoUrl}"
  	println "APPLY_URL=${applyUrl}" 
  	println "DIRECTORY_URL=${directoryUrl}" 
  	println "DATE_RULES_URL=${dateRules}" 
@@ -133,12 +136,11 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
  	println "BASEMAP_URLS=${baseUrls}\n"
 
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
-	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_info_url, value: infoUrl)
+	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_form_handler_url, value: formUrl)
 	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_apply_url, value: applyUrl)
 	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_geoclient_url, value: geoUrl)
 	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_subway_urls, value: subwayUrls)
 	ant.replace(file: 'build/tmp/js/nyc/constants.js', token: local_basemap_urls, value: baseUrls)
-	ant.replace(file: 'build/tmp/index.html', token: local_info_url, value: infoUrl)
 	ant.replace(file: 'build/tmp/index.html', token: local_directory_url, value: directoryUrl)
 	ant.replace(file: 'build/tmp/index.html', token: local_apply_url, value: applyUrl)
 	ant.replace(file: 'build/tmp/index.html', token: local_date_rules, value: dateRules)
@@ -225,35 +227,7 @@ task cleanCsv(dependsOn: clean) << {
 	}
 }
 
-task rewiteDoeSrcs(dependsOn: [setEnv, copyFiles]) << {
-	if (env != 'dev'){
-		ant.replace(file: 'build/tmp/doe/info.html', token: '../css/lang.css', value: 'css/lang.css')
-		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/nyc/lang.js', value: 'js/lang.js')
-		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/ie8.js', value: 'js/ie8.js')
-		copy {
-			from 'build/tmp'
-			include 'doe/**'
-			into 'build'
-		}
-		copy {
-			from 'build/tmp/css'
-			include 'lang.css'
-			into 'build/doe/css'
-		}
-		copy {
-			from 'build/tmp/js/nyc'
-			include 'lang.js'
-			into 'build/doe/js'
-		}
-		copy {
-			from 'build/tmp/js'
-			include 'ie8.js'
-			into 'build/doe/js'
-		}
-	}
-}
-
-task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss, rewiteDoeSrcs]) << {
+task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss]) << {
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
@@ -262,6 +236,7 @@ task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss, rewiteDoeSrcs]) <
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/directions.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/share.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/get-in-touch.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
 
 	if (env != 'dev'){
@@ -270,35 +245,33 @@ task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss, rewiteDoeSrcs]) <
 		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/lang.css" type="text/css">', value: '')
 		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/share.css" type="text/css">', value: '')
 		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
+		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/get-in-touch.css" type="text/css">', value: '')
 		ant.replace(file: 'build/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
 	}
 }
 
-task buildDoe(type: Zip, dependsOn: [setEnv, rewiteDoeSrcs]) {}
+task buildDoe(type: Zip, dependsOn: [setEnv, copyFiles]) {}
 
 task buildApp(dependsOn: [rewiteSrcs, buildDoe]) << {
 	copy {
 		from 'build/tmp'
 		include 'index.html'
+		include 'get-in-touch.html'
 		include 'upk.csv'
 		include 'css/upk-min.css'
+		include 'css/lang.css'
 		include 'css/ie8.css'
 		include 'img/**'
 		include 'js/**'
+		include 'doe/**'
 		exclude 'upk.csv'
 		into 'build/webapp'
 	}
-	if (env == 'dev'){
-		copy {
-			from 'build/tmp'
-			include 'date_rules.js'
-			include 'info.html'
-			include 'css/**'
-			into 'build/webapp'
-		}
-	}
 	println "\nCleaning up...\n"
-	//delete 'build/tmp'
+	if (env != 'dev'){
+		delete 'build/webapp/doe'
+	}
+	delete 'build/tmp'
 	delete 'compile.bat'
 	delete 'compile.sh'
 }
