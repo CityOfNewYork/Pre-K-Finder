@@ -556,7 +556,7 @@ $(document).ready(function(){
 	
 	if (!ACTIVE_APPLY_PERIOD) $("#splash .splash-apply, #splash .splash-directory, #filter-appy").hide();
 	$(".splash-message").html(SPLASH_MSG);
-	$("#splash .splash-info").html(INFO_TITLE);	
+	$("#splash .splash-info div").html(INFO_TITLE);	
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();
 	

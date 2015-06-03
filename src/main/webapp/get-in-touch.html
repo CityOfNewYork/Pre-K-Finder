@@ -100,17 +100,17 @@
 					<label for="relationship">Relationship:</label>
 					<select id="relationship" name="relationship" required data-pattern="^((?!Choose).)*$">
 						<option value="">Choose...</option>
-						<option>Mother</option>
-						<option>Father</option>
-						<option>Grandparent</option>
-						<option>Sister/Brother</option>
-						<option>Other Relative</option>
-						<option>Step Parent</option>
-						<option>Foster Parent</option>
-						<option>Agency</option>
-						<option>Ward Of State</option>
-						<option>Other Legal Guardian</option>
-						<option>Non-Relative</option>
+						<option value="Mother">Mother</option>
+						<option value="Father">Father</option>
+						<option value="Grandparent">Grandparent</option>
+						<option value="Sister/Brother">Sister/Brother</option>
+						<option value="Other Relative">Other Relative</option>
+						<option value="Step Parent">Step Parent</option>
+						<option value="Foster Parent">Foster Parent</option>
+						<option value="Agency">Agency</option>
+						<option value="Ward Of State">Ward Of State</option>
+						<option value="Other Legal Guardian">Other Legal Guardian</option>
+						<option value="Non-Relative">Non-Relative</option>
 					</select>
 					<h3>Contact Information</h3>
 					<table class="fields">
@@ -148,8 +148,8 @@
 				<div><span class="name">Evening Telephone:</span> <span id="review_evening_telephone"></span></div>
 				<div><span class="name">Email address:</span> <span id="review_email"></span></div>
 				<div id="review-btns">
-					<input type="button" onclick="$('#review').fadeOut();" value="Cancel">
-					<button id="review-submit" type="button" onclick="nyc.info.apply();">Submit</button>
+					<button onclick="$('#review').fadeOut();">Cancel</button>
+					<button id="review-submit" onclick="nyc.info.apply();">Submit</button>
 				</div>
 			</div>
 		</div>

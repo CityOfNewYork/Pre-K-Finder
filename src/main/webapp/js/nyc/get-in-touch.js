@@ -35,7 +35,6 @@ nyc.info = {
 				}
 			}
 		});
-		err=[];
 		if (err.length){
 			$(err[0]).focus();
 		}else{
