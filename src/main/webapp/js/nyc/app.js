@@ -12,10 +12,9 @@ nyc.App = (function(){
 	 * @param {nyc.UpkList} upkList
 	 * @param {nyc.UpkTable} upkTable
 	 * @param {nyc.Share} share
-	 * @param {nyc.Lang} lang
 	 * 
 	 */
-	var appClass = function(map, locate, upkList, upkTable, share, lang){
+	var appClass = function(map, locate, upkList, upkTable, share){
 		var me = this;
 		me.pop = null;
 		me.currentLocation = {geometry: null, name: function(){return "";}};
@@ -24,7 +23,6 @@ nyc.App = (function(){
 		me.parseQueryStr();
 		me.upkList = upkList;
 		me.upkTable = upkTable;
-		me.lang = lang;
 		
 		me.initPages();
 
@@ -185,7 +183,7 @@ nyc.App = (function(){
 			 */
 			changePage: function(btnUrl, me){
 				var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
-				$("#external-page iframe").attr("src", url + "?lang=" + me.lang.lang());
+				$("#external-page iframe").attr("src", url);
 				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
 				$("#lang-btn, #copyright").hide();
 			},
@@ -456,6 +454,8 @@ nyc.App = (function(){
 
 $(document).ready(function(){
 
+	new nyc.Lang("body", SUPPORTED_LANGUAGES, "left")
+
 	var map = new OpenLayers.Map(
 		"map", 
 		{
@@ -532,8 +532,7 @@ $(document).ready(function(){
 		new nyc.Locate(map, new nyc.ZoomSearch("#main", map)), 
 		new nyc.upk.List(), 
 		new nyc.upk.ListRenderer(), 
-		new nyc.Share("#main"),
-		new nyc.Lang("body", SUPPORTED_LANGUAGES, "left")
+		new nyc.Share("#main")
 	); 
 
 	/*
