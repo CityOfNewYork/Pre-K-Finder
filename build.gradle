@@ -104,17 +104,27 @@ task copyFiles(dependsOn: clean) << {
 	copy {
 		from 'src/main/webapp'
 		include 'index.html'
+<<<<<<< HEAD
 		include 'get-in-touch.html'
 		include 'doe/**'
+=======
+>>>>>>> branch 'before-cors' of https://github.com/CityOfNewYork/Pre-K-Finder.git
 		include 'img/**'
 		include 'css/**'
 		include 'js/jq/**'
 		include 'js/nyc/**'
+		include 'js/jq/**'
 		include 'js/proj4js/**'
 		include 'js/OpenLayers-2.13.1/OpenLayers.js'
 		include 'js/OpenLayers-2.13.1/theme/default/style.css'
 		include 'js/OpenLayers-2.13.1/theme/default/style.mobile.tidy.css'
+<<<<<<< HEAD
 		include 'js/OpenLayers-2.13.1/img/cloud-popup-relative.png'
+=======
+		include 'js/OpenLayers-2.13.1/theme/default/style.css'
+		include 'js/OpenLayers-2.13.1/img/cloud-popup-relative.png'
+		include 'doe/**'
+>>>>>>> branch 'before-cors' of https://github.com/CityOfNewYork/Pre-K-Finder.git
 		into 'build/tmp' 
 	}
 }
@@ -227,7 +237,34 @@ task cleanCsv(dependsOn: clean) << {
 	}
 }
 
+<<<<<<< HEAD
 task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss]) << {
+=======
+task rewiteDoeSrcs(dependsOn: [setEnv, copyFiles]) << {
+	if (env != 'dev'){
+		ant.replace(file: 'build/tmp/doe/info.html', token: '../css/lang.css', value: 'css/lang.css')
+		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/nyc/lang.js', value: 'js/lang.js')
+		ant.replace(file: 'build/tmp/doe/info.html', token: '../js/ie8.js', value: 'js/ie8.js')
+		copy {
+			from 'build/tmp/css'
+			include 'lang.css'
+			into 'build/tmp/doe/css'
+		}
+		copy {
+			from 'build/tmp/js/nyc'
+			include 'lang.js'
+			into 'build/tmp/doe/js'
+		}
+		copy {
+			from 'build/tmp/js'
+			include 'ie8.js'
+			into 'build/tmp/doe/js'
+		}
+	}
+}
+
+task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss, rewiteDoeSrcs]) << {
+>>>>>>> branch 'before-cors' of https://github.com/CityOfNewYork/Pre-K-Finder.git
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')	
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/constants.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/upk.js"></script>', value: '')
@@ -268,9 +305,12 @@ task buildApp(dependsOn: [rewiteSrcs, buildDoe]) << {
 		into 'build/webapp'
 	}
 	println "\nCleaning up...\n"
+<<<<<<< HEAD
 	if (env != 'dev'){
 		delete 'build/webapp/doe'
 	}
+=======
+>>>>>>> branch 'before-cors' of https://github.com/CityOfNewYork/Pre-K-Finder.git
 	delete 'build/tmp'
 	delete 'compile.bat'
 	delete 'compile.sh'
