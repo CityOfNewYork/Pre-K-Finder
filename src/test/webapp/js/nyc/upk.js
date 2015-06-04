@@ -301,7 +301,6 @@ QUnit.test("nyc.upk.HtmlDecorator.seatsDayHtml", function(assert){
 	var feature = createTestFeature();
 	TEST_LIST.populate([feature]);
 	var node = feature.seatsDayHtml();
-	console.warn(node);
 	var child1 = node.children().first();
 	assert.equal(node[0].tagName, "DIV", "seatsDayHtml node should be a <div>");	
 	assert.ok(node.hasClass("seats"), "seatsDayHtml node should have css class 'seats'");
@@ -316,4 +315,317 @@ QUnit.test("nyc.upk.HtmlDecorator.seatsDayHtml", function(assert){
 		assert.equal(node.html(), "SEATS " + window.DAY_LENGTH[i], "seatsDayHtml node html should be 'SEATS " + window.DAY_LENGTH[i] + "'");			
 	}
 });
+
+
+$.ajax({
+	url:"upk.csv",
+	dataType: "text",
+	success: function(csvData){
+		var csvFeatures = $.csv.toObjects(csvData), features = [], wkt = new OpenLayers.Format.WKT();
+		$.each(csvFeatures, function(_, f){
+			var feature = wkt.read("POINT (" + f.X + " " + f.Y + ")");
+			feature.attributes = f;
+			feature.attributes.id = f.LOCCOCDE;
+			features.push(feature);
+		});
+		runListTests(features);
+	},
+	error: function(){
+		alert("There was an error loading the Pre-K test sites.  Please Try again."); 
+	}
+});	
+
+function runListTests(testFeatures){
+	
+	QUnit.test("nyc.upk.List.populate", function(assert){
+		TEST_LIST.populate(testFeatures);
+		assert.equal(TEST_LIST.allFeatures.length, testFeatures.length, "TEST_LIST.allFeatures should contain " + testFeatures.length + " elements");
+		assert.ok(TEST_LIST.ready, "TEST_LIST should be ready");
+		
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain a feature with id = " + feature.id);
+			for (var fnc in nyc.upk.FieldsDecorator){
+				assert.equal(feature[fnc], nyc.upk.FieldsDecorator[fnc], "feature with id = " + feature.id + " should have " + fnc + " function");
+			}
+			for (var fnc in nyc.upk.HtmlDecorator){
+				assert.equal(feature[fnc], nyc.upk.HtmlDecorator[fnc], "feature with id = " + feature.id + " should have " + fnc + " function");
+			}
+		});
+	});
+
+	/** VARY TYPES **/
+	
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain a feature with id = " + feature.id);
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "CHARTER"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	/** VARY DAYS **/
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 5, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "5", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.dayLength(), filters.dayLength) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [3, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["3", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.dayLength(), filters.dayLength) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.dayLength(), filters.dayLength) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "3", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.dayLength(), filters.dayLength) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.dayLength(), filters.dayLength) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: [],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if ($.inArray(feature.dayLength(), filters.dayLength) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	/** VARY APPLY AND TYPE **/
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: ["true"],
+			type: ["DOE", "NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if (feature.showApply()){			
+			assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain a feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: ["true"],
+			type: ["DOE"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if (feature.showApply() && $.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'NYCEEC'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+				applyOnly: ["true"],
+			type: ["DOE", "NYCEEC"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if (feature.showApply() && $.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['DOE', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: ["true"],
+			type: ["DOE", "CHARTER"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if (feature.showApply() && $.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+	QUnit.test("nyc.upk.List.filter TYPES = ['NYCEEC', 'CHARTER'] - DAY_LENGTH = [1, 2, 3, 4, 5, 6, 7] - NO APPLY", function(assert){
+		var filters = {
+			applyOnly: ["true"],
+			type: ["NYCEEC", "CHARTER"],
+			dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+		};		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST.filter(filters);
+		$.each(TEST_LIST.allFeatures, function(_, feature){
+			if (feature.showApply() && $.inArray(feature.type(), filters.type) > -1){
+				assert.equal(TEST_LIST.filteredFeatures[feature.id], feature, "TEST_LIST.filteredFeatures should contain the feature with id = " + feature.id);
+			}else{
+				assert.notOk(TEST_LIST.filteredFeatures[feature.id], "TEST_LIST.filteredFeatures should not contain the feature with id = " + feature.id);
+			}
+		});
+	});
+
+};
 

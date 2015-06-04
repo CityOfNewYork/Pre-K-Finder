@@ -1,0 +1,10 @@
+LOCCODE,X,Y,PREK_TYPE,NAME,NOTE,ADDRESS,BOROUGH,ZIP,PHONE,EMAIL,WEBSITE,DAY_LENGTH,SEATS,MEALS,INDOOR_OUTDOOR,EXTENDED_DAY,SEMS_CODE,BUTTON_TYPE
+K031,996979,204091,DOE,P.S. 031 Samuel F Dupont,,75 Meserole Ave,K,11222,718-383-8998,mscarla@schools.nyc.gov,http://schools.nyc.gov/schoolportals/14/k031,1,108,2,1,3,14K031,apply
+K032,986550,187189,DOE,P.S. 032 Samuel Mills Sprole,,317 Hoyt St,K,11231,718-222-6400,dflorio@schools.nyc.gov,http://schools.nyc.gov/schoolportals/15/k032,1,30,3,7,3,15K032,apply
+K034,998184,203901,DOE,P.S. 034 Oliver H Perry,,131 Norman Ave,K,11222,718-389-5842,casselt@schools.nyc.gov,http://ps34.org,1,18,2,3,3,14K034,info
+K037,998621,194400,CHARTER,Beginning With Children Charter School II Pre - Kindergarten,,11 Bartlett St,K,11206,718-388-8847,eogbahon@bwccs2.org,http://bwccschool.org/index.jsp,2,18,5,9,3,14K037,apply
+K129,986088,188932,CHARTER,Success Academy Charter School - Cobble Hill Pre - Kindergarten,,284 Baltic St,K,11201,718-704-1460,SACH.MainOffice@saschools.org,http://successacademies.org/schools/cobble-hill/,3,18,5,9,3,15K129,apply
+K182,995368,198597,CHARTER,Success Academy Charter School - Williamsburg Pre - Kindergarten,,183 South 3rd St,K,11211,718-704-1419,SAWB.MainOffice@saschools.org,http://successacademies.org/schools/williamsburg/,4,18,5,9,3,14K182,info
+KAAS,999265,180616,NYCEEC,Associated Beth Rivkah Schools - Preschool,,470 Lefferts Ave,K,11225,718-735-0400,ldeitsch@bethrivkah.edu,http://bethrivkah.edu,5,80,1,3,1,17KAAS,apply
+KABE,990431,166881,NYCEEC,Bais Yaakov D'chassidei Gur,,1975 51st St,K,11204,718-338-5600,esmith@thejnet.com,,6,18,8,3,1,21KABE,apply
+KABF,994744,164153,NYCEEC,Bais Yaakov Academy ( Elm ),,1213 Elm Ave,K,11230,718-339-4747,Levin@byaschool.com,http://byschool.com,7,57,7,7,1,21KABF,info
