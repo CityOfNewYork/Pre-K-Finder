@@ -110,346 +110,346 @@ nyc.App = (function(){
 			error: function(){
 				$("body").removeClass("firstLoad");
 				me.alert(null, "There was an error loading the Pre-K sites.  Please Try again."); 
-				}
-			});	
-		};
+			}
+		});	
+	};
 
-		appClass.prototype = {
-			/** @private */
-			pannedCallout: false,
-			/**
-			 * @export
-			 * @param {String} id
-			 * @param {nyc.App} me
-			 */
-			mapUpk: function(id, me){
-				me.centerUpk(id);
-			},
-			/**
-			 * @export
-			 * @param {Element} btn
-			 * @param {nyc.App} me
-			 */
-			showUpkDetail: function(id, me){
-				var detail = $("#" + id + " .upk-detail"), 
-					show = detail.css("display") == "none";
-				detail.slideToggle(function(){
-					if (id.indexOf("callout") > -1){
-						me.updateCallout();
-					}else if (show){
-						var upkHtml = $("#" + id),
-							upkHeight = upkHtml.height(),
-							upkBottom = upkHtml.position().top + upkHeight,
-							content = $("#list-container"),
-							contentHeight = content.height();
-						if (contentHeight > upkHeight && upkBottom > contentHeight){
-							content.animate({
-								scrollTop: content.scrollTop() + (upkBottom - contentHeight)
-							});
-						}
-					}
-				});
-			},
-			/**
-			 * @export
-			 * @param {Element} btn
-			 * @param {nyc.App} me
-			 */
-			direct: function(btn, me){
-				var to = escape($(btn).data("upk-addr")),
-					name = escape($(btn).data("upk-name")),
-					from = escape(me.currentLocation && me.currentLocation.name ? me.currentLocation.name() : "");
-				$("body").pagecontainer("change", $("#dir-page"), {transition: "slideup"});
-				if (me.lastDir != from + "|" + to){
-					var args = {from: unescape(from), to: unescape(to), facility: unescape(name)};
-					me.lastDir = from + "|" + to;
-					if (me.directions){
-						me.directions.directions(args);
-					}else{
-						setTimeout(function(){
-							me.directions = new nyc.Directions(args, $("#dir-map"));
-						}, 500);
+	appClass.prototype = {
+		/** @private */
+		pannedCallout: false,
+		/**
+		 * @export
+		 * @param {String} id
+		 * @param {nyc.App} me
+		 */
+		mapUpk: function(id, me){
+			me.centerUpk(id);
+		},
+		/**
+		 * @export
+		 * @param {Element} btn
+		 * @param {nyc.App} me
+		 */
+		showUpkDetail: function(id, me){
+			var detail = $("#" + id + " .upk-detail"), 
+				show = detail.css("display") == "none";
+			detail.slideToggle(function(){
+				if (id.indexOf("callout") > -1){
+					me.updateCallout();
+				}else if (show){
+					var upkHtml = $("#" + id),
+						upkHeight = upkHtml.height(),
+						upkBottom = upkHtml.position().top + upkHeight,
+						content = $("#list-container"),
+						contentHeight = content.height();
+					if (contentHeight > upkHeight && upkBottom > contentHeight){
+						content.animate({
+							scrollTop: content.scrollTop() + (upkBottom - contentHeight)
+						});
 					}
 				}
-			},
-			getInTouch: function(){
-				$("body").pagecontainer("change", "get-in-touch.html", {transition: "slideup"});
-				$("#date-month").focus(200);
-			},
-			/**
-			 * @export
-			 * @param {Element|string} btnUrl
-			 * @param {nyc.App} me
-			 */
-			changePage: function(btnUrl, me){
-				var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
-				$("#external-page iframe").attr("src", url);
-				$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
-				$("#lang-btn, #copyright").hide();
-			},
-			/** @export **/
-			hideSplash: function(){
-				$("#splash-cont").css({
-					top : "0",
-					left : $("#splash-cont").offset().left + "px",
-					position : "absolute",
-					overflow : "hidden"
-				});
-				$("#splash-cont").animate({
-					top : "88px",
-					left : "4px",
-					height : "36px",
-					width : "36px",
-					opacity : 0,
-					padding : 0,
-					"border-width" : 0
-				}, 
-				1000, 
-				function() {
-					$("#splash").hide();
-					$("#splash-cont").attr("style", "");
-				});
-			},			
-			/** @private */
-			initPages: function(){
-				var me = this, change = function(e, ui){
-						var toPage = ui.toPage.attr("id");
-						if (IOS){
-							$("html").css("overflow-y", "scroll");
-						}else{
-							var frameSize = function(){						
-								$("#external-page iframe").height($(window).height() - $(".banner").height());
-							};
-							$(window).on("orientationchange resize", frameSize);
-							frameSize();
-						}
-						if (toPage == "map-page"){
-							$("#toggle-list").trigger("click");
-						}
-						if (toPage == "info-page" || toPage == "external-page"){
-							$("#lang-btn, #copyright").hide(200);
-							if (toPage == "info-page"){
-								nyc.info.init();
-							}
-						}else{
-							$("#lang-btn, #copyright").show();
-						}
-					};
-				$("body").pagecontainer({change: change});
-			},
-			isPanelOpen: function(){
-				return $("#toggle-list").hasClass("ui-btn-active");
-			},
-			/** @private */
-			parseQueryStr: function(){
-				var searching = false;
-				try{//parse query string and geocode
-					var params = document.location.search.substr(1).split("&");
-					for (var i = 0; i < params.length; i++){
-						var p = params[i].split("=");
-						if (p[0] == "input"){
-							this.locate.search(decodeURIComponent(p[1]).replace(/\s+/g, " "));
-							searching = true;
-						}
-					}
-				}catch(ignore){}
-				if (!searching) this.locate.locate();				
-			},
-			/** @private */
-			setUpkSearch: function(features){
-				var me = this;
-				$.each(features, function(_, f){
-					var it = $("<li>" + f.name() + "</li>");
-					it.click(function(){
-						me.centerUpk(f.id);
-						$("input[placeholder='Search schools...']").val(f.name());
-					});
-					$("#schools").append(it);
-				});
-			},
-			/** @private */
-			found: function(_, location){
-				var me = this;
-				me.currentLocation = location.feature;
-				var i = setInterval(function(){
-					if (me.upkList.ready){
-						me.upkTable.render(me.upkList, location.feature);		
-						me.upkInView();
-						clearInterval(i);
-					}
-				}, 200);
-				me.removeCallout();
-				$("#alert").fadeOut();
-				me.pop = null;
-				if (location.type == "feature"){
-					me.identify(me.upkList.feature(location.feature.origId));
-				}
-			},
-			/** @private */
-			upkInView: function(){
-				var features = this.upkList.features(this.currentLocation.geometry);
-				if (features.length){
-					var e = this.map.getExtent(), 
-						g = features[0].geometry, 
-						p = new OpenLayers.LonLat(g.x, g.y);
-					if (!e.containsLonLat(p)){
-						e.extend(p);
-						this.map.zoomToExtent(e);
-					}
-				}
-			},
-			/** @private */
-			filter: function(e){
-				var me = this;
-				var filters = {type:[], dayLength:[], applyOnly:[]};
-				$.each($("#filter input[type=checkbox]:checked"), function(_, n){
-					var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
-					values = filters[name].concat(values.split(","));
-					filters[name] = values;
-				});
-				me.upkList.filter(filters);
-				me.upkTable.render(me.upkList, me.currentLocation);
-				me.upkLayer.removeAllFeatures();
-				me.upkLayer.addFeatures(me.upkList.features());
-				me.setUpkSearch(me.upkList.features());				
-				me.removeCallout();
-				me.upkLayer.redraw();
-			},
-			/** @private */
-			alert: function(e, msg){
-				$("#alert .alert-msg").html(msg);
-				$("body").append($("#alert"));
-				$("#alert").fadeIn(400, function(){
-					$("#alert input").focus();				
-				});
-			},
-			/** @private */
-			centerUpk: function(id){
-				var me = this, upk = me.upkList.feature(id), g = upk.geometry;
-				me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
-				upk.renderIntent = "select";
-				$($(".toggle-map")[0]).trigger("click");
-				me.upkLayer.redraw();
-		    	if ($(window).height() < 550){
-		    		var id = function(){
-		    			me.map.events.un({moveend:id});
-		    			me.identify(upk);
-		    		};
-					me.map.events.on({moveend:id});
-		    		me.map.pan(100, 100);
-		    	}else{
-	    			me.identify(upk);
-		    	}
-			},
-			/** @private */
-			hover: function(e){
-			    var f = e.feature;
-			    if (f){
-				    f.renderIntent = "select";
-				    f.layer.drawFeature(f);
-			    }
-			}, 
-			/** @private */
-			out: function(e){
-				var f = e.feature;
-			    if (f){
-			    	f.renderIntent = "default";
-			    	f.layer.drawFeature(f);
-			    }
-			},
-			/** @private */
-			toggle: function(e){
-				var target = $(e.target);
-				$("#toggle .ui-btn").removeClass("ui-btn-active");
-				$("#panel").panel(target.attr("id") == "toggle-list" ? "open" : "close");
-				setTimeout(function(){target.addClass("ui-btn-active");}, 100);
-			},
-			/** @private */
-			removeCallout: function(){
-				$("#callout").remove();
-				this.pannedCallout = false;
-				if (this.pop && this.pop.fid){
-					var f = this.upkList.feature(this.pop.fid);
-					f.renderIntent = "default";
-				    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
-					this.upkLayer.removeFeatures([f]);
-					this.upkLayer.addFeatures([f]);
-					$(this.upkLayer.div).trigger("click");
-				}
-			    this.pop = null;
-			},
-			/** @private **/
-			showPop: function(html, p, id){
-				var me = this,
-					checker = $("#callout-size-check"),
-					div = $("<div></div>").append(html);
-				    if (me.pop) me.removeCallout();
-					checker.html(div.html());	
-				    me.pop = new OpenLayers.Popup.FramedCloud(
-			    		"callout", 
-			    		new OpenLayers.LonLat(p.x, p.y), 
-			    		new OpenLayers.Size(checker[0].offsetWidth, checker[0].offsetHeight), 
-			    		div.html(), 
-			    		null, 
-			    		true, 
-			    		function(){me.removeCallout();}
-		    		);
-					me.pop.fid = id;
-					me.pop.autoSize = false;
-					me.pop.keepInMap = true;
-					me.map.addPopup(me.pop);				
-			    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
-			    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
-			    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
-			    	me.pop.originalHeight = $("#callout").height();
-			    	if (me.pop.relativePosition.indexOf("t") == 0){
-			    		$("#callout").css({
-			    			top: "auto",
-			    			bottom: -($("#callout").position().top + $("#callout").height()) + "px"
-			    		});
-			    	}
-			},
-			/** @private */
-			identify: function(feature){				
-			    this.showPop(feature.html("callout"), feature.geometry, feature.id);
-				this.upkTable.render(this.upkList, feature);		
-			},
-			/** @private */
-			panOnce: function(){
-				var callout = $("#callout");
-				if (callout.length){
-					var mapHeight = $(this.map.div).height(),
-						calloutHeight = callout.height(),
-						calloutTop = this.map.getViewPortPxFromLonLat(this.pop.lonlat).y - calloutHeight,
-						calloutBottom = callout.position().top + callout.parent().position().top + calloutHeight;
-					if (!this.pannedCallout){
-						var pan = 0;
-						if (calloutBottom > mapHeight){
-							pan = calloutBottom - mapHeight;
-						}else if (calloutTop < 0 && $("#callout").css("top") == "auto"){
-							pan = calloutTop;
-						}
-						if (pan){
-							this.map.pan(0, pan);
-							this.pannedCallout = true;
-						}
-					}
-				}
-			},
-			/** @private */
-			updateCallout: function(){
-				var pop = this.pop, callout = $("#callout"), info = $("#callout .upk-info");
-				if (pop && info.length){
-					var infoHeight = info.height(), calloutHeight = infoHeight + 50;
-					$("#callout_contentDiv").css("height", "100%");
-					$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").height(infoHeight);
-					callout.height(calloutHeight);
-					this.panOnce();						
+			});
+		},
+		/**
+		 * @export
+		 * @param {Element} btn
+		 * @param {nyc.App} me
+		 */
+		direct: function(btn, me){
+			var to = escape($(btn).data("upk-addr")),
+				name = escape($(btn).data("upk-name")),
+				from = escape(me.currentLocation && me.currentLocation.name ? me.currentLocation.name() : "");
+			$("body").pagecontainer("change", $("#dir-page"), {transition: "slideup"});
+			if (me.lastDir != from + "|" + to){
+				var args = {from: unescape(from), to: unescape(to), facility: unescape(name)};
+				me.lastDir = from + "|" + to;
+				if (me.directions){
+					me.directions.directions(args);
+				}else{
+					setTimeout(function(){
+						me.directions = new nyc.Directions(args, $("#dir-map"));
+					}, 500);
 				}
 			}
-		};
-		
-		return appClass;
+		},
+		getInTouch: function(){
+			$("body").pagecontainer("change", "get-in-touch.html", {transition: "slideup"});
+			$("#date-month").focus(200);
+		},
+		/**
+		 * @export
+		 * @param {Element|string} btnUrl
+		 * @param {nyc.App} me
+		 */
+		changePage: function(btnUrl, me){
+			var url = typeof btnUrl == "string" ? btnUrl : $(btnUrl).data("url");
+			$("#external-page iframe").attr("src", url);
+			$("body").pagecontainer("change", $("#external-page"), {transition: "slideup"});
+			$("#lang-btn, #copyright").hide();
+		},
+		/** @export **/
+		hideSplash: function(){
+			$("#splash-cont").css({
+				top : "0",
+				left : $("#splash-cont").offset().left + "px",
+				position : "absolute",
+				overflow : "hidden"
+			});
+			$("#splash-cont").animate({
+				top : "88px",
+				left : "4px",
+				height : "36px",
+				width : "36px",
+				opacity : 0,
+				padding : 0,
+				"border-width" : 0
+			}, 
+			1000, 
+			function() {
+				$("#splash").hide();
+				$("#splash-cont").attr("style", "");
+			});
+		},			
+		/** @private */
+		initPages: function(){
+			var me = this, change = function(e, ui){
+					var toPage = ui.toPage.attr("id");
+					if (IOS){
+						$("html").css("overflow-y", "scroll");
+					}else{
+						var frameSize = function(){						
+							$("#external-page iframe").height($(window).height() - $(".banner").height());
+						};
+						$(window).on("orientationchange resize", frameSize);
+						frameSize();
+					}
+					if (toPage == "map-page"){
+						$("#toggle-list").trigger("click");
+					}
+					if (toPage == "info-page" || toPage == "external-page"){
+						$("#lang-btn, #copyright").hide(200);
+						if (toPage == "info-page"){
+							nyc.info.init();
+						}
+					}else{
+						$("#lang-btn, #copyright").show();
+					}
+				};
+			$("body").pagecontainer({change: change});
+		},
+		isPanelOpen: function(){
+			return $("#toggle-list").hasClass("ui-btn-active");
+		},
+		/** @private */
+		parseQueryStr: function(){
+			var searching = false;
+			try{//parse query string and geocode
+				var params = document.location.search.substr(1).split("&");
+				for (var i = 0; i < params.length; i++){
+					var p = params[i].split("=");
+					if (p[0] == "input"){
+						this.locate.search(decodeURIComponent(p[1]).replace(/\s+/g, " "));
+						searching = true;
+					}
+				}
+			}catch(ignore){}
+			if (!searching) this.locate.locate();				
+		},
+		/** @private */
+		setUpkSearch: function(features){
+			var me = this;
+			$.each(features, function(_, f){
+				var it = $("<li>" + f.name() + "</li>");
+				it.click(function(){
+					me.centerUpk(f.id);
+					$("input[placeholder='Search schools...']").val(f.name());
+				});
+				$("#schools").append(it);
+			});
+		},
+		/** @private */
+		found: function(_, location){
+			var me = this;
+			me.currentLocation = location.feature;
+			var i = setInterval(function(){
+				if (me.upkList.ready){
+					me.upkTable.render(me.upkList, location.feature);		
+					me.upkInView();
+					clearInterval(i);
+				}
+			}, 200);
+			me.removeCallout();
+			$("#alert").fadeOut();
+			me.pop = null;
+			if (location.type == "feature"){
+				me.identify(me.upkList.feature(location.feature.origId));
+			}
+		},
+		/** @private */
+		upkInView: function(){
+			var features = this.upkList.features(this.currentLocation.geometry);
+			if (features.length){
+				var e = this.map.getExtent(), 
+					g = features[0].geometry, 
+					p = new OpenLayers.LonLat(g.x, g.y);
+				if (!e.containsLonLat(p)){
+					e.extend(p);
+					this.map.zoomToExtent(e);
+				}
+			}
+		},
+		/** @private */
+		filter: function(e){
+			var me = this;
+			var filters = {type:[], dayLength:[], applyOnly:[]};
+			$.each($("#filter input[type=checkbox]:checked"), function(_, n){
+				var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
+				values = filters[name].concat(values.split(","));
+				filters[name] = values;
+			});
+			me.upkList.filter(filters);
+			me.upkTable.render(me.upkList, me.currentLocation);
+			me.upkLayer.removeAllFeatures();
+			me.upkLayer.addFeatures(me.upkList.features());
+			me.setUpkSearch(me.upkList.features());				
+			me.removeCallout();
+			me.upkLayer.redraw();
+		},
+		/** @private */
+		alert: function(e, msg){
+			$("#alert .alert-msg").html(msg);
+			$("body").append($("#alert"));
+			$("#alert").fadeIn(400, function(){
+				$("#alert input").focus();				
+			});
+		},
+		/** @private */
+		centerUpk: function(id){
+			var me = this, upk = me.upkList.feature(id), g = upk.geometry;
+			me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
+			upk.renderIntent = "select";
+			$($(".toggle-map")[0]).trigger("click");
+			me.upkLayer.redraw();
+	    	if ($(window).height() < 550){
+	    		var id = function(){
+	    			me.map.events.un({moveend:id});
+	    			me.identify(upk);
+	    		};
+				me.map.events.on({moveend:id});
+	    		me.map.pan(100, 100);
+	    	}else{
+    			me.identify(upk);
+	    	}
+		},
+		/** @private */
+		hover: function(e){
+		    var f = e.feature;
+		    if (f){
+			    f.renderIntent = "select";
+			    f.layer.drawFeature(f);
+		    }
+		}, 
+		/** @private */
+		out: function(e){
+			var f = e.feature;
+		    if (f){
+		    	f.renderIntent = "default";
+		    	f.layer.drawFeature(f);
+		    }
+		},
+		/** @private */
+		toggle: function(e){
+			var target = $(e.target);
+			$("#toggle .ui-btn").removeClass("ui-btn-active");
+			$("#panel").panel(target.attr("id") == "toggle-list" ? "open" : "close");
+			setTimeout(function(){target.addClass("ui-btn-active");}, 100);
+		},
+		/** @private */
+		removeCallout: function(){
+			$("#callout").remove();
+			this.pannedCallout = false;
+			if (this.pop && this.pop.fid){
+				var f = this.upkList.feature(this.pop.fid);
+				f.renderIntent = "default";
+			    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
+				this.upkLayer.removeFeatures([f]);
+				this.upkLayer.addFeatures([f]);
+				$(this.upkLayer.div).trigger("click");
+			}
+		    this.pop = null;
+		},
+		/** @private **/
+		showPop: function(html, p, id){
+			var me = this,
+				checker = $("#callout-size-check"),
+				div = $("<div></div>").append(html);
+			    if (me.pop) me.removeCallout();
+				checker.html(div.html());	
+			    me.pop = new OpenLayers.Popup.FramedCloud(
+		    		"callout", 
+		    		new OpenLayers.LonLat(p.x, p.y), 
+		    		new OpenLayers.Size(checker[0].offsetWidth, checker[0].offsetHeight), 
+		    		div.html(), 
+		    		null, 
+		    		true, 
+		    		function(){me.removeCallout();}
+	    		);
+				me.pop.fid = id;
+				me.pop.autoSize = false;
+				me.pop.keepInMap = true;
+				me.map.addPopup(me.pop);				
+		    	$(me.pop.closeDiv).removeClass("olPopupCloseBox");
+		    	$(me.pop.closeDiv).addClass("ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all");
+		    	$(me.pop.closeDiv).css({width:"24px", height:"24px"});
+		    	me.pop.originalHeight = $("#callout").height();
+		    	if (me.pop.relativePosition.indexOf("t") == 0){
+		    		$("#callout").css({
+		    			top: "auto",
+		    			bottom: -($("#callout").position().top + $("#callout").height()) + "px"
+		    		});
+		    	}
+		},
+		/** @private */
+		identify: function(feature){				
+		    this.showPop(feature.html("callout"), feature.geometry, feature.id);
+			this.upkTable.render(this.upkList, feature);		
+		},
+		/** @private */
+		panOnce: function(){
+			var callout = $("#callout");
+			if (callout.length){
+				var mapHeight = $(this.map.div).height(),
+					calloutHeight = callout.height(),
+					calloutTop = this.map.getViewPortPxFromLonLat(this.pop.lonlat).y - calloutHeight,
+					calloutBottom = callout.position().top + callout.parent().position().top + calloutHeight;
+				if (!this.pannedCallout){
+					var pan = 0;
+					if (calloutBottom > mapHeight){
+						pan = calloutBottom - mapHeight;
+					}else if (calloutTop < 0 && $("#callout").css("top") == "auto"){
+						pan = calloutTop;
+					}
+					if (pan){
+						this.map.pan(0, pan);
+						this.pannedCallout = true;
+					}
+				}
+			}
+		},
+		/** @private */
+		updateCallout: function(){
+			var pop = this.pop, callout = $("#callout"), info = $("#callout .upk-info");
+			if (pop && info.length){
+				var infoHeight = info.height(), calloutHeight = infoHeight + 50;
+				$("#callout_contentDiv").css("height", "100%");
+				$("#callout_FrameDecorationDiv_0, #callout_FrameDecorationDiv_1").height(infoHeight);
+				callout.height(calloutHeight);
+				this.panOnce();						
+			}
+		}
+	};
+	
+	return appClass;
 }());
 
 $(document).ready(function(){
