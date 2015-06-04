@@ -138,13 +138,15 @@ QUnit.test("nyc.upk.HtmlDecorator.codeHtml", function(assert){
 	TEST_LIST.populate([feature]);
 	var node = feature.codeHtml();
 	var child1 = node.children().first();
+	var child2 = node.children().last();
 	assert.equal(node[0].tagName, "DIV", "codeHtml node should be a <div>");	
 	assert.ok(node.hasClass("code"), "codeHtml node should have css class 'code'");	
 	assert.ok(child1.hasClass("name"), "codeHtml node first child node should have css class 'name'");	
 	assert.equal(child1[0].tagName, "SPAN", "codeHtml node first child node should be a <span>");	
 	assert.equal(child1.html(), "Program Code: ", "codeHtml node first child node html should be 'Program Code: '");	
-	child1.remove();
-	assert.equal(node.html(), "SEMS_CODE", "codeHtml node html should be 'SEMS_CODE'");	
+	assert.equal(child2[0].tagName, "SPAN", "codeHtml node last child node should be a <span>");	
+	assert.ok(child2.hasClass("notranslate"), "codeHtml node last child node should have css class 'notranslate'");	
+	assert.equal(child2.html(), "SEMS_CODE", "codeHtml last child node html should be 'SEMS_CODE'");		
 });
 
 QUnit.test("nyc.upk.HtmlDecorator.nameHtml", function(assert){
@@ -152,22 +154,23 @@ QUnit.test("nyc.upk.HtmlDecorator.nameHtml", function(assert){
 	TEST_LIST.populate([feature]);
 	var node = feature.nameHtml();
 	var child1 = node.children().first();
-	assert.equal(node[0].tagName, "DIV", "codeHtml node should be a <div>");	
-	assert.ok(node.hasClass("name"), "codeHtml node should have css class 'name'");
-	assert.ok(child1.hasClass("type-icon"), "codeHtml node first child node should have css class 'type-icon'");	
-	assert.equal(child1[0].tagName, "IMG", "codeHtml node first child node should be a <img>");	
-	assert.equal(child1.attr("src"), "img/PREK_TYPE0.png", "codeHtml node first child node src attr should be 'img/PREK_TYPE0.png'");	
+	assert.equal(node[0].tagName, "DIV", "nameHtml node should be a <div>");	
+	assert.ok(node.hasClass("name"), "nameHtml node should have css class 'name'");
+	assert.ok(node.hasClass("notranslate"), "nameHtml node should have css class 'notranslate'");
+	assert.ok(child1.hasClass("type-icon"), "nameHtml node first child node should have css class 'type-icon'");	
+	assert.equal(child1[0].tagName, "IMG", "nameHtml node first child node should be a <img>");	
+	assert.equal(child1.attr("src"), "img/PREK_TYPE0.png", "nameHtml node first child node src attr should be 'img/PREK_TYPE0.png'");	
 	child1.remove();
-	assert.equal(node.html(), "NAME", "codeHtml node html should be 'NAME'");	
+	assert.equal(node.html(), "NAME", "nameHtml node html should be 'NAME'");	
 });
 
 QUnit.test("nyc.upk.HtmlDecorator.noteHtml", function(assert){
 	var feature = createTestFeature();
 	TEST_LIST.populate([feature]);
 	var node = feature.noteHtml();
-	assert.equal(node[0].tagName, "DIV", "codeHtml node should be a <div>");	
-	assert.ok(node.hasClass("note"), "codeHtml node should have css class 'note'");
-	assert.equal(node.html(), "NOTE", "codeHtml node html should be 'NOTE'");	
+	assert.equal(node[0].tagName, "DIV", "noteHtml node should be a <div>");	
+	assert.ok(node.hasClass("note"), "noteHtml node should have css class 'note'");
+	assert.equal(node.html(), "NOTE", "noteHtml node html should be 'NOTE'");	
 });
 
 QUnit.test("nyc.upk.HtmlDecorator.addrHtml", function(assert){
@@ -179,6 +182,8 @@ QUnit.test("nyc.upk.HtmlDecorator.addrHtml", function(assert){
 	assert.equal(addr2[0].tagName, "DIV", "addrHtml node two should be a <div>");	
 	assert.ok(addr1.hasClass("addr"), "addrHtml node one should have css class 'addr'");
 	assert.ok(addr2.hasClass("addr"), "addrHtml node two should have css class 'addr'");
+	assert.ok(addr1.hasClass("notranslate"), "addrHtml node one should have css class 'notranslate'");
+	assert.ok(addr2.hasClass("notranslate"), "addrHtml node two should have css class 'notranslate'");
 	assert.equal(addr1.html(), feature.address1(), "addrHtml node one html should be '" + feature.address1() + "'");	
 	assert.equal(addr2.html(), feature.address2(), "addrHtml node two html should be '" + feature.address2() + "'");	
 });
@@ -296,8 +301,19 @@ QUnit.test("nyc.upk.HtmlDecorator.seatsDayHtml", function(assert){
 	var feature = createTestFeature();
 	TEST_LIST.populate([feature]);
 	var node = feature.seatsDayHtml();
+	console.warn(node);
+	var child1 = node.children().first();
 	assert.equal(node[0].tagName, "DIV", "seatsDayHtml node should be a <div>");	
 	assert.ok(node.hasClass("seats"), "seatsDayHtml node should have css class 'seats'");
-	assert.equal(node.html(), "NOTE", "seatsDayHtml node html should be 'NOTE'");	
+	assert.equal(child1[0].tagName, "SPAN", "seatsDayHtml node one should be a <span>");	
+	assert.ok(child1.hasClass("name"), "seatsDayHtml node one should have css class 'name'");
+	assert.equal(child1.html(), window.SCHOOL_YEAR + " Seats: ", "seatsDayHtml node one html should be '" + window.SCHOOL_YEAR + " Seats: " + "'");	
+	
+	for (var i = 1; i < 8; i++){
+		feature.attributes.DAY_LENGTH = i;
+		node = feature.seatsDayHtml();
+		node.children().first().remove();
+		assert.equal(node.html(), "SEATS " + window.DAY_LENGTH[i], "seatsDayHtml node html should be 'SEATS " + window.DAY_LENGTH[i] + "'");			
+	}
 });
 
