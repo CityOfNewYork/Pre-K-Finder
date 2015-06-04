@@ -12,12 +12,14 @@ nyc.Lang = (function(){
 	 * @param {string} selector
 	 * @param {Object} languages
 	 * @param {string} hintDirection
+	 * @param {number} hintDuration
 	 * 
 	 */
-	var langClass = function(target, languages, hintDirection){
+	var langClass = function(target, languages, hintDirection, hintDuration){
 		var codes = [], langs = {}, div = $(nyc.Lang.HTML);
 		nyc.lang = this;
 		this.hintDirection = hintDirection;
+		this.hintDuration = hintDuration || 2800;
 		$(target).append(div);
 		for (var code in languages){
 			var val = languages[code].val, opt = $('<option></option>');
@@ -31,6 +33,7 @@ nyc.Lang = (function(){
 		this.langs = langs;
 		div.trigger('create');
 		$('#lang-choice-button').addClass('ctl-btn');
+		$('#lang-choice-button, #lang-hint').click(function(){$('#lang-hint').fadeOut();});
 		$('body').append('<script src="//translate.google.com/translate_a/element.js?cb=nyc.lang.init"></script>');
 		setInterval($.proxy(this.hack, this), 200);
 	};
@@ -59,21 +62,23 @@ nyc.Lang = (function(){
 		 * my sincerest apologies to all sensible people
 		 */
 		showHint: function(){
-			var dir = this.hintDirection;
+			var hint = $('#lang-hint'), dir = this.hintDirection, iters = this.hintDuration / 400;
 	    	if (dir){
-	    		var hint = $('#lang-hint'), 
-	    			start = hint.position().left,
+	    		var start = hint.position().left,
 	    			i = 0,
 	    			bounce = function(){
 	    				var left = start + (i % 2 == 0 ? (dir == "left" ? 10 : -10) : (dir == "left" ? -10 : 10));
-		    			if (i > 7){
+		    			if (i > iters){
 		    				hint.fadeOut();
 		    			}else{
 			    			hint.animate({left: left + 'px'}, bounce);
 		    			}
 		    			i++;
 	    			}; 
-	    		hint.fadeIn(bounce);
+	    		hint.css("visibility", "visible");
+	    		bounce();
+	    	}else{
+	    		hint.remove();
 	    	}
 	    },
 	    chooseLang: function(lang){
@@ -210,5 +215,5 @@ nyc.Lang.HTML =
 	"<div id='lang-btn' title='Translate...'>" +
 		"<div id='lang-trans'></div>" +
 		"<select id='lang-choice' class='notranslate' translate='no'></select>" +
-		"<div id='lang-hint'>Translate</div>" +
+		"<div id='lang-hint'>Translate<!-- my sincerest apologies to all sensible people --></div>" +
 	"</div>";

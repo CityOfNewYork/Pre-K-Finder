@@ -42,7 +42,7 @@ body .goog-text-highlight {
 	position: inherit;
 }
 #lang-hint {
-	display: block;
+	visibility: hidden;
 	position: absolute;
 	background-image: url(../img/lang-hint-l.png);
 	background-position: center;
