@@ -236,6 +236,7 @@ task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss]) << {
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/share.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/get-in-touch.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/date.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
 
 	if (env != 'dev'){
@@ -268,9 +269,9 @@ task buildApp(dependsOn: [rewiteSrcs, buildDoe]) << {
 	}
 	println "\nCleaning up...\n"
 	if (env != 'dev'){
-		//delete 'build/webapp/doe'
+		delete 'build/webapp/doe'
 	}
-	//delete 'build/tmp'
+	delete 'build/tmp'
 	delete 'compile.bat'
 	delete 'compile.sh'
 }
