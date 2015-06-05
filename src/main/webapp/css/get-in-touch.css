@@ -98,10 +98,6 @@
 #zip_cell {
 	width: 30%;
 }
-#info-page .ui-content {
-  overflow: auto;
-  height: calc(100% - 45px);
-}
 #info-page .ui-btn:hover, #info-page .ui-btn:hover span {
 	color: white;
 	background-color: rgb(1,51,100);

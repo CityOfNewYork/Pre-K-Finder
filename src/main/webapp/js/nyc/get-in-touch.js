@@ -67,8 +67,13 @@ nyc.info = {
 		return result;
 	},
 	apply: function(){
-		var data = {id: 0, method: "apply", jsonrpc: "2.0", params: {action:"apply", formfields: this.formData()}};
-		nyc.app.changePage(FORM_HANDLER_URL + "?" + JSON.stringify(data), nyc.app);
+		var data = {id: 0, method: "apply", jsonrpc: "2.0", params: {action:"apply", formfields: this.formData()}},
+			url = FORM_HANDLER_URL + "?" + JSON.stringify(data);
+		if (nyc.app){
+			nyc.app.changePage(url, nyc.app);
+		}else{
+			document.location = url;
+		}
 	}
 };
 

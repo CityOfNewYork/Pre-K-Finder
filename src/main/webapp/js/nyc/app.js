@@ -562,5 +562,5 @@ $(document).ready(function(){
 	
 	$("body").append("<div id='copyright' class='notranslate' translate='no'>&copy; " + new Date().getFullYear() + " City of New York</div>");
 	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);
-	
+		
 });

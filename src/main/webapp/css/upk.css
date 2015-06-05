@@ -1,9 +1,11 @@
+html, body {
+	overflow: hidden;
+}
 html, body, .ui-mobile .ui-page-active, #main, #splash {
 	width: 100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
 }
 html, body, div, span, a, input, input[data-type="search"], li, .leaflet-container, .ui-btn, .ui-page-theme-a .ui-btn, .ui-page-theme-a .ui-btn:visited {
 	font-size: 14px;
@@ -39,6 +41,10 @@ span.noshow {
 .olImageLoadError {
 	visibility: hidden !important;
 }
+.capitalize{
+	text-transform: capitalize;
+}
+
 /* ========================== begin panel ======================== */
 
 #panel {
@@ -145,6 +151,10 @@ div#splash-cont {
 .banner {
 	background-color: #013364 !important;
 	height: 44px;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
 }
 .banner-doe-logo {
 	height: 24px;
@@ -178,6 +188,11 @@ div#splash-cont {
 .banner-school-yr, .school-yr {
 	color: white;
 	font-size: 12px;
+}
+#map-page .ui-content, #info-page .ui-content, #dir-page .ui-content, #external-page .ui-content {
+  overflow: auto;
+  height: calc(100% - 45px);
+  margin: 45px 0 0 0;
 }
 
 /* ========================== end banner ========================= */
@@ -286,9 +301,6 @@ div#splash-cont {
     height: 30px;
     width: 32%;
     padding: 5px 0 8px 0;
-}
-label[for="filter-type-doe"] {
-	text-transform: capitalize;
 }
 
 /* ========================== end filter ========================= */
