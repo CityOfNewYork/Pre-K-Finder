@@ -454,7 +454,7 @@ nyc.App = (function(){
 
 $(document).ready(function(){
 
-	new nyc.Lang("body", SUPPORTED_LANGUAGES, "left", 60000);
+	if (!window.IE8) new nyc.Lang("body", SUPPORTED_LANGUAGES, "left", 60000);
 
 	var map = new OpenLayers.Map(
 		"map", 
