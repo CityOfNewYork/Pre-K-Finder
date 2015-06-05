@@ -29,6 +29,6 @@ var FORM_MSG_YES_APPLY = "Some other message!";
 
 var MIN_DOB_YEAR = 2011;
 
-var MAX_DOB_YEAR = 2011;
+var MAX_DOB_YEAR = 2015;
 
 var DOB_MSG = "(<b>Note:</b> To be eligible for pre-K for the 2015-16 school year, your child must have been born in the year 2011.)";

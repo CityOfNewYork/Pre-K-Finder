@@ -13,12 +13,13 @@ var TODAY = localeDate(),
 		"sent to the Pre-K for All Outreach team, who will contact you soon. You will also receive an email " +
 		"shortly confirming your submission.",
 	FORM_ERROR_MSG = "There was an error processing your submission data.  Please try again.",
-	FIREFOX = navigator.userAgent.indexOf("Firefox") > -1;
+	FIREFOX = navigator.userAgent.indexOf("Firefox") > -1,
+	SAFARI = navigator.userAgent.indexOf("Safari") > -1;
 	
 $(document).ready(function(){
 	$("#info-page .banner-school-yr").html("for School Year " + SCHOOL_YEAR);
 	$("#result button").click(function(e){
-		window.history.go(FIREFOX ? -3 : -2);
+		window.history.go(FIREFOX || SAFARI ? -3 : -2);
 	});
 	$.ajax({
 		url:"./services/SchoolRpc.ashx",
