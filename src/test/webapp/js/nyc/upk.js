@@ -371,7 +371,8 @@ function runListTests(testFeatures){
 		});
 	});
 	runListFilterTests(testFeatures);
-	runListFeatureTests(testFeatures);
+	runOtherListTests(testFeatures);
+	runListSortingTests(testFeatures);
 };
 
 function runListFilterTests(testFeatures){
@@ -854,7 +855,7 @@ function runListFilterTests(testFeatures){
 
 };
 
-function runListFeatureTests(testFeatures){
+function runOtherListTests(testFeatures){
 
 	QUnit.test("nyc.upk.List.feature NO FILTER", function(assert){
 		TEST_LIST.populate(testFeatures);
@@ -880,5 +881,94 @@ function runListFeatureTests(testFeatures){
 			}
 		});
 	});
+
+	QUnit.test("nyc.upk.List.distance", function(assert){
+		var point1 = testFeatures[0].geometry;
+		var point2 = testFeatures[7].geometry;
+		assert.equal(TEST_LIST.distance(point1, point2).toFixed(2), 7.16, "distance between points should be 7.16 mi");
+	});
+		
+};
+
+function runListSortingTests(testFeatures){
 	
+	var testUnique = function(resultFeatures, assert){
+		var unique = [];
+		$.each(resultFeatures, function(_, feature){
+			assert.equal($.inArray(feature.id, unique), -1, "TEST_LIST.features() should return a list that does not contain duplicate features");
+			unique.push(feature.id);
+		}); 
+	};
+	
+	QUnit.test("nyc.upk.List.features NO SORT - NO FILTER", function(assert){
+		TEST_LIST.populate(testFeatures);
+		var resultFeatures = TEST_LIST.features();
+		assert.equal(resultFeatures.length, testFeatures.length, "TEST_LIST.features() should return a list of 9 features");
+		$.each(testFeatures, function(_, feature){
+			assert.ok($.inArray(feature, resultFeatures) > -1, "TEST_LIST.features() should return a list of features containing a feature with id = " + feature.id);
+		});
+		testUnique(resultFeatures, assert);
+	});
+	
+	QUnit.test("nyc.upk.List.features YES SORT - NO FILTER", function(assert){
+		TEST_LIST.populate(testFeatures);
+		var point = testFeatures[5].geometry;
+		var resultFeatures = TEST_LIST.features(point);
+		assert.equal(resultFeatures.length, testFeatures.length, "TEST_LIST.features() should return a list of 9 features");
+		$.each(testFeatures, function(_, feature){
+			assert.ok($.inArray(feature, resultFeatures) > -1, "TEST_LIST.features() should return a list of features containing a feature with id = " + feature.id);
+		});
+		var distance1 = 0, distance2 = 0;
+		$.each(resultFeatures, function(i, feature){
+			distance1 = distance2;
+			distance2 = feature.distance;
+			if (i == 0) {
+				assert.equal(distance2, 0, "TEST_LIST.features() should return a list of where the first feature has distance = 0");
+			}
+			assert.ok(distance2 >= distance1, "TEST_LIST.features() should return a list of features with distances in ascending order");
+		});
+		testUnique(resultFeatures, assert);
+	});
+	
+	QUnit.test("nyc.upk.List.features YES SORT - YES FILTER", function(assert){
+		TEST_LIST.populate(testFeatures);
+		var filters = {
+				applyOnly: [],
+				type: ["DOE"],
+				dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+			};		
+		TEST_LIST.filter(filters);
+		var point = testFeatures[5].geometry;
+		var resultFeatures = TEST_LIST.features(point);
+		assert.equal(resultFeatures.length, 3, "TEST_LIST.features() should return a list of 3 features");
+		var distance1 = 0, distance2 = 0;
+		$.each(resultFeatures, function(_, feature){
+			distance1 = distance2;
+			distance2 = feature.distance;
+			assert.ok(distance2 >= distance1, "TEST_LIST.features() should return a list of features with distances in ascending order");
+			assert.equal(feature.type(), "DOE", "all features returned should be of type 'DOE'");
+		});
+		testUnique(resultFeatures, assert);
+	});
+	
+	QUnit.test("nyc.upk.List.features NO SORT - YES FILTER", function(assert){
+		TEST_LIST.populate(testFeatures);
+		var filters = {
+				applyOnly: [],
+				type: ["DOE"],
+				dayLength: ["1", "2", "3", "4", "5", "6", "7"]
+			};		
+		TEST_LIST.filter(filters);
+		var resultFeatures = TEST_LIST.features();
+		assert.equal(resultFeatures.length, 3, "TEST_LIST.features() should return a list of 3 features");
+		$.each(resultFeatures, function(_, feature){
+			assert.equal(feature.type(), "DOE", "all features returned should be of type 'DOE'");
+		});
+		$.each(resultFeatures, function(_, feature){
+			assert.ok($.inArray(feature, testFeatures) > -1, "TEST_LIST.features() should not return a list of features containing a feature with id = " + feature.id);
+		});
+		testUnique(resultFeatures, assert);
+	});
+	
+
 };
