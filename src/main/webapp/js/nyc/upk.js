@@ -404,12 +404,8 @@ nyc.upk.ListRenderer = (function(){
 					tr0 = tbl.insertRow(i), 
 					td0 = tr0.insertCell(0), 
 					td1 = tr0.insertCell(1);
-				tr0.id = "table" + upk.id;
-				tr0.className = upk.type();
-				if (i % 2 == 0) $(tr0).addClass("odd-row");
-				td0.className = "distCell";
-				td1.className = "upkCell";
-				td1.id = upk.id;
+				if (i % 2 == 0) $(tr0).addClass("even-row");
+				td0.className = "dist-cell";
 				if (upk.distance != null){
 					$(td0).html(upk.distance.toFixed(2) + " mi");
 				}
