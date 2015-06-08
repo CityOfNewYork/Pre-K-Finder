@@ -373,6 +373,7 @@ function runListTests(testFeatures){
 	runListFilterTests(testFeatures);
 	runOtherListTests(testFeatures);
 	runListSortingTests(testFeatures);
+	runListRendererTests(testFeatures);
 };
 
 function runListFilterTests(testFeatures){
@@ -969,6 +970,40 @@ function runListSortingTests(testFeatures){
 		});
 		testUnique(resultFeatures, assert);
 	});
-	
 
 };
+
+function runListRendererTests(testFeatures){
+
+	var TEST_LIST_RENDERER = new nyc.upk.ListRenderer();
+	
+	QUnit.test("nyc.upk.List.ListRenderer.render NO SORT", function(assert){
+		
+		var table = $("<table id='list-table' style='display: none;'><tbody></tbody></table>")[0];
+		$("body").append(table);
+		
+		TEST_LIST.populate(testFeatures);
+		TEST_LIST_RENDERER.render(TEST_LIST);
+		assert.equal(table.rows.length, 9, "Rendered table of features should contain 9 rows");
+		
+		$.each(TEST_LIST.features(), function(i, feature){
+			var tr = table.rows[i];
+			var td1 = tr.cells[0];
+			var td2 = tr.cells[1];
+			var div = $("<div></div>").append(feature.html("table"));
+			var expectedHtml = div.html();
+			
+			assert[i % 2 == 0 ? "ok" : "notOk"](
+				$(tr).hasClass("even-row"), 
+				"table row " + i + (i % 2 == 0 ? " should" : " should not") + " have css class 'even-row'"
+			);
+			assert.ok($(td1).hasClass("dist-cell"), "first cell of row " + i + " should have css class 'dist-cell'");
+			assert.equal($(td2).html(), expectedHtml, "html for second cell of row " + i + " should match that for feature with id = " + feature.id);
+		});
+		$(table).remove();
+	});
+	
+	
+};
+
+

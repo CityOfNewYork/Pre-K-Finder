@@ -155,6 +155,7 @@ div#splash-cont {
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 1000;
 }
 .banner-doe-logo {
 	height: 24px;
@@ -321,12 +322,12 @@ div#splash-cont {
 	font-weight: normal;
 	cursor: pointer;
 }
-.odd-row {
+.even-row {
 	background-color: rgba(1,51,100,0.1);
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
 }
-.distCell {
+.dist-cell {
 	text-align: center;
 	width: 35px;
 }
