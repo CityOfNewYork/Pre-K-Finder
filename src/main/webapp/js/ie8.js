@@ -7,7 +7,7 @@ function unIso(dateString){
 };
 
 function ie8Date(dateString){
-	return dateString : new Date(unIso(dateString)) : new Date();
+	return dateString ? new Date(unIso(dateString)) : new Date();
 };
 
 String.prototype.trim = function(){
