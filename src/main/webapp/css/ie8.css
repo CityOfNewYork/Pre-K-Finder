@@ -46,3 +46,6 @@
 .ui-loader, .ui-icon-loading {
 	display: none !important;
 }
+#srch-type-geo, .srch-upk-icon, #srch-type-addr .ui-icon-home {
+	display: none;
+}
