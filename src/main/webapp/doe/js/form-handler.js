@@ -1,14 +1,20 @@
-var FORM_THANK_YOU_MSG = "Thank you for completing our Pre-K for All information form! Your submission is being " +
-		"sent to the Pre-K for All Outreach team, who will contact you soon. You will also receive an email " +
-		"shortly confirming your submission.",
-	FORM_ERROR_MSG = "There was an error processing your submission data.  Please try again.",
-	FIREFOX = navigator.userAgent.indexOf("Firefox") > -1,
+var FIREFOX = navigator.userAgent.indexOf("Firefox") > -1,
 	SAFARI = navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") == -1;
-	
+
+function parseQueryStr(){
+	var params = document.location.search.substr(1).split("&"), result = {};
+	for (var i = 0; i < params.length; i++){
+		var p = params[i].split("=");
+		result[p[0]] = decodeURIComponent(p[1]);
+	}
+	return result;
+};
+
 $(document).ready(function(){
+	var params = parseQueryStr();
 	$("#result button").click(function(e){
 		window.history.go(FIREFOX || SAFARI ? -3 : -2);
-	});
+	}).html(params.ok);
 	$.ajax({
 		url:"./services/SchoolRpc.ashx",
 		beforeSend: function(request){
@@ -16,27 +22,27 @@ $(document).ready(function(){
 		},
 		method:"POST",
 		dataType:"json",
-		data: decodeURIComponent(document.location.search.substr(1)),
+		data: params.data,
 		success: function(response){
 			if (!response.result || (!response.result.ApplicationSubmitFlag && !response.result.EmailSentFlag)){
 				this.error();
 				return;
 			}
-			message(FORM_THANK_YOU_MSG);
+			message(params, params.thanks);
 			$("#info-page").removeClass("info-wait");
 		},
 		error: function(){
-			message(FORM_ERROR_MSG);
+			message(params, params.error);
 			$("#info-page").removeClass("info-wait");
 		}
 	});
 	return false;
 });
 
-function message(msg){
+function message(params, msg){
 	$("#result-message").html(msg);
-	$("#result-error")[msg == FORM_ERROR_MSG ? "show" : "hide"]();
-	$("#result-thanks")[msg == FORM_ERROR_MSG ? "hide" : "show"]();
+	$("#result-error")[msg == params.error ? "show" : "hide"]();
+	$("#result-thanks")[msg == params.error ? "hide" : "show"]();
 	$("#review").fadeOut();
 	$("#result").fadeIn();
 	$("#result button").focus(200);

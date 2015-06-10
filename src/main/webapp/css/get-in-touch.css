@@ -106,6 +106,9 @@
 	color: rgb(1,51,100);
 	background-color: rgb(237, 237, 237);
 }
+#form-handler-thank-you, #form-handler-error, #form-handler-ok {
+	display: none;
+}
 @media only screen and (max-width : 600px) {
 	#street_cell {
 		width: auto;

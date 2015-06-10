@@ -1,3 +1,6 @@
+#dir-page {
+	overflow: hidden;
+}
 #dir-main {
 	position: absolute;
 	top: 44px;
@@ -97,6 +100,6 @@
 		width: 100%;
 	}
 	#directions {
-		overflow: hidden;
+		/* overflow: hidden; */
 	}	
 }

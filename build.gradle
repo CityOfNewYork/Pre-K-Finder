@@ -107,6 +107,7 @@ task copyFiles(dependsOn: clean) << {
 		include 'doe/**'
 		include 'img/**'
 		include 'css/**'
+		include 'js/ie8.js'
 		include 'js/jq/**'
 		include 'js/nyc/**'
 		include 'js/proj4js/**'

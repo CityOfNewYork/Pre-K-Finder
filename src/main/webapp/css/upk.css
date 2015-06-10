@@ -262,12 +262,19 @@ div#splash-cont {
 #external-page iframe {
 	overflow: hidden;
 	border: 0;
+	position: fixed;
+	top: 45px;
 }
 .ios #external-page, .ios #external-content, .ios #external-content iframe {
 	height: 2000px;
 	overflow: hidden !important;
 }
-
+/*
+.ios #external-page iframe {
+	top: auto !important;
+	position: relative !important;
+}
+*/
 /* ====================== end external page ====================== */
 
 

@@ -159,10 +159,10 @@ nyc.Directions = (function(){
 		},
 		/** @private */
 		height: function(){
-			if ($(window).width() > 485 && !navigator.standalone){
+			//if ($(window).width() > 485 && !navigator.standalone){
 				var h =  $('#dir-toggle').css('display') == 'block' ? $('#dir-toggle').height() : 0;
 				$('#directions').height($('#dir-panel').height() - h - $('.banner').height() - $('#dir-content').height() - 10);
-			}
+			//}
 		}
 	};
 	return dirClass;
