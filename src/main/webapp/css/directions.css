@@ -2,7 +2,7 @@
 	overflow: hidden;
 }
 #dir-main {
-	position: absolute;
+	position: fixed;
 	top: 44px;
 	left: 0;
 	height: 100%;
@@ -13,7 +13,7 @@
 	height: 100%;
 }
 #dir-panel {
-	position: absolute;
+	position: fixed;
 	top: 44px;
 	right: 0;
 	height: 100%;

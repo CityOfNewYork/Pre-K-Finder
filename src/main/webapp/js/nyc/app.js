@@ -216,12 +216,6 @@ nyc.App = (function(){
 					var toPage = ui.toPage.attr("id");
 					if (IOS){
 						$("html").css("overflow-y", "scroll");
-					}else{
-						var frameSize = function(){						
-							$("#external-page iframe").height($(window).height() - $(".banner").height());
-						};
-						$(window).on("orientationchange resize", frameSize);
-						frameSize();
 					}
 					if (toPage == "map-page"){
 						$("#toggle-list").trigger("click");
