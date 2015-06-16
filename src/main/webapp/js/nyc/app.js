@@ -20,7 +20,6 @@ nyc.App = (function(){
 		me.currentLocation = {geometry: null, name: function(){return "";}};
 		me.map = map;
 		me.locate = locate;
-		me.parseQueryStr();
 		me.upkList = upkList;
 		me.upkTable = upkTable;
 		
@@ -42,6 +41,7 @@ nyc.App = (function(){
 			collapse: me.upkTable.adjContainerHeight
 		});
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
+		
 		$("#toggle").click(me.toggle);
 		$(share).on("feedback", function(){
 			me.changePage(FEEDBACK_URL, me);
@@ -106,6 +106,7 @@ nyc.App = (function(){
 				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);
 				me.locate.controls.addSources([{name: UPK_SEARCH_BY_CHOICE, cssClass: "srch-upk", source: me.upkList}]);
+				me.parseQueryStr();
 			},
 			error: function(){
 				$("body").removeClass("firstLoad");
@@ -188,6 +189,15 @@ nyc.App = (function(){
 			$("#lang-btn, #copyright").hide();
 		},
 		/** @export **/
+		applyOnly: function(){
+			if (ACTIVE_APPLY_PERIOD){
+				$("#splash .splash-apply-only").hide();
+				$("#filter-apply-only").prop("checked", true)
+					.checkboxradio("refresh")
+					.trigger("change");	
+			}
+		},
+		/** @export **/
 		hideSplash: function(){
 			$("#splash-cont").css({
 				top : "0",
@@ -236,18 +246,22 @@ nyc.App = (function(){
 		},
 		/** @private */
 		parseQueryStr: function(){
-			var searching = false;
-			try{//parse query string and geocode
+			var args = {};
+			try{
 				var params = document.location.search.substr(1).split("&");
 				for (var i = 0; i < params.length; i++){
 					var p = params[i].split("=");
-					if (p[0] == "input"){
-						this.locate.search(decodeURIComponent(p[1]).replace(/\s+/g, " "));
-						searching = true;
-					}
+					args[p[0]] = decodeURIComponent(p[1]);
 				}
 			}catch(ignore){}
-			if (!searching) this.locate.locate();				
+			if (args.address){
+				this.locate.search(args.address);
+			}else{
+				this.locate.locate();
+			}
+			if (args.applyOnly == "true"){
+				this.applyOnly();
+			}
 		},
 		/** @private */
 		setUpkSearch: function(features){
@@ -312,7 +326,7 @@ nyc.App = (function(){
 		/** @private */
 		alert: function(e, msg){
 			$("#alert .alert-msg").html(msg);
-			$("body").append($("#alert"));
+			$("body").prepend($("#alert"));
 			$("#alert").fadeIn(400, function(){
 				$("#alert input").focus();				
 			});
@@ -547,14 +561,18 @@ $(document).ready(function(){
 		$("#splash").fadeOut();
 	};
 	
-	if (!ACTIVE_APPLY_PERIOD) $("#splash .splash-apply, #splash .splash-directory, #filter-appy").hide();
+	if (!ACTIVE_APPLY_PERIOD) $("#splash .splash-apply, #splash .splash-apply-only, #filter-appy").hide();
 	$(".splash-message").html(SPLASH_MSG);
 	$("#splash .splash-info div").html(INFO_TITLE);	
 	$("body").append($("#splash"));
 	$("#splash").fadeIn();
+	$("label[for='filter-apply-only'], #splash-apply-only").html(APPLICATION_FILTER_BUTTON_TITLE);
 	
 	
 	$("body").append("<div id='copyright' class='notranslate' translate='no'>&copy; " + new Date().getFullYear() + " City of New York</div>");
 	$(".banner-school-yr").html("for School Year " + SCHOOL_YEAR);
-		
+	
+	if ($(window).height() > 654 && $("#panel").width() < $(window).width()){
+		$("#filter").collapsible("expand");
+	}
 });

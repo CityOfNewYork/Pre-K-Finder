@@ -17,6 +17,8 @@ var SPLASH_INFO_BUTTON_TITLE_NO_APPLY = "Please Contact Me About Pre-K";
 
 var SPLASH_INFO_BUTTON_TITLE_YES_APPLY = "Please Contact Me About Pre-K"; 
 
+var APPLICATION_FILTER_BUTTON_TITLE = "round 2 programs"; /* must be all lower case for translation to work properly - css will make it appear capitalized */ 
+
 var SCHOOL_YEAR = "2015-16";
 
 

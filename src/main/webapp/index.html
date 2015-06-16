@@ -74,8 +74,8 @@
 				<a class="splash-continue" data-role="button" onclick="nyc.app.hideSplash();">
 					<div>Continue to <span class="notranslate" translate="no"> Pre-K Finder </span> Map</div>
 				</a>
-				<a class="splash-directory" data-role="button" href="http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm?local" target="_blank">
-					<div>View the Pre-K Directory for more info</div>
+				<a class="splash-apply-only" data-role="button" onclick="nyc.app.applyOnly();nyc.app.hideSplash();">
+					<div>Continue to the map for <span id="splash-apply-only" class="capitalize"></span></div>
 				</a>
 			</div>
 		</div>
@@ -85,6 +85,10 @@
 				<div id="filter" data-role="collapsible">
 					<h3>Filter program and day length types...</h3>
 					<div>
+						<div id="filter-appy" data-role="controlgroup" data-type="vertical">
+							<input id="filter-apply-only" type="checkbox" data-filter-name="applyOnly" data-filter-values="true">
+							<label for="filter-apply-only" class="capitalize">accepting applications</label>
+						</div>
 						<div id="filter-type" data-role="controlgroup" data-type="vertical">
 							<input id="filter-type-doe" type="checkbox" checked  data-filter-name="type" data-filter-values="DOE">
 							<label for="filter-type-doe" class="capitalize"><img class="type-icon" alt="District School" src="img/DOE0.png">district school</label>
@@ -100,10 +104,6 @@
 							<label for="filter-day-half" class="capitalize">half day</label>
 							<input id="filter-day-5hr" type="checkbox" checked data-filter-name="dayLength" data-filter-values="4,5,6,7">
 							<label for="filter-day-5hr" class="capitalize">5-Hour</label>
-						</div>
-						<div id="filter-appy" data-role="controlgroup" data-type="vertical">
-							<input id="filter-apply-only" type="checkbox" data-filter-name="applyOnly" data-filter-values="true">
-							<label for="filter-apply-only" class="capitalize">accepting applications</label>
 						</div>
 					</div>
 				</div>
