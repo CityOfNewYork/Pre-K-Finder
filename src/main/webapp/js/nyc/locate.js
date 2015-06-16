@@ -88,7 +88,7 @@ nyc.Locate = (function(){
 				ln1 = (resp.houseNumber ? (resp.houseNumber + " ") : "") + resp.firstStreetNameNormalized;
 				point = new OpenLayers.Geometry.Point(x && y ? x : resp.xCoordinate, x && y ? y : resp.yCoordinate); 
 			}
-			var name = this.capitalize(ln1 + ", " + resp.firstBoroughName) + ", NY " + (resp.zipCode || resp.leftSegmentZipCode),
+			var name = this.capitalize(ln1 + ", " + resp.firstBoroughName) + ", NY " + (resp.zipCode || resp.leftSegmentZipCode || ""),
 				feature = new OpenLayers.Feature.Vector(point, {name: name.replace(/\s{2,}/g, " ")});
 			this.decorate(feature);
 			if (!disambiguating){
