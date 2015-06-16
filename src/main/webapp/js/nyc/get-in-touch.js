@@ -12,7 +12,7 @@ nyc.info = {
 		$("#dob").trigger("create");
 		$("#info-page .banner-school-yr").html("for School Year " + SCHOOL_YEAR);
 		$("#info-page select").on("change", function(e){
-			$(e.target).focus(10);
+			$(e.target).focus(window.IOS ? null : 10);
 		});
 	},
 	valid: function(){
@@ -73,7 +73,7 @@ nyc.info = {
 	},
 	apply: function(){
 		var data = {id: 0, method: "apply", jsonrpc: "2.0", params: {action:"apply", formfields: this.formData()}},
-			url = FORM_HANDLER_URL + "?data=" + JSON.stringify(data) + this.messages();
+			url = FORM_HANDLER_URL + "?data=" + JSON.stringify(data) + "&lang=" + (nyc.lang ? nyc.lang.lang() : "en");
 		if (nyc.app){
 			nyc.app.changePage(url, nyc.app);
 		}else{
