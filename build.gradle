@@ -144,6 +144,7 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	ant.replace(file: 'build/tmp/index.html', token: local_directory_url, value: directoryUrl)
 	ant.replace(file: 'build/tmp/index.html', token: local_apply_url, value: applyUrl)
 	ant.replace(file: 'build/tmp/index.html', token: local_date_rules, value: dateRules)
+	ant.replace(file: 'build/tmp/get-in-touch.html', token: local_date_rules, value: dateRules)
 }
 
 task makeScriptAndExec(dependsOn: [replaceTokens, makeArgs]) << {
@@ -248,6 +249,8 @@ task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss]) << {
 		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/zoomsearch.css" type="text/css">', value: '')
 		ant.replace(file: 'build/tmp/index.html', token: '<link rel="stylesheet" href="css/get-in-touch.css" type="text/css">', value: '')
 		ant.replace(file: 'build/tmp/index.html', token: 'css/upk.css', value: 'css/upk-min.css')
+		ant.replace(file: 'build/tmp/get-in-touch.html', token: '<link rel="stylesheet" href="css/get-in-touch.css" type="text/css">', value: '')
+		ant.replace(file: 'build/tmp/get-in-touch.html', token: 'css/upk.css', value: 'css/upk-min.css')
 	}
 }
 
@@ -260,7 +263,6 @@ task buildApp(dependsOn: [rewiteSrcs, buildDoe]) << {
 		include 'get-in-touch.html'
 		include 'upk.csv'
 		include 'css/upk-min.css'
-		include 'css/lang.css'
 		include 'css/ie8.css'
 		include 'img/**'
 		include 'js/**'
