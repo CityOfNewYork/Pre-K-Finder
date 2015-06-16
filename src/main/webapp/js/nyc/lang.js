@@ -123,7 +123,7 @@ nyc.Lang = (function(){
 		/** @export */
 		setLangDropdown: function(){
 			var langs = this.langs, 
-				defLang = navigator.language.split('-')[0], 
+				defLang = navigator.language ? navigator.language.split('-')[0] : "en", 
 				cookieVal = this.getCookieValue();
 			if (cookieVal){
 				$('#lang-choice').val(langs[cookieVal]);
