@@ -81,14 +81,8 @@ nyc.ZoomSearch.prototype = {
 	},	
 	/** @private */
 	setSourceList: function(cssClass, noChoose){
-		var isAddr = cssClass == 'srch-type-addr',
-			plcHldr = isAddr ? 'Search for an address...' : UPK_SEARCH_BY_PLACEHOLDER,
-			name;
-		this.isAddr = isAddr;
-		$.each(this.sources, function(_, src){
-			if (src.cssClass == cssClass) name = src.name;
-		});
-		$('#fld-srch-container input[data-type="search"]').attr("placeholder", plcHldr);
+		this.currentSearchType = cssClass;
+		$('#fld-srch-container input[data-type="search"]').attr("placeholder", cssClass == 'srch-type-addr' ? 'Search for an address...' : UPK_SEARCH_BY_PLACEHOLDER);
 		$('#fld-srch-container span.lang-placeholder').remove();
 		$('#fld-srch-retention').append($('#fld-srch li'));
 		this.list.append($('li.' + cssClass));
@@ -124,7 +118,7 @@ nyc.ZoomSearch.prototype = {
 
 /**
  * @export
- * @param {nyc.ZoomSearch.NamedSource} sources
+ * @param {Array<nyc.ZoomSearch.NamedSource>} sources
  */
 nyc.ZoomSearch.prototype.addSources = function(sources){
 	var me = this;
@@ -143,6 +137,16 @@ nyc.ZoomSearch.prototype.addSources = function(sources){
 		me.addFeatures(src);
 	});
 	me.setListCss();
+};
+
+/**
+ * @export
+ * @param {nyc.ZoomSearch.NamedSource} namedSource
+ */
+nyc.ZoomSearch.prototype.replaceFeatures = function(namedSource){
+	$("li." + namedSource.cssClass).remove();
+	this.addFeatures(namedSource);
+	if (this.currentSearchType) this.setSourceList(this.currentSearchType, true);
 };
 
 /**

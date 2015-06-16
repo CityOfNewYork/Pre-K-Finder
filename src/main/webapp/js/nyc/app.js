@@ -49,7 +49,6 @@ nyc.App = (function(){
 		
 		me.map.zoomToExtent(NYC_EXT);			
 		me.map.events.register("featureover", map, me.hover);
-		me.map.events.register("featureout", map, me.out);
 		
 		$(window).on("orientationchange resize", function(){
 			me.map.render(map.div);
@@ -102,7 +101,6 @@ nyc.App = (function(){
 				me.map.addLayer(me.upkLayer);
 				me.map.setLayerIndex(me.upkLayer, UPK_LAYER_IDX);
 				me.upkList.populate(features);
-				me.setUpkSearch(me.upkList.features());
 				me.upkLayer.addFeatures(features);
 				me.upkTable.render(me.upkList);
 				me.locate.controls.addSources([{name: UPK_SEARCH_BY_CHOICE, cssClass: "srch-upk", source: me.upkList}]);
@@ -264,18 +262,6 @@ nyc.App = (function(){
 			}
 		},
 		/** @private */
-		setUpkSearch: function(features){
-			var me = this;
-			$.each(features, function(_, f){
-				var it = $("<li>" + f.name() + "</li>");
-				it.click(function(){
-					me.centerUpk(f.id);
-					$("input[placeholder='Search schools...']").val(f.name());
-				});
-				$("#schools").append(it);
-			});
-		},
-		/** @private */
 		found: function(_, location){
 			var me = this;
 			me.currentLocation = location.feature;
@@ -319,7 +305,7 @@ nyc.App = (function(){
 			me.upkTable.render(me.upkList, me.currentLocation);
 			me.upkLayer.removeAllFeatures();
 			me.upkLayer.addFeatures(me.upkList.features());
-			me.setUpkSearch(me.upkList.features());				
+			me.locate.controls.replaceFeatures({name: UPK_SEARCH_BY_CHOICE, cssClass: "srch-upk", source: me.upkList});
 			me.removeCallout();
 			me.upkLayer.redraw();
 		},
@@ -378,10 +364,12 @@ nyc.App = (function(){
 			this.pannedCallout = false;
 			if (this.pop && this.pop.fid){
 				var f = this.upkList.feature(this.pop.fid);
-				f.renderIntent = "default";
-			    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
-				this.upkLayer.removeFeatures([f]);
-				this.upkLayer.addFeatures([f]);
+				if (f){
+					f.renderIntent = "default";
+				    /* if we don't do 3 lines below you can't identify same feature after closing popup - why? - dunno */
+					this.upkLayer.removeFeatures([f]);
+					this.upkLayer.addFeatures([f]);
+				}
 				$(this.upkLayer.div).trigger("click");
 			}
 		    this.pop = null;
