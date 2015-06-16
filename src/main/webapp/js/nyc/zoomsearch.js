@@ -44,6 +44,8 @@ nyc.ZoomSearch.prototype = {
 	/** @private */
 	map: null,
 	/** @private */
+	currentSearchType: 'srch-type-addr',
+	/** @private */
 	zoom: function(e){
 		var map = this.map;
 		map.zoomTo(map.getZoom() + ($(e.target).data('zoom-incr') * 1));
@@ -60,9 +62,14 @@ nyc.ZoomSearch.prototype = {
 	},
 	/** @private */
 	search: function(){
-		var input = this.input.val().trim();
-		if (input.length)
-			$(this).trigger('search', input, this);
+		if (this.currentSearchType == 'srch-type-addr'){
+			var input = this.input.val().trim();
+			if (input.length){
+				$(this).trigger('search', input, this);
+			}			
+		}else{
+			$('#fld-srch').children().first().trigger('click');
+		}
 	},
 	/** @private */
 	chooseSource: function(){
@@ -146,7 +153,7 @@ nyc.ZoomSearch.prototype.addSources = function(sources){
 nyc.ZoomSearch.prototype.replaceFeatures = function(namedSource){
 	$("li." + namedSource.cssClass).remove();
 	this.addFeatures(namedSource);
-	if (this.currentSearchType) this.setSourceList(this.currentSearchType, true);
+	this.setSourceList(this.currentSearchType, true);
 };
 
 /**
