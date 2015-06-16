@@ -320,7 +320,7 @@ nyc.App = (function(){
 		/** @private */
 		centerUpk: function(id){
 			var me = this, upk = me.upkList.feature(id), g = upk.geometry;
-			me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), 8);
+			me.map.setCenter(new OpenLayers.LonLat(g.x, g.y), LOCATE_ZOOM_LEVEL);
 			upk.renderIntent = "select";
 			$($(".toggle-map")[0]).trigger("click");
 			me.upkLayer.redraw();
