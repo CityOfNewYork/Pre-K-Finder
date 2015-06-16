@@ -269,12 +269,13 @@ div#splash-cont {
 	height: 20000px;
 	overflow: hidden !important;
 }
-/*
-.ios #external-page iframe {
-	top: auto !important;
-	position: relative !important;
+.ios #external-content {
+	position: absolute !important;
 }
-*/
+body.iso {
+	height: 20000px !important;
+}
+
 /* ====================== end external page ====================== */
 
 
