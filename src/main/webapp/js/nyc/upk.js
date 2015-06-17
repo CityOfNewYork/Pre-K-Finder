@@ -239,7 +239,7 @@ nyc.upk.HtmlDecorator = {
 			anchorHtml.attr("href", url)
 				.attr("target", "_blank");
 		}else{
-			title = "Get in Touch";
+			title = SPLASH_INFO_BUTTON_TITLE_NO_APPLY;
 			anchorHtml.attr("onclick", "nyc.app.getInTouch();");
 		}
 		anchorHtml.html(title);
