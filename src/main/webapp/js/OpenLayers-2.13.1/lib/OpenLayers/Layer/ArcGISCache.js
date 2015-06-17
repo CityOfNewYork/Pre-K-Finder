@@ -419,7 +419,18 @@ OpenLayers.Layer.ArcGISCache = OpenLayers.Class(OpenLayers.Layer.XYZ, {
     */
     getURL: function (bounds) {
         var res = this.getResolution(); 
-
+        
+        /* bug fix for samsung galaxy returning null for this.map.getZoom() */
+        var zoom = this.map.getZoom();
+        if (!zoom){
+        	for (var i = 0; i < this.map.resolutions; i++){
+        		if (res == this.map.resolutions[i]){
+        			zoom = i;
+        			break;
+        		}
+        	}
+        }
+        
         // tile center
         var originTileX = (this.tileOrigin.lon + (res * this.tileSize.w/2)); 
         var originTileY = (this.tileOrigin.lat - (res * this.tileSize.h/2));
@@ -428,11 +439,11 @@ OpenLayers.Layer.ArcGISCache = OpenLayers.Class(OpenLayers.Layer.XYZ, {
         var point = { x: center.lon, y: center.lat };
         var x = (Math.round(Math.abs((center.lon - originTileX) / (res * this.tileSize.w)))); 
         var y = (Math.round(Math.abs((originTileY - center.lat) / (res * this.tileSize.h)))); 
-        var z = this.hexZoom ? this.map.getZoom().toString(16) : this.map.getZoom();
+        var z = this.hexZoom ? zoom.toString(16) : zoom;
 
         // this prevents us from getting pink tiles (non-existant tiles)
         if (this.lods) {        
-            var lod = this.lods[this.map.getZoom()];
+            var lod = this.lods[zoom];
             if ((x < lod.startTileCol || x > lod.endTileCol) 
                 || (y < lod.startTileRow || y > lod.endTileRow)) {
                     return null;
