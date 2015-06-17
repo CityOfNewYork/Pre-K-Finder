@@ -232,7 +232,7 @@ div#splash-cont {
 
 /* ===================== begin other buttons ===================== */
 
-.ctl-tbn:hover, .upk-action a:hover, #alert .ui-btn:hover, #list-more:hover, #back:hover {
+.ctl-tbn:hover, .upk-action a:hover, .upk-action a:hover span, #alert .ui-btn:hover, #list-more:hover, #back:hover {
 	background-color: #013364 !important;
 	color: white !important;
 	text-shadow: none !important;
