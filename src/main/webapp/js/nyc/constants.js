@@ -6,7 +6,7 @@ function localeDate(dateString){
 APPLY_START_DATE = localeDate(APPLY_START_DATE);
 APPLY_END_DATE = localeDate(APPLY_END_DATE);
 
-var TODAY = localeDate(),
+var TODAY = new Date(),
 	ACTIVE_APPLY_PERIOD = TODAY >= APPLY_START_DATE && TODAY < APPLY_END_DATE,
 	SPLASH_MSG = ACTIVE_APPLY_PERIOD ? SPLASH_MSG_YES_APPLY : SPLASH_MSG_NO_APPLY,
 	INFO_TITLE = ACTIVE_APPLY_PERIOD ? SPLASH_INFO_BUTTON_TITLE_YES_APPLY : SPLASH_INFO_BUTTON_TITLE_NO_APPLY,
@@ -14,15 +14,15 @@ var TODAY = localeDate(),
 	UPK_SEARCH_BY_PLACEHOLDER = "Search by program name or code...",
 	SUPPORTED_LANGUAGES = {
 	    en: {val: "English", desc: "English"},
-	    ar: {val: "Arabic", desc: "&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; " /* Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© */},
-	    bn: {val: "Bengali", desc: "&#x9AC;&#x9BE;&#x999;&#x9BE;&#x9B2;&#x9BF;" /* à¦¬à¦¾à¦™à¦¾à¦²à¦¿ */},
-	    "zh-CN": {val: "Chinese (Simplified)", desc: "&#x4E2D;&#x56FD;" /* ä¸­å›½ */},
-	    fr: {val: "French", desc: "Fran&#231;ais" /* FranÃ§ais */},
-	    ht: {val: "Haitian Creole", desc: "Krey&#242;l Ayisyen" /* KreyÃ²l Ayisyen */},
-	    ko: {val: "Korean", desc: "&#xD55C;&#xAD6D;&#xC758;" /* í•œêµ­ì�˜ */},
-	    ru: {val: "Russian", desc: "P&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;" /* PÑƒÑ�Ñ�ÐºÐ¸Ð¹ */},
-	    es: {val: "Spanish", desc: "Espa&#241;ol" /* EspaÃ±ol */},
-	    ur: {val: "Urdu", desc: "&#x627;&#x631;&#x62F;&#x648;" /* Ø§Ø±Ø¯Ùˆ */}
+	    ar: {val: "Arabic", desc: "&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; "},
+	    bn: {val: "Bengali", desc: "&#x9AC;&#x9BE;&#x999;&#x9BE;&#x9B2;&#x9BF;"},
+	    "zh-CN": {val: "Chinese (Simplified)", desc: "&#x4E2D;&#x56FD;"},
+	    fr: {val: "French", desc: "Fran&#231;ais"},
+	    ht: {val: "Haitian Creole", desc: "Krey&#242;l Ayisyen"},
+	    ko: {val: "Korean", desc: "&#xD55C;&#xAD6D;&#xC758;"},
+	    ru: {val: "Russian", desc: "P&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;"},
+	    es: {val: "Spanish", desc: "Espa&#241;ol"},
+	    ur: {val: "Urdu", desc: "&#x627;&#x631;&#x62F;&#x648;"}
 	},
 	FORM_MSG =  ACTIVE_APPLY_PERIOD ? FORM_MSG_YES_APPLY : FORM_MSG_NO_APPLY,
 	FORM_THANK_YOU_MSG = "Thank you for completing our Pre-K for All information form! Your submission is being " +
