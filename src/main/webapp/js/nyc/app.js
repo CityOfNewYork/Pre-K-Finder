@@ -43,6 +43,7 @@ nyc.App = (function(){
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
 		
 		$("#toggle").click(me.toggle);
+		
 		$(share).on("feedback", function(){
 			me.changePage(FEEDBACK_URL, me);
 		});
