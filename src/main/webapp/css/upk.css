@@ -135,6 +135,10 @@ div#splash-cont {
 	background-color: #f8993a;
 	border: 1px solid #013364;
 }
+#splash a div {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 #splash .ui-btn:hover, #splash .ui-btn:hover div, #splash .ui-btn:hover span {
 	background-color: rgb(1,51,100);
 	color: white;
