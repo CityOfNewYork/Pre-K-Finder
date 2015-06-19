@@ -44,7 +44,7 @@ ext{
 	stg_subway_urls = '["//csgis-stg-prx.csc.nycnet/geowebcache/service/wms/"]'
 	stg_date_rules = '//nycenetstg.nycenet.edu/schoolsearch/js/date-rules.js'
 	
-	prd_form_hanlder_url = '//www.nycenet.edu/schoolsearch/form-handler.html'		
+	prd_form_handler_url = '//www.nycenet.edu/schoolsearch/form-handler.html'		
 	prd_apply_url = '//www.semsnycdoe.com/parentsite'
 	prd_directory_url = 'http://schools.nyc.gov/ChoicesEnrollment/PreK/Resources/default.htm'
 	prd_geoclient_url = '//maps.nyc.gov/geoclient/v1/search.json?app_key=07368656C6C732062&app_id=pre-k&input='
