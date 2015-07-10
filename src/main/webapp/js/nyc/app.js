@@ -50,6 +50,7 @@ nyc.App = (function(){
 		
 		me.map.zoomToExtent(NYC_EXT);			
 		me.map.events.register("featureover", map, me.hover);
+		me.map.events.register("featureout", map, me.out);
 		
 		$(window).on("orientationchange resize", function(){
 			me.map.render(map.div);
@@ -451,7 +452,7 @@ nyc.App = (function(){
 
 $(document).ready(function(){
 
-	if (!window.IE8) new nyc.Lang("body", SUPPORTED_LANGUAGES, "left", 60000);
+	if (!window.IE8) new nyc.Lang("body", SUPPORTED_LANGUAGES, 60000);
 
 	var map = new OpenLayers.Map(
 		"map", 

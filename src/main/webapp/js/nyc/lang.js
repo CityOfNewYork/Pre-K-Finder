@@ -11,36 +11,39 @@ nyc.Lang = (function(){
 	 * 
 	 * @param {string} selector
 	 * @param {Object} languages
-	 * @param {string} hintDirection
-	 * @param {number} hintDuration
+	 * @param {number=} hintDuration
 	 * 
 	 */
-	var langClass = function(target, languages, hintDirection, hintDuration){
-		var codes = [], langs = {}, div = $(nyc.Lang.HTML);
+	var langClass = function(target, languages, hintDuration){
+		var codes = [], div = $(nyc.Lang.HTML);
 		nyc.lang = this;
-		this.hintDirection = hintDirection;
-		this.hintDuration = hintDuration || 2800;
 		$(target).append(div);
 		for (var code in languages){
-			var val = languages[code].val, opt = $('<option></option>');
-			opt.attr('value', val);
-			opt.html(languages[code].desc);
+			var opt = $('<option></option>')
+				.attr('value', languages[code].val)
+				.html(languages[code].desc);
 			$('#lang-choice').append(opt);
-			langs[code] = val;
 			codes.push(code);
+			this.hints.push(languages[code].hint);
 		}
+		this.hintDuration = hintDuration;
 		this.codes = codes.toString();
-		this.langs = langs;
+		this.languages = languages;
 		div.trigger('create');
 		$('#lang-choice-button').addClass('ctl-btn');
-		$('#lang-choice-button, #lang-hint').click(function(){$('#lang-hint').fadeOut();});
+		$('#lang-choice-button, #lang-hint').click(function(){
+			$('#lang-hint').fadeOut();
+		});
 		$('body').append('<script src="//translate.google.com/translate_a/element.js?cb=nyc.lang.init"></script>');
 		setInterval($.proxy(this.hack, this), 200);
 	};
 	
 	langClass.prototype = {
+		/** private */
+		codes: "",
+		hints: [],
 		/** @export */
-		langs: null,
+		languages: null,
 		/** @export */
 		init: function(){
 			nyc.lang.translate = new google.translate.TranslateElement({
@@ -53,7 +56,6 @@ nyc.Lang = (function(){
 			nyc.lang.initDropdown();
 			nyc.lang.setLangDropdown();
 			nyc.lang.hack();
-			nyc.lang.showHint();
 			$(nyc.lang).trigger('ready');
 		},
 		/** 
@@ -62,23 +64,23 @@ nyc.Lang = (function(){
 		 * my sincerest apologies to all sensible people
 		 */
 		showHint: function(){
-			var hint = $('#lang-hint'), dir = this.hintDirection, iters = this.hintDuration / 400;
-	    	if (dir){
-	    		var start = hint.position().left,
+			var duration = this.hintDuration, hints = this.hints;
+	    	if (duration){
+	    		var h = 1,
 	    			i = 0,
-	    			bounce = function(){
-	    				var left = start + (i % 2 == 0 ? (dir == "left" ? 10 : -10) : (dir == "left" ? -10 : 10));
-		    			if (i > iters){
-		    				hint.fadeOut();
-		    			}else{
-			    			hint.animate({left: left + 'px'}, bounce);
+		    		interval = setInterval(function(){
+		    			$('#lang-hint span').html(hints[h] || "Translate");
+	    				h++;
+	    				if (h == hints.length) h = 0;
+		    			if (i > duration){
+		    				clearInterval(interval);
+		    				$('#lang-hint').fadeOut();
 		    			}
-		    			i++;
-	    			}; 
-	    		hint.css("visibility", "visible");
-	    		bounce();
+		    			i += 1000;
+	    			}, 1000);
+	    		$('#lang-hint').fadeIn();
 	    	}else{
-	    		hint.remove();
+	    		$('#lang-hint').remove();
 	    	}
 	    },
 	    chooseLang: function(lang){
@@ -122,20 +124,19 @@ nyc.Lang = (function(){
 		},
 		/** @export */
 		setLangDropdown: function(){
-			var langs = this.langs, 
-				defLang = navigator.language ? navigator.language.split('-')[0] : "en", 
-				cookieVal = this.getCookieValue();
-			if (cookieVal){
-				$('#lang-choice').val(langs[cookieVal]);
-			}else{
-				for (var code in langs){
+			var defLang = navigator.language ? navigator.language.split('-')[0] : "en", 
+				langCode = this.getCookieValue();
+			if (!langCode || langCode == defLang) this.showHint();
+			if (!langCode){
+				for (var code in this.languages){
 					if (code.indexOf(defLang) == 0){
-						$('#lang-choice').val(langs[code]);
+						langCode = code;
 						break;
 					}
 				}
+				langCode = langCode || 'en';
 			}
-			$('#lang-choice').trigger('change');
+			$('#lang-choice').val(this.languages[langCode].val).trigger('change');
 		},
 		/** @export */
 		lang: function(){
@@ -215,5 +216,9 @@ nyc.Lang.HTML =
 	"<div id='lang-btn' title='Translate...'>" +
 		"<div id='lang-trans'></div>" +
 		"<select id='lang-choice' class='notranslate' translate='no'></select>" +
-		"<div id='lang-hint'>Translate<!-- my sincerest apologies to all sensible people --></div>" +
+		"<div id='lang-hint' class='notranslate' translate='no'>" +
+			"<span>Translate</span>" +
+			"<!-- my sincerest apologies to all sensible people -->" +
+			"<a data-role='button' data-icon='delete' data-iconpos='notext'>Close</a>"+
+		"</div>" +
 	"</div>";
