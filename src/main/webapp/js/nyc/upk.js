@@ -90,8 +90,12 @@ nyc.upk.HtmlDecorator = {
 	 * @return {jQuery}
 	 */
 	noteHtml: function(){
+		/* noteHtml not used for temporary modification */
+		return '';
+		/*
 		var noteHtml = $("<div class='note'></div>");		
 		return noteHtml.html(this.note());
+		*/
 	},
 	/** 
 	 * @private 
@@ -163,12 +167,18 @@ nyc.upk.HtmlDecorator = {
 	 * @return {jQuery}
 	 */
 	programFeaturesHtml: function(){
+		/* programFeaturesHtml stored in note field for temporary modification */
+		var programFeaturesHtml = $("<div class='name'>Program Features:</div>");		
+		var noteHtml = $(this.note());		
+		return [programFeaturesHtml, noteHtml];
+		/*
 		var programFeaturesHtml = $("<div class='name'>Program Features:</div>"),
 			featureList = $("<ul class='feats'></ul>");
 		featureList.append(this.programFeatureHtml("meal", MEAL))
 			.append(this.programFeatureHtml("inout", IN_OUT))
 			.append(this.programFeatureHtml("extend", EXTEND));
 		return [programFeaturesHtml, featureList];
+		*/
 	},
 	/** 
 	 * @private 
