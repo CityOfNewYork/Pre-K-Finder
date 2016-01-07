@@ -18,7 +18,7 @@ apply plugin: 'jetty'
 
 ext{
 
-	csvFileIn = 'etc/pm/data/UPK_Report_2015_12_17_Send.csv'
+	csvFileIn = 'etc/pm/data/PrekFinder_ProdLoad_010716.csv'
 
 	default_env = 'dev'
 	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
