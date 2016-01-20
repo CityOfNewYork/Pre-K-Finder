@@ -366,11 +366,6 @@ body.iso {
 .note {
 	color: red;
 }
-.callout .upk-info {
-	max-width: 290px;
-	min-width: 200px;
-	min-height: 100px;	
-}
 .type-icon {
 	width: 20px;
 	height: 20px;
@@ -494,8 +489,6 @@ body.iso {
 }
 #callout-size-check {
 	position: absolute;
-	left: 100px;
-	top: 100px;
 	visibility: hidden;
 	z-index: -1;
 	padding: 5px;
@@ -503,7 +496,7 @@ body.iso {
 #callout-size-check .map {
 	display: none;
 }
-#callout_close {
+#callout_close, #close-fullscreen {
 	background-color: rgba(1,51,100,0.5);
 	border: none;
 	border-radius: 12px;
@@ -513,7 +506,7 @@ body.iso {
 	margin: -2px -3px 0 0;
 	cursor: pointer;
 }
-#callout_close:hover {
+#callout_close:hover, #close-fullscreen:hover {
 	background-color: rgb(1,51,100);
 }
 #callout .type-icon {
@@ -524,6 +517,24 @@ body.iso {
 }
 .callout.upk-info div.name {
 	max-width: 272px;
+}
+#info-fullscreen {
+	display: none;
+	position: fixed;
+	top: 45px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 200000;
+	background-color: white;
+	padding: 10px;
+	overflow: auto;
+}
+#info-fullscreen .upk-action {
+	display: none;
+}
+#info-fullscreen .upk-detail {
+	display: block;
 }
 /* ========================= end callout ========================= */
 
@@ -568,12 +579,6 @@ body.iso {
 	}
 	.odd-row .upk-action a:hover {
 		background-color: white !important;
-	}
-	.callout .detail {
-		display: none;
-	}
-	#callout-size-check .detail, #callout .detail {
-		display: none;
 	}
 	#filter .ui-checkbox {
 		margin: 0 18px;

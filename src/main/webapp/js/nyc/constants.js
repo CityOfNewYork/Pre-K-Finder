@@ -44,43 +44,6 @@ var TODAY = new Date(),
 	EPSG_2263 = new OpenLayers.Projection("EPSG:2263"),
 	IOS = navigator.userAgent.match(/(iPad|iPhone|iPod|iOS)/g) ? true : false,
 	FULL_DAY = [1, 2, 5, 7],
-	DAY_LENGTH = {
-		"0": "Day length not available",
-		"1": "Full day",
-		"2": "Full day and Half Day",
-		"3": "Half Day",
-		"4": "5-Hour",
-		"5": "Full Day and 5-Hour",
-		"6": "Half Day and 5-hour",
-		"7": "Full Day, Half Day and 5-hour"			
-	},
-	EXTEND = {
-		"1": "Extended day offered",
-		"2": "Extended day not offered",
-		"3": " Please contact site directly for information about extended day "
-	},
-	IN_OUT = {
-		"1": "Indoor playspace",
-		"2": "Indoor/Outdoor (offsite) playspace",
-		"3": "Indoor/Outdoor (onsite) playspace",
-		"4": "Indoor/Outdoor (onsite) playspace/Outdoor (offsite) playspace",
-		"5": "Playspace not offered",
-		"6": "Outdoor (offsite) playspace",
-		"7": "Outdoor (onsite) playspace",
-		"8": "Outdoor (onsite) playspace/Outdoor (offsite) playspace",
-		"9": "Please contact site directly for information about playspace"
-	},
-	MEAL = {
-		"1": "Breakfast",
-		"2": "Breakfast/Lunch",
-		"3": "Breakfast/Lunch/Snack(s)",
-		"4": "Breakfast/Snack(s)",
-		"5": "Please contact site directly for information about meals",
-		"6": "Lunch",
-		"7": "Lunch/Snack(s)",
-		"8": "Snack(s)"
-	},
-	BOROUGH = {"M":"Manhattan", "X":"Bronx", "K":"Brooklyn", "Q":"Queens", "R":"Staten Island"},
 	LOCATE_ZOOM_LEVEL = 7,
 	LOCATION_STYLE_MAP = new OpenLayers.StyleMap({
 		"default": OpenLayers.Util.applyDefaults(

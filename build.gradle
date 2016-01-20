@@ -18,7 +18,7 @@ apply plugin: 'jetty'
 
 ext{
 
-	csvFileIn = 'etc/pm/data/PrekFinder_ProdLoad_010716.csv'
+	csvFileIn = 'etc/pm/data/UPK_Report_2015_12_17_DUMMY.csv'
 
 	default_env = 'dev'
 	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
@@ -56,9 +56,11 @@ ext{
 	prd_date_rules = '//www.nycenet.edu/schoolsearch/js/date-rules.js'
 
 	csvOutColumns = ['LOCCODE', 'X', 'Y', 'PREK_TYPE', 'NAME', 'NOTE', 'ADDRESS', 'BOROUGH', 'ZIP', 'PHONE', 'EMAIL', 'WEBSITE', 
-			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE', 'BUTTON_TYPE']
+			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'SEMS_CODE', 'BUTTON_TYPE', 'START_TIME', 'EARLY_DROP',
+			'LATE_PICKUP', 'ENHANCED_LANG', 'FLEX_SCHED', 'SPED_FLG', 'INCOME_FLG', 'SPECIAL_PRIOR']
 	csvOutRequiredColumns = ['LOCCODE', 'X', 'Y', 'PREK_TYPE', 'NAME', 'ADDRESS', 'BOROUGH', 'ZIP', 
-			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE', 'BUTTON_TYPE']
+			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE', 'BUTTON_TYPE', 'START_TIME', 'EARLY_DROP',
+			'LATE_PICKUP', 'ENHANCED_LANG', 'FLEX_SCHED', 'SPED_FLG', 'INCOME_FLG']
 	csvSchoolReplace = 'etc/school_replace.csv'
 	csvAddressReplace = 'etc/address_replace.csv'
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()

@@ -128,28 +128,43 @@ nyc.App = (function(){
 		},
 		/**
 		 * @export
-		 * @param {Element} btn
+		 * @param {string} id
 		 * @param {nyc.App} me
 		 */
 		showUpkDetail: function(id, me){
 			var detail = $("#" + id + " .upk-detail"), 
 				show = detail.css("display") == "none";
-			detail.slideToggle(function(){
-				if (id.indexOf("callout") > -1){
-					me.updateCallout();
-				}else if (show){
-					var upkHtml = $("#" + id),
-						upkHeight = upkHtml.height(),
-						upkBottom = upkHtml.position().top + upkHeight,
-						content = $("#list-container"),
-						contentHeight = content.height();
-					if (contentHeight > upkHeight && upkBottom > contentHeight){
-						content.animate({
-							scrollTop: content.scrollTop() + (upkBottom - contentHeight)
-						});
+			if (id.indexOf("callout") > -1 && ($(window).width() <= 350 || $(window).height() <= 350)){
+				var close = $('#callout_close').clone();
+				close.click(function(){
+					$('#toggle').show();
+					$('#info-fullscreen').hide();
+				});
+				close.attr('id', 'close-fullscreen');
+				close.css({top: '5px', right: '5px'});
+				$('#info-fullscreen').html($('#callout_contentDiv').html());
+				$('#info-fullscreen').append(close);
+				$('#toggle').hide();
+				$('#info-fullscreen').show();
+			}else{
+				detail.slideToggle(function(){
+					if (id.indexOf("callout") > -1){
+						me.updateCallout();
+					}else if (show){
+						var upkHtml = $("#" + id),
+							upkHeight = upkHtml.height(),
+							upkBottom = upkHtml.position().top + upkHeight,
+							content = $("#list-container"),
+							contentHeight = content.height();
+						if (contentHeight > upkHeight && upkBottom > contentHeight){
+							content.animate({
+								scrollTop: content.scrollTop() + (upkBottom - contentHeight)
+							});
+						}
 					}
-				}
-			});
+				});
+
+			}
 		},
 		/**
 		 * @export

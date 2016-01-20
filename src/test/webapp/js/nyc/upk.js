@@ -263,25 +263,25 @@ QUnit.test("nyc.upk.HtmlDecorator.webHtml", function(assert){
 	assert.equal(link.attr("target"), "_blank", "webHtml link should have a target='_blank' attr when IOS=true");	
 });
 
-QUnit.test("nyc.upk.HtmlDecorator.programFeatureHtml MEAL", function(assert){
+QUnit.test("nyc.upk.HtmlDecorator.programFeatureHtml MEALS", function(assert){
 	var feature = createTestFeature();
 	TEST_LIST.populate([feature]);
 	for (var i = 1; i < 9; i++){
 		feature.attributes.MEALS = i;
-		var node = feature.programFeatureHtml("meal", MEAL);
+		var node = feature.programFeatureHtml("meal", MEALS);
 		assert.equal(node[0].tagName, "LI", "programFeatureHtml node should be an <li>");	
-		assert.equal(node.html(), MEAL[i], "programFeatureHtml should have added list item '" + MEAL[i] + "'");			
+		assert.equal(node.html(), MEALS[i], "programFeatureHtml should have added list item '" + MEALS[i] + "'");			
 	}
 });
 
-QUnit.test("nyc.upk.HtmlDecorator.programFeatureHtml IN_OUT", function(assert){
+QUnit.test("nyc.upk.HtmlDecorator.programFeatureHtml INDOOR_OUTDOOR", function(assert){
 	var feature = createTestFeature();
 	TEST_LIST.populate([feature]);
 	for (var i = 1; i < 10; i++){
 		feature.attributes.INDOOR_OUTDOOR = i;
-		var node = feature.programFeatureHtml("inout", IN_OUT);
+		var node = feature.programFeatureHtml("inout", INDOOR_OUTDOOR);
 		assert.equal(node[0].tagName, "LI", "programFeatureHtml node should be an <li>");	
-		assert.equal(node.html(), IN_OUT[i], "programFeatureHtml should have added list item '" + IN_OUT[i] + "'");			
+		assert.equal(node.html(), INDOOR_OUTDOOR[i], "programFeatureHtml should have added list item '" + INDOOR_OUTDOOR[i] + "'");			
 	}
 });
 
@@ -310,8 +310,8 @@ QUnit.test("nyc.upk.HtmlDecorator.programFeaturesHtml", function(assert){
 	assert.equal(node1.html(), "Program Features:", "programFeaturesHtml node one html should be 'Program Features:'");	
 	assert.equal(node2[0].tagName, "UL", "programFeatureHtml node two should be a <ul>");	
 	assert.equal(node2.children().length, 3, "programFeatureHtml node two should have 3 children");	
-	assert.equal($(node2.children()[0]).html(),  MEAL[1], "programFeatureHtml node two first child html should be '" + MEAL[1] + "'");	
-	assert.equal($(node2.children()[1]).html(),  IN_OUT[2], "programFeatureHtml node two secod child html should be '" + IN_OUT[2] + "'");	
+	assert.equal($(node2.children()[0]).html(),  MEALS[1], "programFeatureHtml node two first child html should be '" + MEALS[1] + "'");	
+	assert.equal($(node2.children()[1]).html(),  INDOOR_OUTDOOR[2], "programFeatureHtml node two secod child html should be '" + INDOOR_OUTDOOR[2] + "'");	
 	assert.equal($(node2.children()[2]).html(),  EXTEND[3], "programFeatureHtml node two third child html should be '" + EXTEND[3] + "'");	
 });
 

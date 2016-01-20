@@ -41,8 +41,29 @@ nyc.upk.FieldsDecorator = {
 	inout: function(){
 		return this.attributes.INDOOR_OUTDOOR;
 	},
-	extend: function(){
-		return this.attributes.EXTENDED_DAY;
+	lang: function(){
+		return ENHANCED_LANG[this.attributes.ENHANCED_LANG] || "";
+	},
+	flex: function(){
+		return this.attributes.FLEX_SCHED ? FLEX_SCHED : "";
+	},
+	sped: function(){
+		return this.attributes.SPED_FLG ? SPED_FLG : "";
+	},
+	special: function(){
+		return this.attributes.SPECIAL_PRIOR || "";
+	},
+	income: function(){
+		return this.attributes.INCOME_ELG ? INCOME_ELG : "";
+	},
+	start: function(){
+		return this.attributes.START_TIME;
+	},
+	early: function(){
+		return this.attributes.EARLY_DROP;
+	},
+	late: function(){
+		return this.attributes.LATE_PICKUP;
 	},
 	seats: function(){
 		return this.attributes.SEATS;
@@ -90,12 +111,8 @@ nyc.upk.HtmlDecorator = {
 	 * @return {jQuery}
 	 */
 	noteHtml: function(){
-		/* noteHtml not used for temporary modification */
-		return '';
-		/*
 		var noteHtml = $("<div class='note'></div>");		
 		return noteHtml.html(this.note());
-		*/
 	},
 	/** 
 	 * @private 
@@ -170,10 +187,9 @@ nyc.upk.HtmlDecorator = {
 		/* additional programFeaturesHtml stored in note field for temporary modification */
 		var programFeaturesHtml = $("<div class='name'>Program Features:</div>"),
 			featureList = $("<ul class='feats'></ul>");
-		featureList.append(this.programFeatureHtml("meal", MEAL))
-			.append(this.programFeatureHtml("inout", IN_OUT))
-			.append(this.programFeatureHtml("extend", EXTEND));
-		return [programFeaturesHtml, featureList,  $(this.note())];
+		featureList.append(this.programFeatureHtml("meal", MEALS))
+			.append(this.programFeatureHtml("inout", INDOOR_OUTDOOR));
+		return [programFeaturesHtml, featureList];
 	},
 	/** 
 	 * @private 
@@ -186,6 +202,36 @@ nyc.upk.HtmlDecorator = {
 		return seatsDayHtml.append(yrHtml)
 			.append(this.seats() + " " + DAY_LENGTH[this.dayLength()]);
 	},
+	langHtml: function(){
+		var lang = this.lang();
+		return  lang ? ("<div>" + lang + "</div>") : "";
+	},
+	flexHtml: function(){
+		var flex = this.flex();
+		return  flex ? ("<div>" + flex + "</div>") : "";
+	},
+	spedHtml: function(){
+		var sped = this.sped();
+		return  sped ? ("<div>" + sped + "</div>") : "";
+	},
+	specialHtml: function(){
+		var special = this.special();
+		return  special ? ("<div>" + special + "</div>") : "";
+	},
+	incomeHtml: function(){
+		var income = this.income();
+		return  income ? ("<div>" + income + "</div>") : "";
+	},
+	startHtml: function(){
+		return "<div><b>Daily Start Time:</b> " + this.start() + "</div>";
+	},
+	earlyHtml: function(){
+		return "<div><b>Early Drop Off Available:</b> " + this.early() + "</div>";
+	},
+	lateHtml: function(){
+		return "<div><b>Late Pick Up Available:</b> " + this.late() + "</div>";
+	},
+
 	/** 
 	 * @private 
 	 * @return {jQuery}
@@ -196,6 +242,14 @@ nyc.upk.HtmlDecorator = {
 			.append(this.emailHtml())
 			.append(this.webHtml())
 			.append(this.programFeaturesHtml())
+			.append(this.startHtml())
+			.append(this.earlyHtml())
+			.append(this.lateHtml())
+			.append(this.flexHtml())
+			.append(this.spedHtml())
+			.append(this.specialHtml())
+			.append(this.incomeHtml())
+			.append(this.langHtml())
 			.append(this.seatsDayHtml());
 	},
 	/** 
