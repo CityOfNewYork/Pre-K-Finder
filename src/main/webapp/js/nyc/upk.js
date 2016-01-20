@@ -188,7 +188,10 @@ nyc.upk.HtmlDecorator = {
 		var programFeaturesHtml = $("<div class='name'>Program Features:</div>"),
 			featureList = $("<ul class='feats'></ul>");
 		featureList.append(this.programFeatureHtml("meal", MEALS))
-			.append(this.programFeatureHtml("inout", INDOOR_OUTDOOR));
+			.append(this.programFeatureHtml("inout", INDOOR_OUTDOOR))
+			.append(this.startHtml())
+			.append(this.earlyHtml())
+			.append(this.lateHtml());
 		return [programFeaturesHtml, featureList];
 	},
 	/** 
@@ -223,13 +226,13 @@ nyc.upk.HtmlDecorator = {
 		return  income ? ("<div>" + income + "</div>") : "";
 	},
 	startHtml: function(){
-		return "<div><b>Daily Start Time:</b> " + this.start() + "</div>";
+		return "<li>Daily Start Time: " + this.start() + "</li>";
 	},
 	earlyHtml: function(){
-		return "<div><b>Early Drop Off Available:</b> " + this.early() + "</div>";
+		return "<li>Early Drop Off Available: " + this.early() + "</li>";
 	},
 	lateHtml: function(){
-		return "<div><b>Late Pick Up Available:</b> " + this.late() + "</div>";
+		return "<li>Late Pick Up Available: " + this.late() + "</li>";
 	},
 
 	/** 
@@ -242,9 +245,6 @@ nyc.upk.HtmlDecorator = {
 			.append(this.emailHtml())
 			.append(this.webHtml())
 			.append(this.programFeaturesHtml())
-			.append(this.startHtml())
-			.append(this.earlyHtml())
-			.append(this.lateHtml())
 			.append(this.flexHtml())
 			.append(this.spedHtml())
 			.append(this.specialHtml())

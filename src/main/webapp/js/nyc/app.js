@@ -545,7 +545,38 @@ $(document).ready(function(){
 		new nyc.Locate(map, new nyc.ZoomSearch("#main", map)), 
 		new nyc.upk.List(), 
 		new nyc.upk.ListRenderer(), 
-		new nyc.Share("#main")
+		new nyc.Share("#main"),
+		{
+			schoolType: new nyc.Check({
+				target: '#chk-sch-type',
+				label: 'school type',
+				choices: [
+					{label: 'district school', value: 'DOE'},
+					{label: 'early ed center', value: 'NYCEEC'},
+					{label: 'charter school', value: 'CHARTER'},
+					{label: 'Pre-K center', value: 'CHARTER'}
+		        ]
+			}),
+			dayLength: new nyc.Check({
+				target: '#chk-day-len',
+				label: 'day length',
+				choices: [
+					{label: 'full day', value: '1,2,5,7'},
+					{label: 'half day', value: '3,6,7'},
+					{label: '5-Hour', value: '4,5,6,7'}
+		        ]
+			}),
+			progFeats: new nyc.Check({
+				target: '#chk-prog-feat',
+				label: 'program features',
+				choices: [
+					{label: 'extended hours', value: '1,2,5,7'},
+					{label: 'income eligibility', value: '3,6,7'},
+					{label: 'dual/enhanced language', value: '4,5,6,7'},
+					{label: 'SPED', value: '4,5,6,7'}
+		        ]
+			})
+		}
 	); 
 
 	/*
