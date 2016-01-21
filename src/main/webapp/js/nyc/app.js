@@ -44,7 +44,7 @@ nyc.App = (function(){
 		});
 		
 		$.each(me.filters.progFeats.inputs, function(_, input){
-			input.prop("checked", false).checkboxradio("refresh");
+			input.trigger("click").checkboxradio("refresh");
 		});
 		
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
@@ -320,6 +320,9 @@ nyc.App = (function(){
 		filter: function(){
 			var me = this;
 			var filters = {type:[], dayLength:[], progFeats:[], applyOnly:[]};
+			if ($('#filter-apply-only').prop('checked')){
+				filters.applyOnly.push(1);
+			}
 			$.each(me.filters.schoolType.val(), function(_, val){
 				filters.type = filters.type.concat(val.split(',')); 
 			});
@@ -329,13 +332,15 @@ nyc.App = (function(){
 			$.each(me.filters.progFeats.val(), function(_, val){
 				filters.progFeats = filters.progFeats.concat(val.split(',')); 
 			});
-			me.upkList.filter(filters);
-			me.upkTable.render(me.upkList, me.currentLocation);
-			me.upkLayer.removeAllFeatures();
-			me.upkLayer.addFeatures(me.upkList.features());
-			me.locate.controls.replaceFeatures({name: UPK_SEARCH_BY_CHOICE, cssClass: "srch-upk", source: me.upkList});
-			me.removeCallout();
-			me.upkLayer.redraw();
+			setTimeout(function(){
+				me.upkList.filter(filters);
+				me.upkTable.render(me.upkList, me.currentLocation);
+				me.upkLayer.removeAllFeatures();
+				me.upkLayer.addFeatures(me.upkList.features());
+				me.locate.controls.replaceFeatures({name: UPK_SEARCH_BY_CHOICE, cssClass: "srch-upk", source: me.upkList});
+				me.removeCallout();
+				me.upkLayer.redraw();
+			}, 5)
 		},
 		/** @private */
 		alert: function(e, msg){
@@ -581,7 +586,7 @@ $(document).ready(function(){
 				target: '#chk-prog-feat',
 				title: 'program features',
 				choices: [
-					{label: 'extended hours', value: 'extent'},
+					{label: 'extended hours', value: 'extend'},
 					{label: 'income eligibility', value: 'income'},
 					{label: 'dual/enhanced language', value: 'lang'},
 					{label: 'SPED', value: 'sped'}

@@ -292,7 +292,6 @@ body.iso {
 }
 #filter {
 	margin: 3px 5px;
-	border-radius: 0.6em;
 }
 #filter .ui-collapsible-content {
 	padding: 1px 20px 0 20px;
@@ -325,9 +324,7 @@ a.ui-collapsible-heading-toggle {
     text-align: left;
     text-transform: capitalize;
 }
-.ui-collapsible-themed-content>.ui-collapsible-heading {
-	border-radius: 0.6em;
-}
+
 /* ========================== end filter ========================= */
 
 /* ======================== begin upk list ======================= */

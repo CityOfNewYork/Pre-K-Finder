@@ -45,16 +45,16 @@ nyc.upk.FieldsDecorator = {
 		return ENHANCED_LANG[this.attributes.ENHANCED_LANG] || "";
 	},
 	flex: function(){
-		return this.attributes.FLEX_SCHED ? FLEX_SCHED : "";
+		return this.attributes.FLEX_SCHED == "1" ? FLEX_SCHED : "";
 	},
 	sped: function(){
-		return this.attributes.SPED_FLG ? SPED_FLG : "";
+		return this.attributes.SPED_FLG == "1" ? SPED_FLG : "";
 	},
 	special: function(){
 		return this.attributes.SPECIAL_PRIOR || "";
 	},
 	income: function(){
-		return this.attributes.INCOME_ELG ? INCOME_ELG : "";
+		return this.attributes.INCOME_FLG == "1" ? INCOME_FLG : "";
 	},
 	start: function(){
 		return this.attributes.START_TIME;
@@ -353,14 +353,16 @@ nyc.upk.List = (function(){
 					extend = $.inArray("extend", filters.progFeats) > -1,
 					income = $.inArray("income", filters.progFeats) > -1,
 					lang = $.inArray("lang", filters.progFeats) > -1,
+					sped = $.inArray("sped", filters.progFeats) > -1,
 					applyOnly = filters.applyOnly.length;
 				if (
 						$.inArray(upk.type() + "", type) > -1 && 
 						$.inArray(upk.dayLength() + "", dayLength) > -1 &&
-						(!extend || upk.early() || upk.late()) &&
+						(!extend || upk.early().toLowerCase() != 'no' || upk.late().toLowerCase() != 'no') &&
+						(!income || upk.income()) &&
 						(!lang || upk.lang()) &&
+						(!sped || upk.sped()) &&
 						(!applyOnly || upk.showApply())
-						
 				){
 					me.filteredFeatures[upk.id] = upk;
 				}

@@ -82,5 +82,5 @@ ENHANCED_LANG = {
 },
 FLEX_SCHED = "<b>Alert:</b> Program may utilize flexible scheduling policy. Please contact program directly for details about pre-K schedule.",
 SPED_FLG = "<b>Alert:</b> If your child has an IEP recommending Related Services and/or SEIT, contact the program directly for more information before applying.",
-INCOME_ELG = "<b>Alert:</b> Program may have income or other eligibility requirements. Contact for more information.";
+INCOME_FLG = "<b>Alert:</b> Program may have income or other eligibility requirements. Contact for more information.";
 
