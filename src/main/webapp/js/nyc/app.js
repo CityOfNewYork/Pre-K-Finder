@@ -12,9 +12,10 @@ nyc.App = (function(){
 	 * @param {nyc.UpkList} upkList
 	 * @param {nyc.UpkTable} upkTable
 	 * @param {nyc.Share} share
+	 * @param {Object<string, nyc.Check>} filters
 	 * 
 	 */
-	var appClass = function(map, locate, upkList, upkTable, share){
+	var appClass = function(map, locate, upkList, upkTable, share, filters){
 		var me = this;
 		me.pop = null;
 		me.currentLocation = {geometry: null, name: function(){return "";}};
@@ -22,6 +23,7 @@ nyc.App = (function(){
 		me.locate = locate;
 		me.upkList = upkList;
 		me.upkTable = upkTable;
+		me.filters = filters;
 		
 		me.initPages();
 
@@ -40,6 +42,11 @@ nyc.App = (function(){
 			expand: me.upkTable.adjContainerHeight,
 			collapse: me.upkTable.adjContainerHeight
 		});
+		
+		$.each(me.filters.progFeats.inputs, function(_, input){
+			input.prop("checked", false).checkboxradio("refresh");
+		});
+		
 		$("#filter input[type=checkbox]").change($.proxy(me.filter, me));
 		
 		$("#toggle").click(me.toggle);
@@ -310,13 +317,17 @@ nyc.App = (function(){
 			}
 		},
 		/** @private */
-		filter: function(e){
+		filter: function(){
 			var me = this;
-			var filters = {type:[], dayLength:[], applyOnly:[]};
-			$.each($("#filter input[type=checkbox]:checked"), function(_, n){
-				var name = $(n).data("filter-name"), values = $(n).data("filter-values") + "";
-				values = filters[name].concat(values.split(","));
-				filters[name] = values;
+			var filters = {type:[], dayLength:[], progFeats:[], applyOnly:[]};
+			$.each(me.filters.schoolType.val(), function(_, val){
+				filters.type = filters.type.concat(val.split(',')); 
+			});
+			$.each(me.filters.dayLength.val(), function(_, val){
+				filters.dayLength = filters.dayLength.concat(val.split(',')); 
+			});
+			$.each(me.filters.progFeats.val(), function(_, val){
+				filters.progFeats = filters.progFeats.concat(val.split(',')); 
 			});
 			me.upkList.filter(filters);
 			me.upkTable.render(me.upkList, me.currentLocation);
@@ -549,17 +560,17 @@ $(document).ready(function(){
 		{
 			schoolType: new nyc.Check({
 				target: '#chk-sch-type',
-				label: 'school type',
+				title: 'school type',
 				choices: [
 					{label: 'district school', value: 'DOE'},
 					{label: 'early ed center', value: 'NYCEEC'},
 					{label: 'charter school', value: 'CHARTER'},
-					{label: 'Pre-K center', value: 'CHARTER'}
+					{label: 'Pre-K center', value: 'PKC'}
 		        ]
 			}),
 			dayLength: new nyc.Check({
 				target: '#chk-day-len',
-				label: 'day length',
+				title: 'day length',
 				choices: [
 					{label: 'full day', value: '1,2,5,7'},
 					{label: 'half day', value: '3,6,7'},
@@ -568,12 +579,12 @@ $(document).ready(function(){
 			}),
 			progFeats: new nyc.Check({
 				target: '#chk-prog-feat',
-				label: 'program features',
+				title: 'program features',
 				choices: [
-					{label: 'extended hours', value: '1,2,5,7'},
-					{label: 'income eligibility', value: '3,6,7'},
-					{label: 'dual/enhanced language', value: '4,5,6,7'},
-					{label: 'SPED', value: '4,5,6,7'}
+					{label: 'extended hours', value: 'extent'},
+					{label: 'income eligibility', value: 'income'},
+					{label: 'dual/enhanced language', value: 'lang'},
+					{label: 'SPED', value: 'sped'}
 		        ]
 			})
 		}

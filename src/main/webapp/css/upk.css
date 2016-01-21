@@ -297,13 +297,13 @@ body.iso {
 #filter .ui-collapsible-content {
 	padding: 1px 20px 0 20px;
 }
-#filter h3 a {
-	text-align: center;
-}
 #filter h3 a:after {
 	background-image: url(../img/filter.png);
 	background-size: 12px;
 	background-color: #f8993a;
+}
+#filter label {
+	text-transform: capitalize;
 }
 #filter label.ui-checkbox-on:after {
 	background-color: #80b34e;
@@ -317,7 +317,17 @@ body.iso {
     width: 32%;
     padding: 5px 0 8px 0;
 }
-
+span.current-value {
+	display: none;
+}
+a.ui-collapsible-heading-toggle {
+    white-space: normal;
+    text-align: left;
+    text-transform: capitalize;
+}
+.ui-collapsible-themed-content>.ui-collapsible-heading {
+	border-radius: 0.6em;
+}
 /* ========================== end filter ========================= */
 
 /* ======================== begin upk list ======================= */

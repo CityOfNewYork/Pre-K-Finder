@@ -349,12 +349,20 @@ nyc.upk.List = (function(){
 			me.filteredFeatures = {};
 			$.each(me.allFeatures, function(_, upk){
 				var type = filters.type,
-				dayLength = filters.dayLength,
-				applyOnly = filters.applyOnly.length;
-				if ($.inArray(upk.type() + "", type) > -1 && $.inArray(upk.dayLength() + "", dayLength) > -1){
-					if (!applyOnly || upk.showApply()){
-						me.filteredFeatures[upk.id] = upk;
-					}
+					dayLength = filters.dayLength,
+					extend = $.inArray("extend", filters.progFeats) > -1,
+					income = $.inArray("income", filters.progFeats) > -1,
+					lang = $.inArray("lang", filters.progFeats) > -1,
+					applyOnly = filters.applyOnly.length;
+				if (
+						$.inArray(upk.type() + "", type) > -1 && 
+						$.inArray(upk.dayLength() + "", dayLength) > -1 &&
+						(!extend || upk.early() || upk.late()) &&
+						(!lang || upk.lang()) &&
+						(!applyOnly || upk.showApply())
+						
+				){
+					me.filteredFeatures[upk.id] = upk;
 				}
 			});
 		},
