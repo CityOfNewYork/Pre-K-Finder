@@ -243,6 +243,8 @@ task rewiteSrcs(dependsOn: [cleanCsv, minifyScript, minifyCss]) << {
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/zoomsearch.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/get-in-touch.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/date.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/lookup.js"></script>', value: '')
+	ant.replace(file: 'build/tmp/index.html', token: '<script src="js/nyc/check.js"></script>', value: '')
 	ant.replace(file: 'build/tmp/index.html', token: 'js/nyc/app.js', value: 'js/nyc-min.js')
 
 	if (env != 'dev'){
