@@ -41,8 +41,14 @@ nyc.upk.FieldsDecorator = {
 	inout: function(){
 		return this.attributes.INDOOR_OUTDOOR;
 	},
-	lang: function(){
-		return ENHANCED_LANG[this.attributes.ENHANCED_LANG] || "";
+	langs: function(){
+		var codes = this.attributes.ENHANCED_LANG || "", langs = {dual:[], enhanced:[]};
+		$.each(codes.trim().split(';'), function(_, code){
+			var dual = DUAL_LANG[code], enhanced = ENHANCED_LANG[code];
+			if (dual) langs.dual.push(dual);
+			if (enhanced) langs.enhanced.push(enhanced);
+		});
+		return langs;
 	},
 	flex: function(){
 		return this.attributes.FLEX_SCHED == "1" ? FLEX_SCHED : "";
@@ -206,8 +212,14 @@ nyc.upk.HtmlDecorator = {
 			.append(this.seats() + " " + DAY_LENGTH[this.dayLength()]);
 	},
 	langHtml: function(){
-		var lang = this.lang();
-		return  lang ? ("<div>" + lang + "</div>") : "";
+		var dual = this.langs().dual, enhanced = this.langs().enhanced, msg = '';
+		$.each(dual, function(_, lang){
+			msg += ("<div><b>Dual Language:</b> " + lang + "</div>");
+		});
+		$.each(enhanced, function(_, lang){
+			msg += ("<div><b>Enhanced Language Support:</b> " + lang + "</div>");
+		});
+		return  msg ? ("<div>" + msg + "</div>") : "";
 	},
 	flexHtml: function(){
 		var flex = this.flex();

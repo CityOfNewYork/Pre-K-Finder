@@ -294,7 +294,8 @@ body.iso {
 	margin: 3px 5px;
 }
 #filter .ui-collapsible-content {
-	padding: 1px 20px 0 20px;
+	padding: 1px 5px 0 5px;
+	
 }
 #filter h3 a:after {
 	background-image: url(../img/filter.png);
@@ -568,6 +569,10 @@ a.ui-collapsible-heading-toggle {
 		padding-left: 0;
 		padding-right: 0;
 	}
+	#filter {
+		max-height: 400px;
+		overflow: auto;
+	}	
 }
 @media only screen and (max-width : 495px), screen and (max-height: 350px) {
 	#panel {
@@ -603,6 +608,10 @@ a.ui-collapsible-heading-toggle {
 		height: 220px;
 		overflow: auto;
 	}
+	#filter {
+		max-height: 280px;
+		overflow: auto;
+	}	
 }
 
 /* ====================== end media queries ====================== */

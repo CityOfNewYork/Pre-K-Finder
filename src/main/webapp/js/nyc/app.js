@@ -413,6 +413,7 @@ nyc.App = (function(){
 				checker = $("#callout-size-check"),
 				div = $("<div></div>").append(html);
 			    if (me.pop) me.removeCallout();
+				if (html.indexOf && html.indexOf("Geoserver") > -1) return;
 				checker.html(div.html());	
 			    me.pop = new OpenLayers.Popup.FramedCloud(
 		    		"callout", 
