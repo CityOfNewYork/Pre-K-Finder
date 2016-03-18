@@ -568,10 +568,10 @@ $(document).ready(function(){
 				target: '#chk-sch-type',
 				title: 'school type',
 				choices: [
-					{label: 'district school', value: 'DOE'},
-					{label: 'early ed center', value: 'NYCEEC'},
-					{label: 'charter school', value: 'CHARTER'},
-					{label: 'Pre-K center', value: 'PKC'}
+					{label: '<img class="type-icon" alt="district school" src="img/DOE0.png">District School', value: 'DOE'},
+					{label: '<img class="type-icon" alt="early ed center" src="img/NYCEEC0.png">Early Ed Center', value: 'NYCEEC'},
+					{label: '<img class="type-icon" alt="charter school" src="img/CHARTER0.png">Charter School', value: 'CHARTER'},
+					{label: '<img class="type-icon" alt="Pre-K center" src="img/PKC0.png">Pre-K Center', value: 'PKC'}
 		        ]
 			}),
 			dayLength: new nyc.Check({

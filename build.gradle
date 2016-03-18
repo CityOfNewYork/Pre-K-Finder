@@ -18,7 +18,7 @@ apply plugin: 'jetty'
 
 ext{
 
-	csvFileIn = 'etc/pm/data/UPK_Report_2015_12_17_DUMMY.csv'
+	csvFileIn = 'etc/pm/data/TEST_PreKFinderLoad_03172016.csv'
 
 	default_env = 'dev'
 	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
@@ -60,7 +60,7 @@ ext{
 			'LATE_PICKUP', 'ENHANCED_LANG', 'FLEX_SCHED', 'SPED_FLG', 'INCOME_FLG', 'SPECIAL_PRIOR']
 	csvOutRequiredColumns = ['LOCCODE', 'X', 'Y', 'PREK_TYPE', 'NAME', 'ADDRESS', 'BOROUGH', 'ZIP', 
 			'DAY_LENGTH', 'SEATS', 'MEALS', 'INDOOR_OUTDOOR', 'EXTENDED_DAY', 'SEMS_CODE', 'BUTTON_TYPE', 'START_TIME', 'EARLY_DROP',
-			'LATE_PICKUP', 'ENHANCED_LANG', 'FLEX_SCHED', 'SPED_FLG', 'INCOME_FLG']
+			'LATE_PICKUP', 'FLEX_SCHED', 'SPED_FLG', 'INCOME_FLG']
 	csvSchoolReplace = 'etc/school_replace.csv'
 	csvAddressReplace = 'etc/address_replace.csv'
 	schoolReplace = CSVParser.parse(new File(csvSchoolReplace).getText(), CSVFormat.EXCEL).getRecords()
@@ -200,6 +200,7 @@ task cleanCsv(dependsOn: clean) << {
 	def first = true
 	def inColumns
 	csvFileOut.append("${csvOutColumns.join(',')}\n")
+	def write=false
 	for(inRecord in parser.getRecords()) {
 		if (first){
 			first = false
@@ -216,7 +217,7 @@ task cleanCsv(dependsOn: clean) << {
 				if (outColIndex > -1){
 					def badFormatResult = false 
 					def value = inRecord[inColIndex]
-					if (!value.isNumber()){
+					if (!value.isNumber() || outCol == 'PHONE'){
 						def formatted = FormatAndValidate.formatAndValidate(project, outCol, value, inRecord, log)
 						if (!formatted[0]){
 							//continue
@@ -227,7 +228,13 @@ task cleanCsv(dependsOn: clean) << {
 					newRecord[outColIndex] = value 
 				}
 			}
+			if (write){
+			write=false
 			csvFileOut.append("${newRecord.join(',')}\n")
+			}else{
+			write=true
+			}
+			
 		}
 	}
 }
