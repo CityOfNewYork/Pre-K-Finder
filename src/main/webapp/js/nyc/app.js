@@ -590,7 +590,7 @@ $(document).ready(function(){
 					{label: 'extended hours', value: 'extend'},
 					{label: 'income eligibility', value: 'income'},
 					{label: 'dual/enhanced language', value: 'lang'},
-					{label: 'SPED', value: 'sped'}
+					{label: 'special education', value: 'sped'}
 		        ]
 			})
 		}
