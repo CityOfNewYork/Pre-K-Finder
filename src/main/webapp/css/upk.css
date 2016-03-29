@@ -432,6 +432,9 @@ a.ui-collapsible-heading-toggle {
 .odd-row .upk-detail {
 	background-color: white;
 }
+div.seats {
+	margin-top: 10px;
+}
 
 /* ========================= end upk info ======================== */
 

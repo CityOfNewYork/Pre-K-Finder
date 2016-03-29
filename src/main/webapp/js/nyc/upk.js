@@ -372,7 +372,7 @@ nyc.upk.List = (function(){
 						$.inArray(upk.dayLength() + "", dayLength) > -1 &&
 						(!extend || upk.early().toLowerCase() != 'no' || upk.late().toLowerCase() != 'no') &&
 						(!income || upk.income()) &&
-						(!lang || upk.lang()) &&
+						(!lang || upk.langs().dual.length || upk.langs().enhanced.length) &&
 						(!sped || upk.sped()) &&
 						(!applyOnly || upk.showApply())
 				){

@@ -18,7 +18,7 @@ apply plugin: 'jetty'
 
 ext{
 
-	csvFileIn = 'etc/pm/data/TEST_PreKFinderLoad_03172016.csv'
+	csvFileIn = 'etc/pm/data/PreKFinderLoad_032416.csv'
 
 	default_env = 'dev'
 	isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
