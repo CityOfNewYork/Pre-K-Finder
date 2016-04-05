@@ -38,7 +38,7 @@ nyc.App = (function(){
 		});
 		
 		$("#panel").panel("open");
-		$("#filter").collapsible({
+		$("#filter, #filter-appy, #chk-sch-type, #chk-day-len, #chk-prog-feat").collapsible({
 			expand: me.upkTable.adjContainerHeight,
 			collapse: me.upkTable.adjContainerHeight
 		});
@@ -589,8 +589,8 @@ $(document).ready(function(){
 				choices: [
 					{label: 'extended hours', value: 'extend'},
 					{label: 'income eligibility', value: 'income'},
-					{label: 'dual/enhanced language', value: 'lang'},
-					{label: 'special education', value: 'sped'}
+					{label: 'dual/enhanced language', value: 'lang'}//,
+					//{label: 'special education', value: 'sped'}
 		        ]
 			})
 		}
