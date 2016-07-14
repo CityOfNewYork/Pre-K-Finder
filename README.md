@@ -12,3 +12,5 @@ In production the Pre-K facilities data may change without notice and is cached 
 * Use ```gradle jettRun``` to run from project root on local Jetty web server
 	* Allows for viewing live edits of src/main/webapp
 	* Allows for viewing a build from build/webapp
+
+This application is no longer under development and will be replaced by a version utilizing openlayers 3 (https://github.com/CityOfNewYork/pka.git)
